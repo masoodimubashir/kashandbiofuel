@@ -26,6 +26,8 @@ class Product extends Model
         'qty'
     ];
 
+   
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

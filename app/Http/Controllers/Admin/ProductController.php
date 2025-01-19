@@ -66,7 +66,7 @@ class ProductController extends Controller
                         <input class="tgl tgl-skewed changeStatus" id="' . $checkboxId . '" type="checkbox" ' . ($status === 'on' ? 'checked' : '') . '>
                         <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="' . $checkboxId . '"></label>
                     ';
-                    })
+                            })
                     ->addColumn('action', function ($product) {
                         // Edit button
                         $editButton = '
