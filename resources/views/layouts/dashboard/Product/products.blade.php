@@ -59,14 +59,14 @@
                     <input type="hidden" id="productId" name="product_id">
 
                     <!-- Product Name -->
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-4">
                         <label class="form-label" for="name">Product Name</label>
                         <input class="form-control" id="name" name="name" type="text">
                         <div class="invalid-feedback">Please enter a valid product name</div>
                     </div>
 
                     <!-- Category -->
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-4">
                         <label class="form-label" for="category_id">Category</label>
                         <select class="form-select" id="category_id" name="category_id">
                             <option value="">Select Your Category</option>
@@ -78,7 +78,7 @@
                     </div>
 
                     <!-- Subcategory -->
-                    <div class="col-12 col-md-2">
+                    <div class="col-12 col-md-4">
                         <label class="form-label" for="sub_category_id">Subcategory</label>
                         <select class="form-select" id="sub_category_id" name="sub_category_id">
                             <option value="">Select Subcategory</option>
@@ -86,7 +86,7 @@
                         <div class="invalid-feedback">Please select a subcategory</div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <label class="box-col-12 text-start">Crafted Date </label>
                         <div class="box-col-12">
                             <div class="input-group flatpicker-calender">
@@ -98,34 +98,34 @@
                         </div>
 
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <label class="form-label" for="qty">Quantity</label>
                         <input class="form-control" id="qty" name="qty" type="text">
                         <div class="invalid-feedback">Enter Quantity</div>
                     </div>
 
                     <!-- Price -->
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-4">
                         <label class="form-label" for="price">Price</label>
                         <input class="form-control" id="price" name="price" type="number" step="0.01">
                         <div class="invalid-feedback">Please enter a valid price</div>
                     </div>
 
                     <!-- SKU -->
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-4">
                         <label class="form-label" for="sku">SKU</label>
                         <input class="form-control" id="sku" name="sku" type="text">
                         <div class="invalid-feedback">Please enter SKU</div>
                     </div>
 
                     <!-- Selling Price -->
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-4">
                         <label class="form-label" for="selling_price">Selling Price</label>
                         <input class="form-control" id="selling_price" name="selling_price" type="text">
                         <div class="invalid-feedback">Please enter Selling Price</div>
                     </div>
                     <!-- Tags Multi-select -->
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-4">
 
                         <label class="form-label" for="search_tags">Tags</label>
                         <select class="form-select tags" id="search_tags" name="search_tags" multiple>
@@ -172,6 +172,53 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade bd-example-modal-lg" id="seoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+
+
+                    <h4 class="modal-title" id="modalTitle">Add New Product</h4>
+
+
+                    <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="productForm" class="row g-3 p-4" enctype='multipart/form-data'>
+                    @csrf
+                    <input type="hidden" id="productId" name="product_id">
+
+                    <!-- Product Name -->
+                    <div class="col-12 col-md-6">
+                        <label class="form-label" for="name">Meta Title</label>
+                        <input class="form-control" id="name" name="name" type="text" placeholder="">
+                        <div class="invalid-feedback">Please enter a valid product name</div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label" for="name">Product Name</label>
+                        <input class="form-control" id="name" name="name" type="text">
+                        <div class="invalid-feedback">Please enter a valid product name</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label" for="name">Product Name</label>
+                        <textarea class="form-control" id="name" name="name"></textarea>
+                        <div class="invalid-feedback">Please enter a valid product name</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success">Generate SEO</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    
 
     <x-slot name="header">
         <div class="row">
@@ -290,16 +337,16 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Product Name</th>
-                                            <th scope="col">SKU</th>
                                             <th scope="col">Price</th>
                                             <th scope="col">Selling Price</th>
                                             <th scope="col">Crafted Date</th>
-                                            <th scope="col">status</th>
+                                            <th scope="col">Status</th>
                                             <th scope=col>Action</th>
+                                            <th scope=col>Seo</th>
+
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
 
@@ -331,10 +378,7 @@
                             orderable: false,
                             searchable: false
                         },
-                        {
-                            data: 'sku',
-                            name: 'sku'
-                        },
+                   
                         {
                             data: 'price',
                             name: 'price'
@@ -356,6 +400,12 @@
                         {
                             data: 'action',
                             name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'seo',
+                            name: 'seo',
                             orderable: false,
                             searchable: false
                         }
@@ -487,7 +537,7 @@
 
                     // Add tags as JSON
                     const tags = $('#search_tags').val();
-                    formData.append('search_tags', JSON.stringify(tags));
+                    formData.append('search_tags', tags);
 
                     $.ajax({
                         url: '/admin/products',

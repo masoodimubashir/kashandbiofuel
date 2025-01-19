@@ -27,6 +27,10 @@ return new class extends Migration
             $table->text('short_description');
             $table->text('additional_description');
             $table->text('description');
+            $table->string('meta_title')->nullable();
+            $table->string('meta_keywords')->nullable();
+            $table->text('meta_description')->nullable();
+
             $table->timestamps();
         });
     }

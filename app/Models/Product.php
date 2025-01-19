@@ -23,8 +23,13 @@ class Product extends Model
         'short_description',
         'additional_description',
         'description',
-        'qty'
+        'qty',
+        'meta_description',
+        'meta_keywords',
+        'meta_title', 
     ];
+
+
 
    
 
@@ -42,4 +47,6 @@ class Product extends Model
     {
         return $this->hasMany(ProductAttribute::class);
     }
+
+  
 }

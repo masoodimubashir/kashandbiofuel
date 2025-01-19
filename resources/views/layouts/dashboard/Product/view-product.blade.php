@@ -83,18 +83,24 @@
                             <div class="product-slider owl-carousel owl-theme" id="sync1">
                                 @foreach ($product->productAttributes as $attribute)
                                     <div class="item">
-                                        <img src="{{ asset('storage/' . $attribute->image_path) }}" alt="Product Image"
-                                            class="img-fluid">
+                                        @if ($attribute->image_path)
+                                            <img src="{{ asset('storage/' . $attribute->image_path) }}"
+                                                alt="Product Image" class="img-fluid">
+                                        @endif
                                     </div>
                                 @endforeach
+                                <img src="{{ asset('dashboard/assets/images/product/product_default.png') }}"
+                                    alt="Product Image" class="img-fluid">
                             </div>
 
                             <!-- Thumbnail Navigation -->
                             <div class="owl-carousel owl-theme mt-3" id="sync2">
                                 @foreach ($product->productAttributes as $attribute)
                                     <div class="item">
-                                        <img src="{{ asset('storage/' . $attribute->image_path) }}"
-                                            alt="Product Thumbnail" class="img-fluid">
+                                        @if ($attribute->image_path)
+                                            <img src="{{ asset('storage/' . $attribute->image_path) }}"
+                                                alt="Product Image" class="img-fluid">
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>

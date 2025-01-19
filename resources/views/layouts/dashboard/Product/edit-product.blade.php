@@ -34,14 +34,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header pb-0">
-                        <h4>Product Form</h4>
-                    </div>
-                    <div class="card-body">
-                        <form id="productForm" class="row g-3" enctype="multipart/form-data">
 
-                            @csrf
+                <form id="productForm" class="row g-3" enctype="multipart/form-data">
+
+                    @csrf
+                    <div class="card">
+                        <div class="card-body">
 
                             <input type="hidden" id="productId" name="product_id">
 
@@ -122,9 +120,13 @@
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label" for="tags">Search Tags</label>
-                                    <select class="form-select tags" id="tags" name="search_tags[]" multiple>
+                                    <select class="form-select tags" id="tags" name="search_tags" multiple>
                                         @if ($product->search_tags)
-                                            @foreach (json_decode($product->search_tags) as $tag)
+                                            @php
+                                                $tags = explode(',', json_decode($product->search_tags)); // Decodes into an array
+                                            @endphp
+
+                                            @foreach ($tags as $tag)
                                                 <option value="{{ $tag }}" selected>{{ $tag }}
                                                 </option>
                                             @endforeach
@@ -133,6 +135,7 @@
                                     <div class="invalid-feedback">Tags Are Required</div>
                                 </div>
                             </div>
+
 
                             <!-- Descriptions -->
                             <div class="row">
@@ -158,11 +161,13 @@
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
                             <!-- Product Attributes Section -->
                             <div class="row mb-3">
                                 <div class="col-12">
-                                    <div class="card">
                                         <div class="card-header d-flex justify-content-between align-items-center">
                                             <h5 class="mb-0">Product Attributes</h5>
                                             <button type="button" class="btn btn-primary btn-sm" id="addRowBtn">
@@ -174,22 +179,22 @@
                                                 <!-- Dynamic rows will be added here -->
                                             </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
 
 
 
                             <!-- Form Actions -->
-                            <div class="row">
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-primary me-2">Update Product</button>
-                                    <a href="{{ route('products.index') }}" class="btn btn-secondary">Cancel</a>
-                                </div>
+
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary me-2">Update Product</button>
+                                <a href="{{ route('products.index') }}" class="btn btn-secondary">Cancel</a>
                             </div>
-                        </form>
+
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -289,11 +294,11 @@
                     <div class="existing-images row mt-2">
 
                         ${data ?  `
-                                                    <div class="col-md-3 mb-2 image-container">
-                                                        <div class="position-relative">
-                                                            <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
-                                                        </div>
-                                                    </div>` : ''}
+                                                                                                    <div class="col-md-3 mb-2 image-container">
+                                                                                                        <div class="position-relative">
+                                                                                                            <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
+                                                                                                        </div>
+                                                                                                    </div>` : ''}
 
                                     
                     </div>
@@ -358,7 +363,7 @@
                     // Add basic product data
                     formData.append('id', $('#productId').val());
                     formData.append('name', $('#name').val());
-                    formData.append('search_tags', JSON.stringify($('#tags').val()));
+                    formData.append('search_tags', ($('#tags').val()));
 
                     // Handle product attributes and images
                     $('.variation-row').each(function(index) {
@@ -434,6 +439,7 @@
 
                     // Display errors in respective invalid-feedback divs
                     Object.entries(errors).forEach(([field, messages]) => {
+
                         const input = $(`[name="${field}"]`);
                         input.addClass('is-invalid');
 

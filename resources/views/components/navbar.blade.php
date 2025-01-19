@@ -49,7 +49,7 @@
                                    </div>
                                </li>
                                <li class="right-side">
-                                   <a href="contact-us.html" class="delivery-login-box">
+                                   <a href="{{ route('contact-us.index') }}" class="delivery-login-box">
                                        <div class="delivery-icon">
                                            <i data-feather="phone-call"></i>
                                        </div>
