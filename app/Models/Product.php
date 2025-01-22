@@ -9,6 +9,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Product extends Model
 {
 
+
+    /**
+     * Bit flags for product statuses
+     * Each value must be a power of 2 for bitwise operations to work correctly
+     */
+     const FEATURED = 1;     // 0001 in binary
+     
+     const DISCOUNTED = 2;   // 0010 in binary
+     
+     const NEW_ARRIVAL = 4;   // 1000 in binary
+
+
+
     protected $fillable = [
         'category_id',
         'sub_category_id',
@@ -25,11 +38,12 @@ class Product extends Model
         'description',
         'qty',
         'meta_description',
-        'meta_keywords',
-        'meta_title', 
+        'meta_keyword',
+        'meta_title',
+        'featured',
+        'discounted',
+        'new_arrival',
     ];
-
-
 
    
 
@@ -48,5 +62,8 @@ class Product extends Model
         return $this->hasMany(ProductAttribute::class);
     }
 
-  
+
+
+
+
 }

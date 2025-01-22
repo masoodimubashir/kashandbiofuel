@@ -80,17 +80,22 @@
                     <div class="card">
                         <!-- Main Image Carousel -->
                         <div class="card-body">
+
                             <div class="product-slider owl-carousel owl-theme" id="sync1">
                                 @foreach ($product->productAttributes as $attribute)
                                     <div class="item">
                                         @if ($attribute->image_path)
                                             <img src="{{ asset('storage/' . $attribute->image_path) }}"
                                                 alt="Product Image" class="img-fluid">
+                                        @else
+                                            <img src="{{ asset('dashboard/assets/images/product/product_default.png') }}"
+                                                alt="Product Image" class="img-fluid">
                                         @endif
                                     </div>
                                 @endforeach
-                                <img src="{{ asset('dashboard/assets/images/product/product_default.png') }}"
-                                    alt="Product Image" class="img-fluid">
+
+
+
                             </div>
 
                             <!-- Thumbnail Navigation -->
@@ -100,6 +105,9 @@
                                         @if ($attribute->image_path)
                                             <img src="{{ asset('storage/' . $attribute->image_path) }}"
                                                 alt="Product Image" class="img-fluid">
+                                        @else
+                                            <img src="{{ asset('dashboard/assets/images/product/product_default.png') }}"
+                                                alt="Product Image" class="img-fluid">
                                         @endif
                                     </div>
                                 @endforeach
@@ -107,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xxl-8 box-col-6 order-xxl-0 order-1">
+                <div class="col-xxl-5 box-col-6 order-xxl-0 order-1">
                     <div class="card">
                         <div class="card-body">
                             <div class="product-page-details">
@@ -122,10 +130,7 @@
                                         title="Color: {{ $codes }}"></li>
                                 @endforeach
                             </ul>
-                            <hr>
-                            <p>
-                                {{ $product->short_description }}
-                            </p>
+
                             <hr>
                             <div>
                                 <table class="product-page-width">
@@ -189,13 +194,76 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xxl-3 col-md-6 box-col-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="collection-filter-block">
+                                <ul class="pro-services">
+                                    <li>
+                                        <div class="d-flex"><i data-feather="truck"></i>
+                                            <div class="flex-grow-1">
+                                                <h5 class="fw-bold">Meta Title</h5>
+                                                <p>{{ $product->meta_title }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex"><i data-feather="clock"></i>
+                                            <div class="flex-grow-1">
+                                                <h5 class="fw-bold">Meta keyword</h5>
+                                                <p>{{ $product->meta_keyword }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex"><i data-feather="gift"></i>
+                                            <div class="flex-grow-1">
+                                                <h5 class="fw-bold">Meta Description</h5>
+                                                <p>{{ $product->meta_description }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex"><i data-feather="gift"></i>
+                                            <div class="flex-grow-1">
+                                                <p>
+                                                <ul>
+                                                    {{ $product->featured ? 'Featured' : '' }}
+                                                    <br>
+                                                    {{ $product->discounted ? 'Discounted' : '' }}
+                                                    <br>
+                                                    {{ $product->new_arrival ? 'New Arrival' : '' }}
+
+                                                </ul>
+
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <!-- silde-bar colleps block end here-->
+                    </div>
+
+
+                </div>
+
+
             </div>
         </div>
         <div class="card">
             <div class="row product-page-main">
                 <div class="col-sm-12">
                     <ul class="nav nav-pills nav-primary mb-0" id="top-tab" role="tablist">
-                        <li class="nav-item"><a class="nav-link active" id="top-home-tab" data-bs-toggle="tab"
+                        <li class="nav-item"><a class="nav-link active" id="contact-top-tab" data-bs-toggle="tab"
+                                href="#top-contact" role="tab" aria-controls="top-contact"
+                                aria-selected="true">Short Description</a>
+                            <div class="material-border"></div>
+                        </li>
+                        <li class="nav-item"><a class="nav-link " id="top-home-tab" data-bs-toggle="tab"
                                 href="#top-home" role="tab" aria-controls="top-home"
                                 aria-selected="false">Description</a>
                             <div class="material-border"></div>
@@ -207,11 +275,15 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="top-tabContent">
-                        <div class="tab-pane fade active show" id="top-home" role="tabpanel"
-                            aria-labelledby="top-home-tab">
+                        <div class="tab-pane fade active show" id="top-contact" role="tabpanel"
+                            aria-labelledby="contact-top-tab">
+                            <p class="mb-0 m-t-20">
+                                {!! $product->short_description !!}
+                            </p>
+                        </div>
+                        <div class="tab-pane fade" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
                             <p class="mb-0 m-t-20">
                                 {!! $product->description !!}
-
                             </p>
                             <p class="mb-0 m-t-20">
                             </p>
@@ -224,6 +296,7 @@
 
                             </p>
                         </div>
+
                     </div>
                 </div>
             </div>

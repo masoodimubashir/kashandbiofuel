@@ -135,13 +135,13 @@
                     </div>
 
                     <!-- Description Fields -->
-                    <div class="col-12 col-md-6 mt-3">
+                    <div class="col-12 col-lg-6 mt-3">
                         <label class="form-label" for="short_description">Short Description</label>
                         <textarea class="form-control" id="short_description" name="short_description"></textarea>
                         <div class="invalid-feedback ">Please enter a short description</div>
                     </div>
 
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-lg-6">
                         <label class="form-label" for="additional_description">Additional Description</label>
                         <textarea class="form-control" id="additional_description" name="additional_description"></textarea>
                         <div class="invalid-feedback">Please enter an additional description</div>
@@ -151,6 +151,27 @@
                         <label class="form-label" for="description">Description</label>
                         <textarea class="form-control" id="summernote" name="description"></textarea>
                         <div class="invalid-feedback">Please enter a description</div>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <div class="d-flex flex-wrap gap-3">
+                            
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="featured" name="featured">
+                                <label class="form-check-label" for="featured">Featured</label>
+                            </div>
+                            
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="discounted" name="discounted">
+                                <label class="form-check-label" for="discounted">Discounted</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="new_arrival" name="new_arrival">
+                                <label class="form-check-label" for="new_arrival">New Arrival</label>
+                            </div>
+                           
+                        </div>
                     </div>
 
                     <!-- Product Variations -->
@@ -174,38 +195,42 @@
     </div>
 
 
+
+
+
+
+    {{-- Seo Manager Model --}}
     <div class="modal fade bd-example-modal-lg" id="seoModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-ld">
             <div class="modal-content">
                 <div class="modal-header">
 
-
-                    <h4 class="modal-title" id="modalTitle">Add New Product</h4>
-
-
-                    <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button class="btn-close py-0" type="button" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-                <form id="productForm" class="row g-3 p-4" enctype='multipart/form-data'>
+                <form id="seoForm" class="row g-3 p-4">
+
                     @csrf
-                    <input type="hidden" id="productId" name="product_id">
+
+                    <input type="hidden" id="product_id" name="product_id">
 
                     <!-- Product Name -->
                     <div class="col-12 col-md-6">
                         <label class="form-label" for="name">Meta Title</label>
-                        <input class="form-control" id="name" name="name" type="text" placeholder="">
-                        <div class="invalid-feedback">Please enter a valid product name</div>
+                        <input class="form-control" id="meta_title" name="meta_title" type="text">
+                        <div class="invalid-feedback">Please enter a valid Title</div>
                     </div>
 
                     <div class="col-12 col-md-6">
-                        <label class="form-label" for="name">Product Name</label>
-                        <input class="form-control" id="name" name="name" type="text">
-                        <div class="invalid-feedback">Please enter a valid product name</div>
+                        <label class="form-label" for="name">Meta Keywords</label>
+                        <input class="form-control" id="meta_keyword" name="meta_keyword" type="text">
+                        <div class="invalid-feedback">Please enter a valid Keywords</div>
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label" for="name">Product Name</label>
-                        <textarea class="form-control" id="name" name="name"></textarea>
-                        <div class="invalid-feedback">Please enter a valid product name</div>
+                        <label class="form-label" for="name">Meta Description</label>
+                        <textarea class="form-control" id="meta_description" name="meta_description"></textarea>
+                        <div class="invalid-feedback">Please enter a valid Description</div>
                     </div>
 
                     <!-- Submit Button -->
@@ -218,7 +243,7 @@
     </div>
 
 
-    
+
 
     <x-slot name="header">
         <div class="row">
@@ -279,74 +304,27 @@
                                     Add Product
                                 </button>
 
+
+
+
+
                             </div>
-                            <div class="collapse" id="collapseProduct">
-                                <div class="card card-body list-product-body">
-                                    <div
-                                        class="row row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-2 g-3">
-                                        <div class="col">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected="">Choose Product</option>
-                                                <option value="1">Apple iphone 13 Pro</option>
-                                                <option value="2">Wood Chair</option>
-                                                <option value="3">M185 Compact Wireless Mouse</option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected="">Choose Category</option>
-                                                <option value="1">Furniture</option>
-                                                <option value="2">Smart Gadgets</option>
-                                                <option value="3">Electrics</option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected="">Choose Sub Category</option>
-                                                <option value="1">Smart Phones</option>
-                                                <option value="2">Smart Watches</option>
-                                                <option value="3">Wireless headphone</option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected="">Status</option>
-                                                <option value="1">Sold Out </option>
-                                                <option value="2">In Stock</option>
-                                                <option value="3">Pre Order</option>
-                                                <option value="4">Limited Stock </option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected="">Price</option>
-                                                <option value="1">56000.00</option>
-                                                <option value="2">19000.00</option>
-                                                <option value="3">10000.00</option>
-                                                <option value="3">15000.00</option>
-                                                <option value="3">99000.00</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="list-product">
                             <div class="table-responsive">
                                 <table class="table table-md table-striped" id="productsTable">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Product Name</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Selling Price</th>
-                                            <th scope="col">Crafted Date</th>
-                                            <th scope="col">Status</th>
-                                            <th scope=col>Action</th>
-                                            <th scope=col>Seo</th>
-
+                                            <th scope="col" style="width: 15%;">Product Name</th>
+                                            <th scope="col" style="width: 10%;">Price</th>
+                                            <th scope="col" style="width: 15%;">Selling Price</th>
+                                            <th scope="col" style="width: 10%;">Status</th>
+                                            <th scope="col" style="width: 20%;">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody></tbody>
+
+                                    <tbody class="text-center   "></tbody>
                                 </table>
                             </div>
 
@@ -378,7 +356,7 @@
                             orderable: false,
                             searchable: false
                         },
-                   
+
                         {
                             data: 'price',
                             name: 'price'
@@ -387,10 +365,7 @@
                             data: 'selling_price',
                             name: 'selling_price'
                         },
-                        {
-                            data: 'crafted_date',
-                            name: 'crafted_date'
-                        },
+
                         {
                             data: 'status',
                             name: 'status',
@@ -403,13 +378,14 @@
                             orderable: false,
                             searchable: false
                         },
-                        {
-                            data: 'seo',
-                            name: 'seo',
-                            orderable: false,
-                            searchable: false
-                        }
-                    ]
+                    ],
+                    drawCallback: function(settings) {
+                        // Initialize select2 for the dynamically added select elements
+                        $('.select_flag').select2({
+                            placeholder: "Select Flag",
+                            width: '10px' // Adjust width if needed
+                        });
+                    }
                 });
 
                 FilePond.registerPlugin(
@@ -419,7 +395,7 @@
 
                 const inputElement = document.querySelector('.product-pond');
                 const pond = FilePond.create(inputElement, {
-                    
+
                     maxFileSize: '10MB',
                     server: {
                         process: {
@@ -478,13 +454,14 @@
 
 
 
+
                 $(document).on('click', '.remove-row', function() {
                     $(this).closest('.variation-row').remove();
                 });
 
                 function validateFile(file) {
 
-                    const validTypes = ["image/jpeg", "image/png", "image/gif", "file/csv"];
+                    const validTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "file/csv"];
                     return validTypes.includes(file.type);
                 }
 
@@ -523,6 +500,8 @@
 
                     // Get all variation rows and organize images by color
                     $('.variation-row').each(function(index) {
+
+
                         const hexCode = $(this).find('input[type="color"]').val();
                         const images = $(this).find('input[type="file"]')[0].files;
 
@@ -616,7 +595,6 @@
                     $('#productForm')[0].reset();
                     $('#variationRows').empty();
                     clearErrors();
-                    files.length = 0;
 
                     // Reset Select2
                     $('#search_tags').val(null).trigger('change');
@@ -687,10 +665,6 @@
                     $(this).closest('.variation-row').remove();
                 });
 
-                // Remove individual row when clicking the remove button
-                $(document).on('click', '.remove-row', function() {
-                    $(this).closest('.variation-row').remove();
-                });
 
 
                 $(document).on('click', '.remove-color', function() {
@@ -730,6 +704,7 @@
                 });
 
                 $(document).on('change', '.changeStatus', function() {
+
                     const categoryId = $(this).attr('id').replace('cb_', '');
                     const newStatus = $(this).prop('checked') ? 1 : 0;
 
@@ -756,44 +731,61 @@
                 });
 
 
+
+                $('#seoModal').on('show.bs.modal', function(event) {
+                    const button = $(event.relatedTarget); // Button that triggered the modal
+                    const productId = button.data('id'); // Extract info from data-* attributes
+
+                    $('#seoModal #product_id').val(productId); // Set the product ID in the modal's hidden input
+                });
+
+                $('#seoForm').on('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+                    formData.append('_method', 'PUT');
+
+
+                    const url = "{{ route('product.seo') }}";
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                productTable.ajax.reload();
+                                $('#seoModal').modal('hide');
+                                formData.resetForm();
+                                Swal.fire('Success', 'SEO data updated successfully', 'success');
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                                handleFormErrors(xhr.responseJSON.errors);
+
+                            } else {
+                                Swal.fire('Error', 'An unexpected error occurred.', 'error');
+
+                            }
+
+                        }
+                    });
+                });
+
+
+            
+
+
+
             });
         </script>
     @endpush
 
 
 </x-app-layout>
-
-
-
-
-
-{{-- Get Product Tags
-function initializeProductForm(productId) {
-    $.ajax({
-        url: `/admin/products/${productId}/edit`,
-        method: 'GET',
-
-        success: function(response) {
-
-            const product = response.product;
-
-            // Handle tags
-            if (product.search_tags) {
-                try {
-                    const tags = JSON.parse(product.search_tags); 
-                    tags.forEach(tag => {
-                        const option = new Option(tag, tag, true, true);
-                        $('#tags').append(option);
-                    });
-                } catch (e) {
-                    Swal.fire('Error', 'Error Fetching Search Tags', 'error!');
-                }
-            }
-
-        },
-        error: function(xhr) {
-            Swal.fire('Error', 'Error loading product', 'error!');
-
-        }
-    });
-} --}}

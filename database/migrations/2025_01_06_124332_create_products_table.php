@@ -28,9 +28,11 @@ return new class extends Migration
             $table->text('additional_description');
             $table->text('description');
             $table->string('meta_title')->nullable();
-            $table->string('meta_keywords')->nullable();
+            $table->string('meta_keyword')->nullable();
             $table->text('meta_description')->nullable();
-
+            $table->boolean('featured')->default(false);
+            $table->boolean('discounted')->default(false);
+            $table->boolean('new_arrival')->default(false);
             $table->timestamps();
         });
     }

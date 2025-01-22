@@ -51,8 +51,7 @@ class ProductController extends Controller
                         return
                             '
                             <div class="product-names">
-                                <div class="light-product-box"><img class="img-fluid" src="' . $imageUrl . '" alt="Product Image">
-                                </div>
+                              <img class="img-fluid rounded" style="height:70px; width:70px" src="' . $imageUrl . '" alt="Product Image">
                                 <p>' . $product->name . '</p>
                             </div>';
                     })
@@ -69,28 +68,38 @@ class ProductController extends Controller
                     })
 
                     ->addColumn('action', function ($product) {
-
                         // Edit button
                         $editButton = '
-                        <a href="' . route('products.edit', $product->id)  . '" >
-                          <i style="cursor:pointer;" class="fa-solid fa-pen-to-square fs-5 text-success me-3 editBtn" 
-                            title="Show"></i>
-                        </a>';
+                            <a href="' . route('products.edit', $product->id) . '" >
+                                <i style="cursor:pointer;" class="fa-solid fa-pen-to-square fs-5 text-success me-3 editBtn" 
+                                   title="Edit"></i>
+                            </a>';
 
                         // Show button
-                        $showbutton = '
-                        <a href="' . route('products.show', $product->id)  . '" >
-                          <i style="cursor:pointer;" class="fa-regular fa-eye fs-5 text-success me-3 editBtn" 
-                            title="Show"></i>
-                        </a>';
+                        $showButton = '
+                            <a href="' . route('products.show', $product->id) . '" >
+                                <i style="cursor:pointer;" class="fa-regular fa-eye fs-5 text-success me-3 showBtn" 
+                                   title="Show"></i>
+                            </a>';
 
                         // Delete button
                         $deleteButton = '
-                        <i style="cursor:pointer;" class="fa-solid fa-trash deleteBtn fs-5 text-danger me-3" data-id="' . $product->id . '" id="deleteBtn_' . $product->id . '" title="Delete"></i>
-                    ';
+                            <i style="cursor:pointer;" class="fa-solid fa-trash deleteBtn fs-5 text-danger me-3" 
+                               data-id="' . $product->id . '" 
+                               id="deleteBtn_' . $product->id . '" 
+                               title="Delete"></i>';
 
-                        return   $editButton . ' ' . $showbutton . ' ' . $deleteButton;
+                        $seoButton = '
+                               <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#seoModal" 
+                                   data-id="' . $product->id . '" aria-label="Edit SEO for product ' . htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8') . '">
+                                   SEO
+                               </button>';
+
+
+
+                        return '<div class="d-flex justify-content-start gap-2 align-items-center">' . $editButton . $showButton .          $deleteButton . $seoButton  . '</div>';
                     })
+
 
                     ->editColumn('price', function ($product) {
                         return $product->price; // Format price
@@ -100,21 +109,7 @@ class ProductController extends Controller
                         return $product->selling_price; // Format selling price
                     })
 
-                    ->addColumn('seo', function ($product) {
-
-                        // SEO button
-                        $seoButton = '
-                         
-                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#seoModal">
-                                SEO
-                            </button>
-                         
-                          ';
-
-                        return $seoButton;
-                    })
-
-                    ->rawColumns(['product_name', 'status', 'action', 'seo']) // Allow rendering of HTML for these columns
+                    ->rawColumns(['product_name', 'status', 'action']) // Allow rendering of HTML for these columns
 
                     ->make(true);
             }
@@ -138,6 +133,8 @@ class ProductController extends Controller
         DB::beginTransaction();
 
         try {
+            
+
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'sku' => 'required|string|unique:products,sku',
@@ -152,7 +149,7 @@ class ProductController extends Controller
                 'product_attributes.*.hex_code' => 'required|string|max:7',
                 'product_attributes.*.images' => 'required|array|min:1',
                 'product_attributes.*.images.*' => 'required|file|mimes:jpeg,png,jpg,webp|max:2048',
-                'search_tags' => 'required|json',
+                'search_tags' => 'required',
                 'crafted_date' => 'required|date',
                 'qty' => 'required|string|min:1'
             ]);
@@ -166,6 +163,7 @@ class ProductController extends Controller
             }
 
             $product = Product::create([
+
                 'name' => $request->name,
                 'sku' => $request->sku,
                 'price' => $request->price,
@@ -180,7 +178,12 @@ class ProductController extends Controller
                 'slug' => Str::slug($request->name),
                 'status' => 1,
                 'qty' => $request->qty,
+                'featured' => $request->filled('featured') ? 1 : 0,
+                'discounted' => $request->filled('discounted') ? 1 : 0,
+                'new_arrival' => $request->filled('new_arrival') ? 1 : 0,
+
             ]);
+
 
             $productFolder = 'products/' . $product->slug;
             Storage::makeDirectory('public/' . $productFolder);
@@ -304,18 +307,32 @@ class ProductController extends Controller
                 'short_description' => $request->short_description,
                 'additional_description' => $request->additional_description,
                 'description' => $request->description,
+                'featured' => $request->filled('featured') ? 1 : 0,
+                'discounted' => $request->filled('discounted') ? 1 : 0,
+                'new_arrival' => $request->filled('new_arrival') ? 1 : 0,
             ]);
 
+
+
             if ($request->filled('product_attributes')) {
+
                 foreach ($request->product_attributes as $attributeData) {
-                    if (isset($attributeData['id'])) {
+
+
+                    if (!isset($attributeData['images'])) {
+
                         $attribute = ProductAttribute::find($attributeData['id']);
+
+
                         if ($attribute) {
                             $attribute->update(['hex_code' => $attributeData['hex_code']]);
                         }
                     } else if (isset($attributeData['images'])) {
+
                         foreach ($attributeData['images'] as $image) {
+
                             $imagePath = $image->store($productFolder, 'public');
+
                             ProductAttribute::create([
                                 'product_id' => $product->id,
                                 'image_path' => $imagePath,
@@ -326,8 +343,10 @@ class ProductController extends Controller
                 }
             }
 
+
             // Remove deleted attributes
             if ($request->filled('removed_attributes')) {
+                // dd($request->removed_attributes);
                 $removedIds = explode(',', $request->removed_attributes);
                 $removedAttributes = ProductAttribute::whereIn('id', $removedIds)->get();
 
@@ -339,10 +358,10 @@ class ProductController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Product updated successfully',
-            ]);
+            // return response()->json([
+            //     'status' => 'success',
+            //     'message' => 'Product updated successfully',
+            // ]);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());

@@ -161,30 +161,53 @@
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-12 mt-3">
+                                <div class="d-flex flex-wrap gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="featured"
+                                            name="featured" value="{{ $product->featured }}" {{ $product->featured  ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="featured">Featured</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="discounted"
+                                            name="discounted" value="{{ $product->discounted }}" {{ $product->discounted  ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="discounted">Discounted</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="new_arrival"
+                                            name="new_arrival" value="{{ $product->new_arrival }}" {{ $product->new_arrival  ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="new_arrival">New Arrival</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <div class="card-body">
                             <!-- Product Attributes Section -->
                             <div class="row mb-3">
                                 <div class="col-12">
-                                        <div class="card-header d-flex justify-content-between align-items-center">
-                                            <h5 class="mb-0">Product Attributes</h5>
-                                            <button type="button" class="btn btn-primary btn-sm" id="addRowBtn">
-                                                <i class="fas fa-plus"></i> Add Attribute
-                                            </button>
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Product Attributes</h5>
+                                        <button type="button" class="btn btn-primary btn-sm" id="addRowBtn">
+                                            <i class="fas fa-plus"></i> Add Attribute
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="variationRows">
+                                            <!-- Dynamic rows will be added here -->
                                         </div>
-                                        <div class="card-body">
-                                            <div id="variationRows">
-                                                <!-- Dynamic rows will be added here -->
-                                            </div>
-                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-
-
-                            <!-- Form Actions -->
 
 
                             <div class="col-12">
@@ -294,11 +317,11 @@
                     <div class="existing-images row mt-2">
 
                         ${data ?  `
-                                                                                                    <div class="col-md-3 mb-2 image-container">
-                                                                                                        <div class="position-relative">
-                                                                                                            <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
-                                                                                                        </div>
-                                                                                                    </div>` : ''}
+                                                                                                                            <div class="col-md-3 mb-2 image-container">
+                                                                                                                                <div class="position-relative">
+                                                                                                                                    <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
+                                                                                                                                </div>
+                                                                                                                            </div>` : ''}
 
                                     
                     </div>
