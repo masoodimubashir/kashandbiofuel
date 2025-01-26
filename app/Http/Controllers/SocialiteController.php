@@ -30,18 +30,27 @@ class SocialiteController extends Controller
         ]);
 
         Auth::login($user);
-        
+
         // Check for admin role first
         if ($user->hasRole('admin')) {
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
-        
+
 
         // Check if user has any roles
         if (!$user->hasRole('user')) {
             $user->addRole('user');
         }
-        
+
+
+        if (session()->has('url.intended')) {
+
+            $url = session()->pull('url.intended');
+            session()->forget('url.intended');
+
+            return redirect()->intended($url);
+        }
+
         return redirect()->to('/');
     }
 }

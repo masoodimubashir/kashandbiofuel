@@ -8,18 +8,49 @@ use App\Models\Product;
 use App\Models\Reviews;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use Log;
 
 class CategoryShoppingController extends Controller
 {
-    public function index()
-    {
 
+    public function index(Request $request)
+    {
+        $query = Product::query()
+            ->has('productAttribute')
+            ->has('category')
+            ->has('subCategory')
+            ->with(['productAttribute', 'review', 'category', 'subCategory'])
+            ->withAvg('review', 'rating');
+
+            
+        // Apply category filters
+        if ($request->has('categories')) {
+            $query->whereIn('category_id', $request->categories);
+        }
+
+        // Apply subcategory filters
+        if ($request->has('subcategories')) {
+            $query->whereIn('sub_category_id', $request->subcategories);
+        }
+
+        // Apply price range filter
+        if ($request->has('price')) {
+            [$minPrice, $maxPrice] = explode(';', $request->price);
+            $query->whereBetween('price', [(float)$minPrice, (float)$maxPrice]);
+        }
+
+        // Apply rating filter
+        if ($request->has('rating')) {
+            $query->whereHas('review', function ($query) use ($request) {
+                $query->whereIn('rating', $request->rating);
+            });
+        }
+
+        $products = $query->latest()->paginate(20);
         $categories = Category::latest()->get();
         $subCategories = SubCategory::latest()->get();
-        $products = Product::with('productAttributes')->latest()->get();
         $reviews = Reviews::latest()->get();
 
-//        dd($reviews);
 
         return view('frontend.Category.category-shopping', compact(
             'categories',

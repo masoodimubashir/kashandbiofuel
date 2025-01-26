@@ -13,13 +13,13 @@
     @foreach($allProducts as $product)
         <div>
             <div class="product-box-2 wow fadeIn" data-wow-delay="{{ $loop->iteration * 0.1 . 's' }}">
-                <a href="{{ route('Product.show', [$product->slug]) }}" class="product-image">
+                <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                     <img src="{{ asset('storage/' . $product->productAttributes()->first()->image_path) }}"
                          class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
                 </a>
 
                 <div class="product-detail">
-                    <a href="{{ route('Product.show', [$product->slug]) }}">
+                    <a href="{{ route('product.show', [$product->slug]) }}">
                         <h6>{{ $product->name }}</h6>
                     </a>
                     <ul class="rating">

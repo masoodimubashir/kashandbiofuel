@@ -38,7 +38,7 @@ Route::get('/shop-by-category', [CategoryShoppingController::class, 'index'])->n
 
 
 // Routes For Product
-Route::get('/Product/{slug}', [FrontendProductController::class, 'show'])->name('Product.show');
+Route::get('/product/{slug}', [FrontendProductController::class, 'show'])->name('product.show');
 
 
 //Routes For Cart
@@ -106,7 +106,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 
         //  Route For Reviewing The Product
-        Route::post('/Product/review/store', [ProductReviewController::class, 'store'])->name('Product.review.store');
+        Route::post('/product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
 
 
     });

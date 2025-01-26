@@ -7,6 +7,7 @@ use App\Models\Reviews;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProductReviewController extends Controller
@@ -26,6 +27,7 @@ class ProductReviewController extends Controller
                     'comment' => 'required|string|max:255',
                     'product_id' => 'required|exists:products,id',
                 ]);
+
 
                 if ($validator->fails()) {
                     return response()->json([
@@ -54,6 +56,7 @@ class ProductReviewController extends Controller
 
             } catch (Exception $e) {
 
+                Log::error($e->getMessage());
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Something went wrong.'

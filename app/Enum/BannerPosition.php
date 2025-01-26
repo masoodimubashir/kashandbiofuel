@@ -3,7 +3,11 @@
 namespace App\Enum;
 
 
-enum BannerPosition: string
+/**
+ * Represents the possible positions for a banner on the website.
+ */
+
+ enum BannerPosition: string
 {
     case HEADER = 'header';
     case SLIDER = 'slider';

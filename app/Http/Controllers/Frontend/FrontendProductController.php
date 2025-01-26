@@ -42,6 +42,6 @@ class FrontendProductController extends Controller
         ];
 
 
-        return view('frontend.Product.index', compact('product'));
+        return view('frontend.Product.product-detail', compact('product'));
     }
 }
