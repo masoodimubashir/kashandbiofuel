@@ -24,7 +24,7 @@
 
                                         <label class="form-label" for="name">Name<span
                                                 class="txt-danger">*</span></label>
-                                        <input class="form-control" id="name" type="text" name="name"
+                                        <input class="form-control" id="name" type="text" name="name" 
                                             value="{{ old('name', $user->name) }}" placeholder="Enter first name">
                                         @error('name')
                                             <div class="text-danger">
@@ -36,10 +36,10 @@
 
                                     </div>
                                     <div class="col-xl-4 col-sm-6">
-                                        <label class="form-label" for="email">Last Name<span
+                                        <label class="form-label" for="email">Email<span
                                                 class="txt-danger">*</span></label>
-                                        <input class="form-control" id="email" type="email" id="email"
-                                            name="email" value="{{ old('email', $user->email) }}"
+                                        <input class="form-control" id="email" type="email" id="email" 
+                                             name="email" value="{{ old('email', $user->email) }}"
                                             placeholder="Enter Email">
 
                                         @error('email')

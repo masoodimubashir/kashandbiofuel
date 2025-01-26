@@ -11,15 +11,14 @@ class Product extends Model
 
 
     /**
-     * Bit flags for product statuses
+     * Bit flags for Product statuses
      * Each value must be a power of 2 for bitwise operations to work correctly
      */
-     const FEATURED = 1;     // 0001 in binary
-     
-     const DISCOUNTED = 2;   // 0010 in binary
-     
-     const NEW_ARRIVAL = 4;   // 1000 in binary
+    const FEATURED = 1;     // 0001 in binary
 
+    const DISCOUNTED = 2;   // 0010 in binary
+
+    const NEW_ARRIVAL = 4;   // 1000 in binary
 
 
     protected $fillable = [
@@ -45,7 +44,6 @@ class Product extends Model
         'new_arrival',
     ];
 
-   
 
     public function category(): BelongsTo
     {
@@ -63,7 +61,9 @@ class Product extends Model
     }
 
 
-
-
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Reviews::class);
+    }
 
 }

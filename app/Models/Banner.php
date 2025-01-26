@@ -14,4 +14,6 @@ class Banner extends Model
     protected $casts = [
         'position' => BannerPosition::class
     ];
+
+
 }

@@ -1,9 +1,6 @@
 @extends('welcome')
 
 @section('main')
-    
-   
-
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
@@ -93,7 +90,8 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-profile" type="button" role="tab"><i data-feather="user"></i>
+                                    data-bs-target="#pills-profile" type="button" role="tab"><i
+                                        data-feather="user"></i>
                                     Profile</button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -122,13 +120,16 @@
                                         <h2>My Dashboard</h2>
                                         <span class="title-leaf">
                                             <svg class="icon-width bg-gray">
-                                                <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf"></use>
+                                                <use
+                                                    xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
+                                                </use>
                                             </svg>
                                         </span>
                                     </div>
 
                                     <div class="dashboard-user-name">
-                                        <h6 class="text-content">Hello, <b class="text-title">{{ auth()->user()->name }}</b></h6>
+                                        <h6 class="text-content">Hello, <b
+                                                class="text-title">{{ auth()->user()->name }}</b></h6>
                                         <p class="text-content">From your My Account Dashboard you have the ability to
                                             view a snapshot of your recent account activity and update your account
                                             information. Select a link below to view or edit information.</p>
@@ -140,8 +141,8 @@
                                                 <div class="total-contain">
                                                     <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/order.svg"
                                                         class="img-1 blur-up lazyload" alt="">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/order.svg" class="blur-up lazyload"
-                                                        alt="">
+                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/order.svg"
+                                                        class="blur-up lazyload" alt="">
                                                     <div class="total-detail">
                                                         <h5>Total Order</h5>
                                                         <h3>3658</h3>
@@ -153,8 +154,8 @@
                                                 <div class="total-contain">
                                                     <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/pending.svg"
                                                         class="img-1 blur-up lazyload" alt="">
-                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/pending.svg" class="blur-up lazyload"
-                                                        alt="">
+                                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/pending.svg"
+                                                        class="blur-up lazyload" alt="">
                                                     <div class="total-detail">
                                                         <h5>Total Pending Order</h5>
                                                         <h3>254</h3>
@@ -244,7 +245,9 @@
                                         <h2>My Wishlist History</h2>
                                         <span class="title-leaf title-leaf-gray">
                                             <svg class="icon-width bg-gray">
-                                                <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf"></use>
+                                                <use
+                                                    xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
+                                                </use>
                                             </svg>
                                         </span>
                                     </div>
@@ -677,7 +680,9 @@
                                         <h2>My Orders History</h2>
                                         <span class="title-leaf title-leaf-gray">
                                             <svg class="icon-width bg-gray">
-                                                <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf"></use>
+                                                <use
+                                                    xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
+                                                </use>
                                             </svg>
                                         </span>
                                     </div>
@@ -1002,7 +1007,9 @@
                                             <h2>My Address Book</h2>
                                             <span class="title-leaf">
                                                 <svg class="icon-width bg-gray">
-                                                    <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf"></use>
+                                                    <use
+                                                        xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
+                                                    </use>
                                                 </svg>
                                             </span>
                                         </div>
@@ -1281,7 +1288,9 @@
                                             <h2>My Card Details</h2>
                                             <span class="title-leaf">
                                                 <svg class="icon-width bg-gray">
-                                                    <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf"></use>
+                                                    <use
+                                                        xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
+                                                    </use>
                                                 </svg>
                                             </span>
                                         </div>
@@ -1445,145 +1454,103 @@
                                         <h2>My Profile</h2>
                                         <span class="title-leaf">
                                             <svg class="icon-width bg-gray">
-                                                <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf"></use>
+                                                <use
+                                                    xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
+                                                </use>
                                             </svg>
                                         </span>
                                     </div>
 
-                                    <div class="profile-detail dashboard-bg-box">
-                                        <div class="dashboard-title">
-                                            <h3>Profile Name</h3>
-                                        </div>
-                                        <div class="profile-name-detail">
-                                            <div class="d-sm-flex align-items-center d-block">
-                                                <h3>Vicki E. Pope</h3>
-                                                <div class="product-rating profile-rating">
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star" class="fill"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i data-feather="star"></i>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
 
-                                            <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                data-bs-target="#editProfile">Edit</a>
-                                        </div>
 
-                                        <div class="location-profile">
-                                            <ul>
-                                                <li>
-                                                    <div class="location-box">
-                                                        <i data-feather="map-pin"></i>
-                                                        <h6>Downers Grove, IL</h6>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <form id="send-verification" method="post"
+                                                action="{{ route('verification.send') }}">
+                                                @csrf
+                                            </form>
+
+                                            @if (session('status') === 'profile-updated')
+                                                <div class="text-success">Password Updated....</div>
+                                            @endif
+
+                                            <form id="profileUpdateForm">
+
+
+
+                                                <div class="row g-4">
+
+
+
+                                                    <div class="col-xxl-6">
+                                                        <div class="form-floating theme-form-floating">
+                                                            <input type="email" class="form-control" id="email"
+                                                                readonly value="{{ old('email', auth()->user()->email) }}">
+                                                            <label for="email">Email address</label>
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            test
+                                                        </div>
+                                                        @error('name')
+                                                            <div class="text-danger">
+                                                                {{ $message }}
+
+                                                            </div>
+                                                        @enderror
                                                     </div>
-                                                </li>
 
-                                                <li>
-                                                    <div class="location-box">
-                                                        <i data-feather="mail"></i>
-                                                        <h6>vicki.pope@gmail.com</h6>
+                                                    <div class="col-xxl-6">
+                                                        <div class="form-floating theme-form-floating">
+                                                            <input class="form-control" type="text"
+                                                                value="{{ old('name', auth()->user()->name) }}"
+                                                                name="name" id="name" maxlength="10">
+                                                            <label for="name">Name</label>
+                                                        </div>
+                                                        @error('email')
+                                                            <div class="text-danger">
+                                                                {{ $message }}
+
+                                                            </div>
+                                                        @enderror
                                                     </div>
-                                                </li>
 
-                                                <li>
-                                                    <div class="location-box">
-                                                        <i data-feather="check-square"></i>
-                                                        <h6>Licensed for 2 years</h6>
+
+
+                                                    <div>
+                                                        <button class="btn theme-bg-color btn-sm fw-bold text-light">Save
+                                                            changes</button>
                                                     </div>
-                                                </li>
-                                            </ul>
-                                        </div>
 
-                                        <div class="profile-description">
-                                            <p>Residences can be classified by and how they are connected to
-                                                neighbouring residences and land. Different types of housing tenure can
-                                                be used for the same physical type.</p>
-                                        </div>
-                                    </div>
 
-                                    <div class="profile-about dashboard-bg-box">
-                                        <div class="row">
-                                            <div class="col-xxl-7">
-                                                <div class="dashboard-title mb-3">
-                                                    <h3>Profile About</h3>
+                                                    @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
+                                                        <div>
+                                                            <p class="text-sm mt-2 text-gray-800">
+                                                                {{ __('Your email address is unverified.') }}
+
+                                                                <button form="send-verification"
+                                                                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                    {{ __('Click here to re-send the verification email.') }}
+                                                                </button>
+                                                            </p>
+
+                                                            @if (session('status') === 'verification-link-sent')
+                                                                <p class="mt-2 font-medium text-sm text-green-600">
+                                                                    {{ __('A new verification link has been sent to your email address.') }}
+                                                                </p>
+                                                            @endif
+                                                        </div>
+                                                    @endif
+
                                                 </div>
+                                            </form>
 
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Gender :</td>
-                                                                <td>Female</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Birthday :</td>
-                                                                <td>21/05/1997</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Phone Number :</td>
-                                                                <td>
-                                                                    <a href="javascript:void(0)"> +91 846 - 547 -
-                                                                        210</a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Address :</td>
-                                                                <td>549 Sulphur Springs Road, Downers, IL</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
 
-                                                <div class="dashboard-title mb-3">
-                                                    <h3>Login Details</h3>
-                                                </div>
 
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Email :</td>
-                                                                <td>
-                                                                    <a href="javascript:void(0)">vicki.pope@gmail.com
-                                                                        <span data-bs-toggle="modal"
-                                                                            data-bs-target="#editProfile">Edit</span></a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Password :</td>
-                                                                <td>
-                                                                    <a href="javascript:void(0)">●●●●●●
-                                                                        <span data-bs-toggle="modal"
-                                                                            data-bs-target="#editProfile">Edit</span></a>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
 
-                                            <div class="col-xxl-5">
-                                                <div class="profile-image">
-                                                    <img src="../assets/images/inner-page/dashboard-profile.png"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-                                            </div>
                                         </div>
 
                                     </div>
+
                                 </div>
                             </div>
 
@@ -1593,7 +1560,9 @@
                                         <h2>My Download</h2>
                                         <span class="title-leaf">
                                             <svg class="icon-width bg-gray">
-                                                <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf"></use>
+                                                <use
+                                                    xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
+                                                </use>
                                             </svg>
                                         </span>
                                     </div>
@@ -2366,7 +2335,8 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-floating mb-4 theme-form-floating">
-                            <input type="text" class="form-control" id="fname" placeholder="Enter First Name">
+                            <input type="text" class="form-control" id="fname"
+                                placeholder="Enter First Name">
                             <label for="fname">First Name</label>
                         </div>
                     </form>
@@ -2380,15 +2350,15 @@
 
                     <form>
                         <div class="form-floating mb-4 theme-form-floating">
-                            <input type="email" class="form-control" id="email" placeholder="Enter Email Address">
+                            <input type="email" class="form-control" id="email"
+                                placeholder="Enter Email Address">
                             <label for="email">Email Address</label>
                         </div>
                     </form>
 
                     <form>
                         <div class="form-floating mb-4 theme-form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="address"
-                                style="height: 100px"></textarea>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="address" style="height: 100px"></textarea>
                             <label for="address">Enter Address</label>
                         </div>
                     </form>
@@ -2534,7 +2504,8 @@
                         <div class="col-xxl-6">
                             <form>
                                 <div class="form-floating theme-form-floating">
-                                    <input type="email" class="form-control" id="email1" value="vicki.pope@gmail.com">
+                                    <input type="email" class="form-control" id="email1"
+                                        value="vicki.pope@gmail.com">
                                     <label for="email1">Email address</label>
                                 </div>
                             </form>
@@ -2543,8 +2514,9 @@
                         <div class="col-xxl-6">
                             <form>
                                 <div class="form-floating theme-form-floating">
-                                    <input class="form-control" type="tel" value="4567891234" name="mobile" id="mobile"
-                                        maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value =
+                                    <input class="form-control" type="tel" value="4567891234" name="mobile"
+                                        id="mobile" maxlength="10"
+                                        oninput="javascript: if (this.value.length > this.maxLength) this.value =
                                             this.value.slice(0, this.maxLength);">
                                     <label for="mobile">Email address</label>
                                 </div>
@@ -2710,14 +2682,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-animation btn-md fw-bold"
+                        data-bs-dismiss="modal">No</button>
                     <button type="button" class="btn theme-bg-color btn-md fw-bold text-light"
                         data-bs-target="#removeAddress" data-bs-toggle="modal">Yes</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade theme-modal remove-profile" id="removeAddress" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content">
@@ -2741,5 +2714,49 @@
     </div>
     <!-- Remove Profile Modal End -->
 
+
+    @push('frontend.scripts')
+        <script>
+            $(document).ready(function() {
+                $('#profileUpdateForm').on('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+                    formData.append('_method', 'PATCH');
+
+                    $.ajax({
+                        url: "{{ route('profile.update') }}",
+                        type: 'PATCH',
+                        data: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Swal.fire('Success!', 'Profile Updated...', 'success');
+                            }
+                        },
+                        error: function(xhr) {
+                            const errors = xhr.responseJSON.errors;
+
+                            if (errors) {
+                                let errorMessage = '';
+                                Object.keys(errors).forEach(key => {
+                                    errorMessage += errors[key].join('<br>');
+                                });
+                                Swal.fire('Error!', errorMessage, 'error');
+                            } else {
+                                Swal.fire('Error!', 'Something went wrong.', 'error');
+                            }
+                        }
+                    });
+                });
+
+
+            });
+        </script>
+    @endpush
 
 @endsection

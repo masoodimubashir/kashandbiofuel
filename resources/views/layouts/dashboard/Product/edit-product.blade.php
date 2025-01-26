@@ -1,8 +1,6 @@
 <x-app-layout>
 
 
-
-
     <x-slot name="header">
         <div class="row">
             <div class="col-12 col-sm-6">
@@ -24,9 +22,9 @@
         </div>
     </x-slot>
 
-    {{-- <input type="text" id="product-id" value="{{ $product->id }}">
+    {{-- <input type="text" id="Product-id" value="{{ $Product->id }}">
     <div class="card-body">
-        <input class="product-images-pond" type="file" name="file" multiple>
+        <input class="Product-images-pond" type="file" name="file" multiple>
     </div> --}}
 
 
@@ -81,7 +79,7 @@
                                     <label class="form-label" for="price">Price<span
                                             class="text-danger">*</span></label>
                                     <input type="number" step="0.01" class="form-control" id="price"
-                                        name="price">
+                                           name="price">
                                     <div class="invalid-feedback"></div>
                                 </div>
 
@@ -89,7 +87,7 @@
                                     <label class="form-label" for="selling_price">Selling Price<span
                                             class="text-danger">*</span></label>
                                     <input type="number" step="0.01" class="form-control" id="selling_price"
-                                        name="selling_price">
+                                           name="selling_price">
                                     <div class="invalid-feedback"></div>
                                 </div>
 
@@ -123,7 +121,7 @@
                                     <select class="form-select tags" id="tags" name="search_tags" multiple>
                                         @if ($product->search_tags)
                                             @php
-                                                $tags = explode(',', json_decode($product->search_tags)); // Decodes into an array
+                                                $tags = json_decode($product->search_tags, true); // Decodes into an array
                                             @endphp
 
                                             @foreach ($tags as $tag)
@@ -141,14 +139,16 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="short_description">Short Description</label>
-                                    <textarea class="form-control" id="short_description" name="short_description" rows="3"></textarea>
+                                    <textarea class="form-control" id="short_description" name="short_description"
+                                              rows="3"></textarea>
                                     <div class="invalid-feedback"></div>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="additional_description">Additional
                                         Description</label>
-                                    <textarea class="form-control" id="additional_description" name="additional_description" rows="3"></textarea>
+                                    <textarea class="form-control" id="additional_description"
+                                              name="additional_description" rows="3"></textarea>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -171,17 +171,20 @@
                                 <div class="d-flex flex-wrap gap-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="featured"
-                                            name="featured" value="{{ $product->featured }}" {{ $product->featured  ? 'checked' : '' }}>
+                                               name="featured"
+                                               value="{{ $product->featured }}" {{ $product->featured  ? 'checked' : '' }}>
                                         <label class="form-check-label" for="featured">Featured</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="discounted"
-                                            name="discounted" value="{{ $product->discounted }}" {{ $product->discounted  ? 'checked' : '' }}>
+                                               name="discounted"
+                                               value="{{ $product->discounted }}" {{ $product->discounted  ? 'checked' : '' }}>
                                         <label class="form-check-label" for="discounted">Discounted</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="new_arrival"
-                                            name="new_arrival" value="{{ $product->new_arrival }}" {{ $product->new_arrival  ? 'checked' : '' }}>
+                                               name="new_arrival"
+                                               value="{{ $product->new_arrival }}" {{ $product->new_arrival  ? 'checked' : '' }}>
                                         <label class="form-check-label" for="new_arrival">New Arrival</label>
                                     </div>
 
@@ -227,7 +230,7 @@
         <script>
             // Initialize variables
 
-            $(document).ready(function() {
+            $(document).ready(function () {
 
                 let removedAttributes = [];
                 let removedImages = [];
@@ -242,8 +245,9 @@
                     $.ajax({
                         url: `/admin/products/${productId}/edit`,
                         method: 'GET',
-                        success: function(response) {
+                        success: function (response) {
 
+                            console.log(response);
                             const product = response.product;
 
                             // Set form values
@@ -264,7 +268,7 @@
                             // Load subcategories
                             loadSubCategories(product.category_id, product.sub_category_id);
 
-                            // Add product attributes with images
+                            // Add Product attributes with images
                             if (product.product_attributes?.length) {
                                 product.product_attributes.forEach(attribute => {
                                     addVariationRow(attribute);
@@ -274,13 +278,13 @@
                     });
                 }
 
-                // Initial load of subcategories for existing product
+                // Initial load of subcategories for existing Product
                 function loadSubCategories(categoryId, selectedSubCategoryId = null) {
                     if (categoryId) {
                         $.ajax({
                             url: `/admin/categories/${categoryId}`,
                             method: "GET",
-                            success: function(response) {
+                            success: function (response) {
                                 const category = response.category;
                                 let options = '<option value="">Select Subcategory</option>';
                                 category.sub_categories.forEach(subcategory => {
@@ -297,7 +301,7 @@
 
 
                 // Handle category change
-                $('#category_id').on('change', function() {
+                $('#category_id').on('change', function () {
                     const categoryId = $(this).val();
                     loadSubCategories(categoryId);
                 });
@@ -316,14 +320,14 @@
                     <input type="file" class="form-control" name="images[]" multiple accept="image/*">
                     <div class="existing-images row mt-2">
 
-                        ${data ?  `
+                        ${data ? `
                                                                                                                             <div class="col-md-3 mb-2 image-container">
                                                                                                                                 <div class="position-relative">
                                                                                                                                     <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
                                                                                                                                 </div>
                                                                                                                             </div>` : ''}
 
-                                    
+
                     </div>
                 </div>
                 <div class="col-md-1">
@@ -342,14 +346,13 @@
                 // const $row = $(rowHtml);
                 // $('#variationRows').append($row);
 
-                $('#addRowBtn').click(function() {
+                $('#addRowBtn').click(function () {
                     addVariationRow();
                 });
 
 
-
                 // Handle existing image deletion
-                $(document).on('click', '.delete-image', function() {
+                $(document).on('click', '.delete-image', function () {
                     const imageId = $(this).data('image-id');
                     const container = $(this).closest('.image-container');
 
@@ -368,7 +371,7 @@
                 });
 
                 // Handle row removal
-                $(document).on('click', '.remove-row', function() {
+                $(document).on('click', '.remove-row', function () {
                     const row = $(this).closest('.variation-row');
                     const attributeId = row.find('input[name="attribute_id[]"]').val();
 
@@ -379,17 +382,17 @@
                 });
 
                 // Form submission
-                $('#productForm').on('submit', function(e) {
+                $('#productForm').on('submit', function (e) {
                     e.preventDefault();
                     const formData = new FormData(this);
 
-                    // Add basic product data
+                    // Add basic Product data
                     formData.append('id', $('#productId').val());
                     formData.append('name', $('#name').val());
                     formData.append('search_tags', ($('#tags').val()));
 
-                    // Handle product attributes and images
-                    $('.variation-row').each(function(index) {
+                    // Handle Product attributes and images
+                    $('.variation-row').each(function (index) {
                         const hexCode = $(this).find('input[type="color"]').val();
                         const images = $(this).find('input[type="file"]')[0].files;
                         const attributeId = $(this).find('input[name="attribute_id[]"]').val();
@@ -427,11 +430,11 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
+                        success: function (response) {
                             Swal.fire('Success', 'Product updated successfully', 'success')
                                 .then(() => window.location.href = '/admin/products');
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             handleFormErrors(xhr.responseJSON?.errors);
                         }
                     });
@@ -488,8 +491,7 @@
                 }
 
 
-
-                // Initialize form with product data
+                // Initialize form with Product data
                 const productId = window.location.pathname.split('/')[3];
                 initializeProductForm(productId);
 

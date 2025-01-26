@@ -227,7 +227,6 @@
     <!-- Map Section End -->
 
 
-
     <!-- Location Modal Start -->
     <div class="modal location-modal fade theme-modal" id="locationModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
@@ -327,4 +326,5 @@
         </div>
     </div>
     <!-- Location Modal End -->
+
 @endsection

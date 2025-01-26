@@ -44,18 +44,17 @@ class ProductController extends Controller
                     ->addColumn('product_name', function ($product) {
 
                         $image = $product->productAttributes->first();
-                        $imageUrl = $image ? asset('storage/' . $image->image_path) : asset('dashboard/assets/images/product/product_default.png');
+                        $imageUrl = $image ? asset('storage/' . $image->image_path) : asset('dashboard/assets/images/Product/product_default.png');
 
 
                         // Generate the card HTML
                         return
                             '
-                            <div class="product-names">
+                            <div class="Product-names">
                               <img class="img-fluid rounded" style="height:70px; width:70px" src="' . $imageUrl . '" alt="Product Image">
                                 <p>' . $product->name . '</p>
                             </div>';
                     })
-
                     ->addColumn('status', function ($product) {
 
                         $status = $product->status === 1 ? 'on' : 'off';
@@ -66,49 +65,43 @@ class ProductController extends Controller
                         <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="' . $checkboxId . '"></label>
                     ';
                     })
-
                     ->addColumn('action', function ($product) {
                         // Edit button
                         $editButton = '
                             <a href="' . route('products.edit', $product->id) . '" >
-                                <i style="cursor:pointer;" class="fa-solid fa-pen-to-square fs-5 text-success me-3 editBtn" 
+                                <i style="cursor:pointer;" class="fa-solid fa-pen-to-square fs-5 text-success me-3 editBtn"
                                    title="Edit"></i>
                             </a>';
 
                         // Show button
                         $showButton = '
                             <a href="' . route('products.show', $product->id) . '" >
-                                <i style="cursor:pointer;" class="fa-regular fa-eye fs-5 text-success me-3 showBtn" 
+                                <i style="cursor:pointer;" class="fa-regular fa-eye fs-5 text-success me-3 showBtn"
                                    title="Show"></i>
                             </a>';
 
                         // Delete button
                         $deleteButton = '
-                            <i style="cursor:pointer;" class="fa-solid fa-trash deleteBtn fs-5 text-danger me-3" 
-                               data-id="' . $product->id . '" 
-                               id="deleteBtn_' . $product->id . '" 
+                            <i style="cursor:pointer;" class="fa-solid fa-trash deleteBtn fs-5 text-danger me-3"
+                               data-id="' . $product->id . '"
+                               id="deleteBtn_' . $product->id . '"
                                title="Delete"></i>';
 
                         $seoButton = '
-                               <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#seoModal" 
-                                   data-id="' . $product->id . '" aria-label="Edit SEO for product ' . htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8') . '">
+                               <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#seoModal"
+                                   data-id="' . $product->id . '" aria-label="Edit SEO for Product ' . htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8') . '">
                                    SEO
                                </button>';
 
 
-
-                        return '<div class="d-flex justify-content-start gap-2 align-items-center">' . $editButton . $showButton .          $deleteButton . $seoButton  . '</div>';
+                        return '<div class="d-flex justify-content-start gap-2 align-items-center">' . $editButton . $showButton . $deleteButton . $seoButton . '</div>';
                     })
-
-
                     ->editColumn('price', function ($product) {
                         return $product->price; // Format price
                     })
-
                     ->editColumn('selling_price', function ($product) {
                         return $product->selling_price; // Format selling price
                     })
-
                     ->rawColumns(['product_name', 'status', 'action']) // Allow rendering of HTML for these columns
 
                     ->make(true);
@@ -133,7 +126,6 @@ class ProductController extends Controller
         DB::beginTransaction();
 
         try {
-            
 
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
@@ -162,6 +154,10 @@ class ProductController extends Controller
                 ], 422);
             }
 
+
+            $tags = explode(',', $request->search_tags);
+            $request->merge(['search_tags' => json_encode($tags)]);
+
             $product = Product::create([
 
                 'name' => $request->name,
@@ -174,7 +170,7 @@ class ProductController extends Controller
                 'crafted_date' => $request->crafted_date,
                 'category_id' => $request->category_id,
                 'sub_category_id' => $request->sub_category_id,
-                'search_tags' => json_encode($request->search_tags),
+                'search_tags' => $request->search_tags,
                 'slug' => Str::slug($request->name),
                 'status' => 1,
                 'qty' => $request->qty,
@@ -187,8 +183,6 @@ class ProductController extends Controller
 
             $productFolder = 'products/' . $product->slug;
             Storage::makeDirectory('public/' . $productFolder);
-
-
 
 
             $productAttributes = [];
@@ -216,7 +210,7 @@ class ProductController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to create product: ' . $e->getMessage()
+                'message' => 'Failed to create Product: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -235,24 +229,7 @@ class ProductController extends Controller
 
         return view('layouts.dashboard.Product.view-product', compact('product', 'uniqueHexCodes'));
 
-        // try {
-        //     if (!$product) {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => 'Product not found',
-        //         ], 404);  // 404 status code
-        //     }
 
-        //     return response()->json([
-        //         'status' => 'success',
-        //         'product' => $product,
-        //     ]);
-        // } catch (Exception $e) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Something went wrong. Please try again later.',
-        //     ], 500);
-        // }
     }
 
     /**
@@ -292,12 +269,15 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             $productFolder = 'products/' . $product->slug;
 
+            $tags = explode(',', $request->search_tags);
+            $request->merge(['search_tags' => json_encode($tags)]);
+
             $product->update([
                 'category_id' => $request->category_id,
                 'sub_category_id' => $request->sub_category_id,
                 'name' => $request->name,
                 'sku' => $request->sku,
-                'search_tags' => json_encode($request->search_tags),
+                'search_tags' => $request->search_tags,
                 'slug' => Str::slug($request->name),
                 'price' => $request->price,
                 'selling_price' => $request->selling_price,
@@ -311,7 +291,6 @@ class ProductController extends Controller
                 'discounted' => $request->filled('discounted') ? 1 : 0,
                 'new_arrival' => $request->filled('new_arrival') ? 1 : 0,
             ]);
-
 
 
             if ($request->filled('product_attributes')) {
@@ -358,17 +337,17 @@ class ProductController extends Controller
 
             DB::commit();
 
-            // return response()->json([
-            //     'status' => 'success',
-            //     'message' => 'Product updated successfully',
-            // ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Product updated successfully',
+            ]);
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
-
 
 
     /**
@@ -379,7 +358,7 @@ class ProductController extends Controller
         DB::beginTransaction(); // Start the transaction
 
         try {
-            // 1. Delete associated product attribute images from the storage
+            // 1. Delete associated Product attribute images from the storage
             $productAttributes = ProductAttribute::where('product_id', $product->id)
                 ->get();
 
@@ -396,19 +375,18 @@ class ProductController extends Controller
             }
 
 
-
-            // 2. Delete the associated product attributes from the database
+            // 2. Delete the associated Product attributes from the database
             ProductAttribute::where('product_id', $product->id)
                 ->delete();
 
-            // 3. Delete the product folder from storage (including subdirectories)
-            $productFolder = 'products/' . $product->slug; // Get the folder path using the product's slug
+            // 3. Delete the Product folder from storage (including subdirectories)
+            $productFolder = 'products/' . $product->slug; // Get the folder path using the Product's slug
             if (Storage::exists('public/' . $productFolder)) {
-                Storage::deleteDirectory('public/' . $productFolder); // Delete the entire product folder
+                Storage::deleteDirectory('public/' . $productFolder); // Delete the entire Product folder
             }
 
-            // 4. Delete the product itself from the database (forceDelete for permanent removal if using soft deletes)
-            $product->forceDelete(); // or $product->delete(); if soft delete is used
+            // 4. Delete the Product itself from the database (forceDelete for permanent removal if using soft deletes)
+            $product->forceDelete(); // or $Product->delete(); if soft delete is used
 
             DB::commit(); // Commit the transaction
 
@@ -418,10 +396,10 @@ class ProductController extends Controller
             ]);
         } catch (Exception $e) {
             DB::rollBack(); // Rollback the transaction on failure
-            Log::error('Failed to delete product: ' . $e->getMessage()); // Log the error for debugging
+            Log::error('Failed to delete Product: ' . $e->getMessage()); // Log the error for debugging
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete product: ' . $e->getMessage(),
+                'message' => 'Failed to delete Product: ' . $e->getMessage(),
             ], 500);
         }
     }

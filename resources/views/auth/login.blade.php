@@ -94,6 +94,9 @@
                                         <label for="email">Email Address</label>
                                     </div>
                                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                    <x-input-error :messages="$errors->get('socialite')" class="mt-2" />
+
+
 
                                 </div>
 
@@ -111,13 +114,12 @@
                                     <div class="forgot-box">
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox"
-                                                id="flexCheckDefault">
-                                            <label class="form-check-label" for="flexCheckDefault">Remember me</label>
+                                                id="flexCheckDefault" name="remember">
+                                            <label class="form-check-label" for="flexCheckDefault">{{ __('Remember me') }}</label>
                                         </div>
                                         @if (Route::has('password.request'))
                                             <a href="{{ route('password.request') }}" class="forgot-password">
                                                 {{ __('Forgot your password?') }}
-
                                             </a>
                                         @endif
 
@@ -125,8 +127,9 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-animation w-100 justify-content-center" type="submit">Log
-                                        In</button>
+                                    <button class="btn btn-animation w-100 justify-content-center" type="submit">
+                                        {{ __('Log in') }}
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -138,12 +141,12 @@
                         <div class="log-in-button">
                             <ul>
                                 <li>
-                                    <a href="https://www.google.com/" class="btn google-button w-100">
+                                    <a href="{{ route('auth.redirect') }}" class="btn google-button w-100">
                                         <img src="{{ asset('front/assets/images/inner-page/google.png') }}"
                                             class="blur-up lazyload" alt=""> Log In with Google
                                     </a>
                                 </li>
-                              
+
                             </ul>
                         </div>
 
@@ -195,6 +198,6 @@
     </div>
 
     <div class="flex items-center justify-end mt-4">
-       
+
     </div>
 </form> --}}

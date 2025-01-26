@@ -41,7 +41,6 @@
     </style>
 
 
-
     <!-- Product Form Modal -->
     <div class="modal fade bd-example-modal-lg" id="productModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -91,7 +90,7 @@
                         <div class="box-col-12">
                             <div class="input-group flatpicker-calender">
                                 <input class="form-control" id="datetime-local" id="crafted_date" type="date"
-                                    name="crafted_date">
+                                       name="crafted_date">
                                 <div class="invalid-feedback">Please enter Crafted Date</div>
 
                             </div>
@@ -143,7 +142,8 @@
 
                     <div class="col-12 col-lg-6">
                         <label class="form-label" for="additional_description">Additional Description</label>
-                        <textarea class="form-control" id="additional_description" name="additional_description"></textarea>
+                        <textarea class="form-control" id="additional_description"
+                                  name="additional_description"></textarea>
                         <div class="invalid-feedback">Please enter an additional description</div>
                     </div>
 
@@ -155,12 +155,12 @@
 
                     <div class="col-12 mt-3">
                         <div class="d-flex flex-wrap gap-3">
-                            
+
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="featured" name="featured">
                                 <label class="form-check-label" for="featured">Featured</label>
                             </div>
-                            
+
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="discounted" name="discounted">
                                 <label class="form-check-label" for="discounted">Discounted</label>
@@ -170,7 +170,7 @@
                                 <input class="form-check-input" type="checkbox" id="new_arrival" name="new_arrival">
                                 <label class="form-check-label" for="new_arrival">New Arrival</label>
                             </div>
-                           
+
                         </div>
                     </div>
 
@@ -195,10 +195,6 @@
     </div>
 
 
-
-
-
-
     {{-- Seo Manager Model --}}
     <div class="modal fade bd-example-modal-lg" id="seoModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-ld">
@@ -206,7 +202,7 @@
                 <div class="modal-header">
 
                     <button class="btn-close py-0" type="button" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                            aria-label="Close"></button>
                 </div>
                 <form id="seoForm" class="row g-3 p-4">
 
@@ -243,8 +239,6 @@
     </div>
 
 
-
-
     <x-slot name="header">
         <div class="row">
             <div class="col-12 col-sm-6">
@@ -262,8 +256,6 @@
     </x-slot>
 
 
-
-
     <div class="container-fluid">
 
         <!-- Table Section -->
@@ -277,7 +269,6 @@
                     <div class="card-body">
 
 
-
                         <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="file" name="product_excel" class="product-pond">
@@ -287,11 +278,9 @@
                 </div>
 
 
-
                 <div class="card">
 
                     <div class="card-body">
-
 
 
                         <div class="list-product-header">
@@ -300,12 +289,9 @@
 
 
                                 <button class="btn btn-success " type="button" data-bs-toggle="modal"
-                                    id="productBtn" data-bs-target=".bd-example-modal-lg">
+                                        id="productBtn" data-bs-target=".bd-example-modal-lg">
                                     Add Product
                                 </button>
-
-
-
 
 
                             </div>
@@ -315,13 +301,13 @@
                             <div class="table-responsive">
                                 <table class="table table-md table-striped" id="productsTable">
                                     <thead>
-                                        <tr>
-                                            <th scope="col" style="width: 15%;">Product Name</th>
-                                            <th scope="col" style="width: 10%;">Price</th>
-                                            <th scope="col" style="width: 15%;">Selling Price</th>
-                                            <th scope="col" style="width: 10%;">Status</th>
-                                            <th scope="col" style="width: 20%;">Action</th>
-                                        </tr>
+                                    <tr>
+                                        <th scope="col" style="width: 15%;">Product Name</th>
+                                        <th scope="col" style="width: 10%;">Price</th>
+                                        <th scope="col" style="width: 15%;">Selling Price</th>
+                                        <th scope="col" style="width: 10%;">Status</th>
+                                        <th scope="col" style="width: 20%;">Action</th>
+                                    </tr>
                                     </thead>
 
                                     <tbody class="text-center   "></tbody>
@@ -336,12 +322,9 @@
     </div>
 
 
-
-
-
     @push('dashboard.script')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
 
                 const productTable = $('#productsTable').DataTable({
                     processing: true,
@@ -351,11 +334,11 @@
                         type: 'GET',
                     },
                     columns: [{
-                            data: 'product_name',
-                            name: 'product_name',
-                            orderable: false,
-                            searchable: false
-                        },
+                        data: 'product_name',
+                        name: 'product_name',
+                        orderable: false,
+                        searchable: false
+                    },
 
                         {
                             data: 'price',
@@ -379,7 +362,7 @@
                             searchable: false
                         },
                     ],
-                    drawCallback: function(settings) {
+                    drawCallback: function (settings) {
                         // Initialize select2 for the dynamically added select elements
                         $('.select_flag').select2({
                             placeholder: "Select Flag",
@@ -393,7 +376,7 @@
                     FilePondPluginFileValidateSize
                 );
 
-                const inputElement = document.querySelector('.product-pond');
+                const inputElement = document.querySelector('.Product-pond');
                 const pond = FilePond.create(inputElement, {
 
                     maxFileSize: '10MB',
@@ -433,7 +416,7 @@
 
                 $('#summernote').summernote({
                     ...summernoteConfig,
-                    placeholder: 'Enter product description here'
+                    placeholder: 'Enter Product description here'
                 });
 
                 $('#short_description').summernote({
@@ -453,9 +436,7 @@
                 });
 
 
-
-
-                $(document).on('click', '.remove-row', function() {
+                $(document).on('click', '.remove-row', function () {
                     $(this).closest('.variation-row').remove();
                 });
 
@@ -478,12 +459,12 @@
                     previewItem.append(previewWrapper);
 
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         img.attr('src', e.target.result);
                     };
                     reader.readAsDataURL(file);
 
-                    removeBtn.click(function() {
+                    removeBtn.click(function () {
                         const index = files.findIndex(f => f.file === file);
                         if (index > -1) {
                             files.splice(index, 1);
@@ -494,12 +475,12 @@
                     previewContainer.append(previewItem);
                 }
 
-                $('#productForm').on('submit', function(e) {
+                $('#productForm').on('submit', function (e) {
                     e.preventDefault();
                     const formData = new FormData(this);
 
                     // Get all variation rows and organize images by color
-                    $('.variation-row').each(function(index) {
+                    $('.variation-row').each(function (index) {
 
 
                         const hexCode = $(this).find('input[type="color"]').val();
@@ -527,7 +508,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
                                 productTable.ajax.reload();
                                 $('#productModal').modal('hide');
@@ -535,7 +516,7 @@
                                 Swal.fire('Success', 'Product created successfully', 'success');
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             handleFormErrors(xhr.responseJSON.errors);
                         }
                     });
@@ -606,13 +587,13 @@
                 }
 
 
-                $('#category_id').on('change', function() {
+                $('#category_id').on('change', function () {
                     const categoryId = $(this).val();
                     if (categoryId) {
                         $.ajax({
                             url: `/admin/categories/${categoryId}`,
                             method: "GET",
-                            success: function(response) {
+                            success: function (response) {
                                 const category = response.category;
                                 let options = '<option value="">Select Subcategory</option>';
                                 category.sub_categories.forEach(subcategory => {
@@ -629,7 +610,7 @@
 
                 let rowIndex = 0;
 
-                $('#addRowBtn').click(function() {
+                $('#addRowBtn').click(function () {
                     const newRow = `
                         <div class="variation-row border rounded p-3 mt-3">
                             <div class="row">
@@ -661,17 +642,16 @@
                     rowIndex++;
                 });
 
-                $(document).on('click', '.remove-row', function() {
+                $(document).on('click', '.remove-row', function () {
                     $(this).closest('.variation-row').remove();
                 });
 
 
-
-                $(document).on('click', '.remove-color', function() {
+                $(document).on('click', '.remove-color', function () {
                     $(this).closest('.color-group').remove();
                 });
 
-                $(document).on('click', '.deleteBtn', function() {
+                $(document).on('click', '.deleteBtn', function () {
                     const productId = $(this).data('id');
                     Swal.fire({
                         title: 'Are you sure?',
@@ -689,13 +669,13 @@
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content')
                                 },
-                                success: function(response) {
-                                    Swal.fire('Deleted!', 'The product has been deleted.',
+                                success: function (response) {
+                                    Swal.fire('Deleted!', 'The Product has been deleted.',
                                         'success');
                                     productTable.ajax.reload(null, false);
                                 },
-                                error: function() {
-                                    Swal.fire('Error!', 'Failed to delete the product.',
+                                error: function () {
+                                    Swal.fire('Error!', 'Failed to delete the Product.',
                                         'error');
                                 }
                             });
@@ -703,7 +683,7 @@
                     });
                 });
 
-                $(document).on('change', '.changeStatus', function() {
+                $(document).on('change', '.changeStatus', function () {
 
                     const categoryId = $(this).attr('id').replace('cb_', '');
                     const newStatus = $(this).prop('checked') ? 1 : 0;
@@ -716,14 +696,14 @@
                             model: 'Product',
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
                                 productTable.ajax.reload(null, false);
                             } else {
                                 Swal.fire('Error!', 'Failed to update status.', 'error');
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             Swal.fire('Error!', 'Something went wrong while updating status.',
                                 'error');
                         }
@@ -731,22 +711,21 @@
                 });
 
 
-
-                $('#seoModal').on('show.bs.modal', function(event) {
+                $('#seoModal').on('show.bs.modal', function (event) {
                     const button = $(event.relatedTarget); // Button that triggered the modal
                     const productId = button.data('id'); // Extract info from data-* attributes
 
-                    $('#seoModal #product_id').val(productId); // Set the product ID in the modal's hidden input
+                    $('#seoModal #product_id').val(productId); // Set the Product ID in the modal's hidden input
                 });
 
-                $('#seoForm').on('submit', function(e) {
+                $('#seoForm').on('submit', function (e) {
                     e.preventDefault();
 
                     const formData = new FormData(this);
                     formData.append('_method', 'PUT');
 
 
-                    const url = "{{ route('product.seo') }}";
+                    const url = "{{ route('Product.seo') }}";
 
                     $.ajax({
                         url: url,
@@ -757,7 +736,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
                                 productTable.ajax.reload();
                                 $('#seoModal').modal('hide');
@@ -765,7 +744,7 @@
                                 Swal.fire('Success', 'SEO data updated successfully', 'success');
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             if (xhr.responseJSON && xhr.responseJSON.errors) {
                                 handleFormErrors(xhr.responseJSON.errors);
 
@@ -777,10 +756,6 @@
                         }
                     });
                 });
-
-
-            
-
 
 
             });

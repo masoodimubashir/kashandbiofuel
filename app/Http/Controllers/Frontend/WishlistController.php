@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Http\Controllers\Frontend;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class WishlistController extends Controller
+{
+
+    public function index()
+    {
+        return view('frontend.Wishlist.wishlist');
+    }
+
+    public function store(Request $request)
+    {
+        dd($request->all());
+    }
+
+
+}

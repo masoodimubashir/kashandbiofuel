@@ -1,0 +1,27 @@
+/*  Styles For Input Stars */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse; /* Display stars right-to-left */
+    justify-content: flex-start;
+}
+
+.star-rating input {
+    display: none; /* Hide the radio buttons */
+}
+
+.star-rating label {
+    font-size: 2rem; /* Adjust size of the stars */
+    color: lightgray; /* Default color of stars */
+    cursor: pointer; /* Pointer cursor for selection */
+}
+
+.star-rating input:checked ~ label {
+    color: gold; /* Highlight selected stars */
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: gold; /* Highlight stars on hover */
+}
+
+

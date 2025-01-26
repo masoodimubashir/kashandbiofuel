@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend;
 
 use App\Enum\BannerPosition;
+use App\Http\Controllers\Controller;
 use App\Models\Banner;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {

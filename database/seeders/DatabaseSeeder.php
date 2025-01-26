@@ -15,12 +15,16 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $this->call(LaratrustSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(SubCategorySeeder::class);
 
         $user = User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('@Admin123')
         ]);
+
+
 
         $user->addRole('admin');
 

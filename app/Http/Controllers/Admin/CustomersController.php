@@ -34,7 +34,7 @@ class CustomersController extends Controller
                         return Carbon::parse($user->created_at)->format('d-m-Y');
                     })
                     ->make(true);
-            
+
             }
 
             return view('layouts.dashboard.Customers.customer');
@@ -62,7 +62,7 @@ class CustomersController extends Controller
                 'hours' => 'required|numeric',
                 'performance' => 'required|string'
             ]);
-
+            
             if ($validator->fails()) {
                 return response()->json([
                     'status' => 'error',

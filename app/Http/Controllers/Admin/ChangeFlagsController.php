@@ -15,7 +15,7 @@ class ChangeFlagsController extends Controller
 
         dd($product);
 
-        // Update the flag for the product
+        // Update the flag for the Product
         $product->flag = $request->flag;
         $product->save();
 
