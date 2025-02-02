@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User\Requests\Auth;
+namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
@@ -52,6 +52,7 @@ class LoginRequest extends FormRequest
 
         }
 
+
         // Check regular login credentials
         if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
@@ -61,6 +62,7 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+
     }
 
     /**

@@ -48,6 +48,12 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         if ($user->hasRole('user')) {
+            session()->put('user', [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'login' => true,
+            ]);
             return redirect(route('user.dashboard', absolute: false));
         }
 

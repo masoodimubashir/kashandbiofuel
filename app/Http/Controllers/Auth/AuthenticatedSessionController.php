@@ -3,22 +3,29 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\User\Requests\Auth\LoginRequest;
+use App\Http\Requests\LoginRequest;
+use App\Service\ItemService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+
+    public function __construct(private ItemService $itemService)
+    {
+    }
+
     /**
      * Display the login view.
      */
     public function create(): View
     {
 
-        session()->put('url.intended', url()->previous());
         return view('auth.login');
+
     }
 
     /**
@@ -32,18 +39,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-
         if ($request->user()->hasRole('user')) {
 
+            $user_id = auth()->id();
+            $guest_id = Cookie::get('guest_id');;
 
-            if (session()->has('url.intended')) {
-                $url = session()->pull('url.intended');
-                session()->forget('url.intended');
-                return redirect()->intended($url);
-            }
+            $this->itemService->mergeItems($guest_id, $user_id);
 
             return redirect()->to('/');
+
         }
+
 
         return redirect()->intended(route('admin.dashboard', absolute: false));
     }

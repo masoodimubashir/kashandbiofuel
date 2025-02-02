@@ -22,16 +22,22 @@ use App\Http\Controllers\Frontend\ProductReviewController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialiteController;
+use App\Http\Controllers\User\ApplyCouponController;
 use App\Http\Controllers\User\UserDashboardController;
+use App\Http\Controllers\User\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
+// Checking Session User For Testing
+Route::get('/s', function () {
+    $user = session()->all();
+    dd($user);
+});
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Routes For Contact
 Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
 Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact-us.store');
-
 
 // Route For Category Shopping
 Route::get('/shop-by-category', [CategoryShoppingController::class, 'index'])->name('category.index');
@@ -41,14 +47,24 @@ Route::get('/shop-by-category', [CategoryShoppingController::class, 'index'])->n
 Route::get('/product/{slug}', [FrontendProductController::class, 'show'])->name('product.show');
 
 
-//Routes For Cart
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/store', [CartController::class, 'store'])->name('cart.store');
+Route::middleware('checkUserGuest')->group(function () {
 
+    //Routes For Cart
+    Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view-cart');
+    Route::post('/cart/store', [CartController::class, 'addToCart'])->name('cart.add-to-cart');
+    Route::patch('/cart/update-quantity/{id}', [CartController::class, 'updateQty'])->name('cart.update-qty');
+    Route::delete('/cart/delete/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove-from-cart');
+    Route::put('/return-to-wishlist/{id}', [CartController::class, 'returnToWishlist'])->name('return-to-wishlist');
 
-// Routes For Wishlist
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::post('/wishlist/store', [WishlistController::class, 'store'])->name('wishlist.store');
+    // Routes For Wishlist
+    Route::get('/wishlist', [WishlistController::class, 'viewWishlist'])->name('wishlist.view-wishlist');
+    Route::post('/wishlist/store', [WishlistController::class, 'addToWishlist'])->name('wishlist.add-to-wishlist');
+    Route::delete('/wishlist/delete/{id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove-from-wishlist');
+    Route::put('/return-to-cart/{id}', [WishlistController::class, 'returnToCart'])->name('return-to-cart');
+
+//    Route::put('apply-coupon', [ApplyCouponController::class, 'applyCoupon'])->name('apply-coupon');
+
+});
 
 
 //Route For Checkout
@@ -58,17 +74,17 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
 
-
 // Authenticated Routes For User And Admin
-
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Protected Routes For Admin Only
     Route::middleware('role:admin')->prefix('admin')->group(function () {
 
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-            ->name('admin.dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
         Route::resource('/customers', CustomersController::class);
 
@@ -102,20 +118,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //  Protected Routes For User
     Route::middleware('role:user')->prefix('user')->group(function () {
 
-//        Route For User Dashboard
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 
-        //  Route For Reviewing The Product
         Route::post('/product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
+
+        Route::put('/update/profile', [UserProfileController::class, 'update'])->name('user.profile.update');
+        Route::put('/update/password', [UserProfileController::class, 'updatePassword'])->name('user.password.update');
 
 
     });
 
-
-    // Routes For Both Users And Admin
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 });
 

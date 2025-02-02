@@ -18,23 +18,22 @@ class NewlyArrived extends Component
     public function __construct()
     {
 
+
         $this->new_arrivals = Product::query()
-            ->has('productAttributes')
-            ->with(['productAttributes' => function ($query) {
-                $query->select('product_id', 'image_path')
-                    ->take(1);
-            }])
-            ->select([
-                'id',
-                'name',
-                'slug',
-                'selling_price'
+            ->has('reviews')
+            ->has('productAttribute')
+            ->with([
+                'review',
+                'productAttribute',
             ])
-            ->where('new_arrival', 1)
-            ->latest()
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->where([
+                'status' => 1,
+                'new_arrival' => 1
+            ])
             ->take(3)
             ->get();
-
     }
 
     /**

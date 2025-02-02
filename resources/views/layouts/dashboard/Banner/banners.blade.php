@@ -26,7 +26,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h4>Header Banner</h4>
+                            <h4>Hero Banner</h4>
                         </div>
                         <div class="card-body">
                             <input class="show-preview my-pond" type="file" name="file">
@@ -37,22 +37,22 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h4>Header Banner</h4>
+                            <h4>Header Banner 2</h4>
                         </div>
                         <div class="card-body">
                             <input class="show-preview my-pond2" type="file" name="file">
                         </div>
                     </div>
                 </div>
-                
+
             </div>
 
             <!-- Second Row -->
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h4>Header Banner</h4>
+                            <h4>Banner Slider 1</h4>
                         </div>
                         <div class="card-body">
                             <input class="show-preview my-pond3" type="file" name="file">
@@ -60,10 +60,10 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h4>Header Banner</h4>
+                            <h4>Banner Slider 2</h4>
                         </div>
                         <div class="card-body">
                             <input class="show-preview my-pond4" type="file" name="file">
@@ -71,13 +71,35 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h4>Header Banner</h4>
+                            <h4>Banner Slider 3</h4>
                         </div>
                         <div class="card-body">
                             <input class="show-preview my-pond5" type="file" name="file">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <h4>Banner Slider 4</h4>
+                        </div>
+                        <div class="card-body">
+                            <input class="show-preview my-pond6" type="file" name="file">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <h4>Featured Banner</h4>
+                        </div>
+                        <div class="card-body">
+                            <input class="show-preview my-pond7" type="file" name="file">
                         </div>
                     </div>
                 </div>
@@ -87,18 +109,23 @@
 
     @push('dashboard.script')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 FilePond.registerPlugin(
                     FilePondPluginImagePreview,
                     FilePondPluginFileValidateType
                 );
 
+
                 const positions = {
-                    'my-pond': 'header',
-                    'my-pond2': 'slider',
-                    'my-pond3': 'featured',
-                    'my-pond4': 'promotion',
-                    'my-pond5': 'footer'
+                    'my-pond': 'hero-1',
+                    'my-pond2': 'hero-2',
+                    'my-pond3': 'slider-1',
+                    'my-pond4': 'slider-2',
+                    'my-pond5': 'slider-3',
+                    'my-pond6': 'slider-4',
+                    'my-pond7': 'featured',
+
+
                 };
 
                 function createServerConfig(data) {
@@ -157,15 +184,20 @@
                     const serverConfig = createServerConfig(data);
 
                     Object.entries(positions).forEach(([pondClass, position]) => {
+
                         const pondConfig = createPondConfig(position, serverConfig);
-                        
+
+
                         if (data.files && data.files.length > 0) {
+
+
                             const matchingFile = data.files.find(file => file.id === position);
-                            
+
+
                             if (matchingFile) {
                                 pondConfig.files = [{
                                     source: matchingFile.id,
-                                    options: { type: 'local' },
+                                    options: {type: 'local'},
                                     source: matchingFile.url
                                 }];
                             }

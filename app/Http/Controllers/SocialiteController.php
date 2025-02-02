@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Service\ItemService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
+
+    public function __construct(private ItemService $itemService)
+    {
+
+    }
+
     public function redirect()
     {
 
@@ -31,25 +39,21 @@ class SocialiteController extends Controller
 
         Auth::login($user);
 
-        // Check for admin role first
+
         if ($user->hasRole('admin')) {
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
 
-
-        // Check if user has any roles
         if (!$user->hasRole('user')) {
             $user->addRole('user');
         }
 
+        $user_id = \auth()->user()->id;
+        $guest_id = Cookie::get('guest_id');
 
-        if (session()->has('url.intended')) {
 
-            $url = session()->pull('url.intended');
-            session()->forget('url.intended');
+        $this->itemService->mergeItems($guest_id, $user_id);
 
-            return redirect()->intended($url);
-        }
 
         return redirect()->to('/');
     }

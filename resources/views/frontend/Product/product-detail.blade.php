@@ -153,7 +153,7 @@
                                                        type="radio"
                                                        name="color"
                                                        id="color-{{ $product_attribute->id }}"
-                                                       value="{{ $product_attribute->hex_code }}">
+                                                       value="{{ $product_attribute->id }}">
                                                 <!-- Ensure value is set -->
 
                                                 <label class="form-check-label"
@@ -490,7 +490,7 @@
                                                                 <div class="people-comment">
                                                                     <div class="people-name"><a
                                                                             href="javascript:void(0)"
-                                                                            class="name">Jack Doe</a>
+                                                                            class="name">{{$review->user->name}}</a>
                                                                         <div class="date-time">
                                                                             <h6 class="text-content">
                                                                                 {{$review->created_at->format('d M Y h:i A')}}
@@ -739,7 +739,7 @@
     <script>
         $(document).ready(function () {
             // Constants
-            const selectedColor = $('input[name="color"]');
+            const product_attribute_id = $('input[name="color"]');
             const qtyInput = $('input[name="qty"]');
             const productSlug = window.location.pathname.split('/')[2];
             const product_id = $('input[name="product_id"]').val();
@@ -750,66 +750,65 @@
             // Function to register event listeners
             function setupEventListeners() {
                 // Handle color selection
-                selectedColor.on('change', handleColorChange);
+                product_attribute_id.on('change', handleColorChange);
 
-                // Handle quantity increment and decrement
-                $('.qty-left-minus').on('click', handleDecreaseQuantity);
-                $('.qty-right-plus').on('click', handleIncreaseQuantity);
 
                 // Add to Cart
                 $('#cart-btn').on('click', async function (event) {
                     event.preventDefault();
-                    console.log(event);
-                    await handleCartAction('{{route('cart.store')}}', addToCart);
+                    await handleCartAction('{{route('cart.add-to-cart')}}', addToCart);
                 });
 
                 // Add to Wishlist
                 $('#wishlist-btn').on('click', async function (event) {
                     event.preventDefault();
-                    console.log(event);
-                    await handleCartAction('{{route('wishlist.store')}}', addToWishlist);
+                    await handleCartAction('{{route('wishlist.add-to-wishlist')}}', addToWishlist);
+
                 });
 
-                // Submit Review Form
                 $('#product-review-form').on('submit', handleReviewFormSubmit);
             }
 
             // Handlers
             function handleColorChange(event) {
                 event.preventDefault();
-                const selectedColorId = $(this).attr('id');
-                console.log(`Selected Color ID: ${selectedColorId}`);
+                const product_attribute_id = $(this).attr('id');
             }
 
+
+            async function handleCartAction(url, action) {
+
+                const product_attribute_id = $('input[name="color"]:checked').val();
+                const qty = qtyInput.val();
+                const data = createFormData({product_attribute_id, qty, product_id});
+                await action(data, url);
+            }
+
+            // Utility function to adjust quantity
+            function adjustQuantity(button, adjustment) {
+                const qtyField = button.closest('.quantity-container').find('.qty-input'); // Find qty-input in the container
+                let qty = parseInt(qtyField.val()) || 1;
+                qty = Math.max(1, qty + adjustment);
+                qtyField.val(qty);
+                console.log(`Quantity adjusted: ${qty}`);
+            }
+
+            // Quantity decrement
             function handleDecreaseQuantity(event) {
                 event.preventDefault();
                 adjustQuantity($(this), -1);
             }
 
+            // Quantity increment
             function handleIncreaseQuantity(event) {
                 event.preventDefault();
                 adjustQuantity($(this), 1);
             }
 
-            async function handleCartAction(url, action) {
-                const selectedColor = $('input[name="color"]:checked').val();
-                const qty = qtyInput.val();
-                console.log('Action Data:', {selectedColor, qty, productSlug});
+            // Bind click handlers using event delegation
+            $(document).on('click', '.qty-left-minus', handleDecreaseQuantity);
+            $(document).on('click', '.qty-right-plus', handleIncreaseQuantity);
 
-                const data = createFormData({selectedColor, qty, productSlug});
-                const response = await action(data, url);
-
-                console.log('Response:', response);
-            }
-
-
-            // Utility Functions
-            function adjustQuantity(button, adjustment) {
-                const qtyField = button.parent().find('.qty-input');
-                let qty = parseInt(qtyField.val()) || 0;
-                qty = Math.max(1, qty + adjustment); // Ensure quantity is at least 1
-                qtyField.val(qty);
-            }
 
             async function addToCart(formData, url) {
                 return ajaxRequest(formData, url);
@@ -833,24 +832,21 @@
                 try {
                     const response = await submitReview(formData, url);
 
+                    console.log(response.data);
+
                     if (response.status === 'success') {
 
                         refreshReviewList(reviewList, response.data);
                         resetForm('#product-review-form');
                         $('#writereview').modal('hide');
 
-                    } else {
-                        showAlert('Error!', response.message, 'error');
                     }
                 } catch (error) {
-                    console.log(error)
                     if (error.status === 422) {
                         handleError(error);
-                        console.log(error.response);
 
                     } else if (error.status === 401) {
-                        window.location.href = '/login';
-
+                        window.location.href = '{{route('login')}}';
                     } else {
                         handleError(error);
                     }
@@ -873,6 +869,23 @@
                     },
                     processData: false,
                     contentType: false,
+                    success: function (response) {
+                        if (response.status === true) {
+                            window.location.href = response.redirect_url;
+                        } else {
+                            showAlert('Success!', response.message, 'success');
+                        }
+                    },
+                    error: function (error) {
+
+                        if (error.status === 401) {
+                            window.location.href = '{{route('login')}}';
+                        }
+                        if (error.status === 422) {
+                            handleError(error);
+                        }
+                    }
+
                 });
             }
 
@@ -908,6 +921,7 @@
                 const userName = review.user.name || 'Anonymous';
                 const reviewDate = formatDate(review.created_at) || 'Just now';
                 const stars = generateRatingStars(review.rating || 0);
+
 
                 const reviewHtml = `
             <li>

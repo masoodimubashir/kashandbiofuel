@@ -13,8 +13,8 @@
                     <div class="notification-slider">
                         <div>
                             <div class="timer-notification">
-                                <h6><strong class="me-1">Welcome to Fastkart!</strong>Wrap new offers/gift
-                                    every single day on Weekends.<strong class="ms-1">New Coupon Code: Fast024
+                                <h6><strong class="me-1">Welcome to Kash And Bio Fuel!</strong>Wrap new offers/gift
+                                    every single day on Weekends.<strong class="ms-1">
                                     </strong>
 
                                 </h6>
@@ -37,54 +37,12 @@
                 <ul class="about-list right-nav-about">
                     <li class="right-nav-list">
                         <div class="dropdown theme-form-select">
-                            <button class="btn dropdown-toggle" type="button" id="select-language"
-                                    data-bs-toggle="dropdown">
-                                <img src="../assets/images/country/united-states.png"
-                                     class="img-fluid blur-up lazyload" alt="">
-                                <span>English</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="javascript:void(0)" id="english">
-                                        <img src="../assets/images/country/united-kingdom.png"
-                                             class="img-fluid blur-up lazyload" alt="">
-                                        <span>English</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="javascript:void(0)" id="france">
-                                        <img src="../assets/images/country/germany.png"
-                                             class="img-fluid blur-up lazyload" alt="">
-                                        <span>Germany</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="javascript:void(0)" id="chinese">
-                                        <img src="../assets/images/country/turkish.png"
-                                             class="img-fluid blur-up lazyload" alt="">
-                                        <span>Turki</span>
-                                    </a>
-                                </li>
-                            </ul>
+                           
                         </div>
                     </li>
                     <li class="right-nav-list">
                         <div class="dropdown theme-form-select">
-                            <button class="btn dropdown-toggle" type="button" id="select-dollar"
-                                    data-bs-toggle="dropdown">
-                                <span>USD</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end sm-dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" id="aud" href="javascript:void(0)">AUD</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" id="eur" href="javascript:void(0)">EUR</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" id="cny" href="javAascript:void(0)">CNY</a>
-                                </li>
-                            </ul>
+                           
                         </div>
                     </li>
                 </ul>

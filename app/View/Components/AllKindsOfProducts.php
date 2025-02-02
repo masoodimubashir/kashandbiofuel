@@ -15,10 +15,16 @@ class AllKindsOfProducts extends Component
     {
         $this->allProducts = Product::query()
             ->has('productAttributes')
-            ->with(['productAttributes' => function ($query) {
-                $query->select('product_id', 'image_path')
-                    ->take(1);
-            }])
+            ->with([
+                'productAttributes' => function ($query) {
+                    $query->select('product_id', 'image_path')
+                        ->take(1);
+                },
+                'reviews'
+            ])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->where('status', 1)
             ->select([
                 'id',
                 'name',
@@ -29,6 +35,7 @@ class AllKindsOfProducts extends Component
             ->latest()
             ->take(10)
             ->get();
+
     }
 
     public function render(): View

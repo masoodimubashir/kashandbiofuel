@@ -7,6 +7,7 @@
                 </span>
     <p>A virtual assistant collects the products from your list</p>
 </div>
+
 <div class="row">
     <div class="col-12">
         <div class="slider-5 ratio_87">
@@ -17,6 +18,7 @@
                             <img src="../assets/images/veg-2/blog/1.jpg" class="bg-img blur-up lazyload"
                                  alt="">
                         </a>
+                        
                     </div>
 
                     <div class="blog-detail">

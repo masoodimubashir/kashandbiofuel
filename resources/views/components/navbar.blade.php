@@ -60,7 +60,8 @@
                                 </a>
                             </li>
                             <li class="right-side">
-                                <a href="{{route('wishlist.index')}}" class="btn p-0 position-relative header-wishlist">
+                                <a href="{{route('wishlist.view-wishlist')}}"
+                                   class="btn p-0 position-relative header-wishlist">
                                     <i data-feather="heart"></i>
                                 </a>
                             </li>
@@ -77,14 +78,14 @@
                                         <ul class="cart-list">
                                             <li class="product-box-contain">
                                                 <div class="drop-cart">
-                                                    <a href="product-left-thumbnail.html" class="drop-image">
+                                                    <a href="" class="drop-image">
                                                         <img
                                                             src="{{ asset('front/assets/images/vegetable/Product/1.png') }}"
                                                             class="blur-up lazyload" alt="">
                                                     </a>
 
                                                     <div class="drop-contain">
-                                                        <a href="product-left-thumbnail.html">
+                                                        <a href="">
                                                             <h5>Fantasy Crunchy Choco Chip Cookies</h5>
                                                         </a>
                                                         <h6><span>1 x</span> $80.58</h6>
@@ -97,14 +98,14 @@
 
                                             <li class="product-box-contain">
                                                 <div class="drop-cart">
-                                                    <a href="product-left-thumbnail.html" class="drop-image">
+                                                    <a href="" class="drop-image">
                                                         <img
                                                             src="{{ asset('front/assets/images/vegetable/Product/2.png') }}"
                                                             class="blur-up lazyload" alt="">
                                                     </a>
 
                                                     <div class="drop-contain">
-                                                        <a href="product-left-thumbnail.html">
+                                                        <a href="">
                                                             <h5>Peanut Butter Bite Premium Butter Cookies 600 g
                                                             </h5>
                                                         </a>
@@ -123,7 +124,7 @@
                                         </div>
 
                                         <div class="button-group">
-                                            <a href="{{route('cart.index')}}" class="btn btn-sm cart-button">View
+                                            <a href="{{route('cart.view-cart')}}" class="btn btn-sm cart-button">View
                                                 Cart</a>
                                             <a href="{{route('checkout.index')}}"
                                                class="btn btn-sm cart-button theme-bg-color

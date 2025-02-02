@@ -27,7 +27,9 @@
     <!-- Product Section Start -->
     <section>
         <div class="container-fluid-lg">
-            <x-top-save-today/>
+            {{--   All Kinds Of Products Start--}}
+            <x-all-kinds-of-products/>
+            {{--  All Kinds Of Products End--}}
         </div>
     </section>
     <!-- Product Section End -->
@@ -53,7 +55,8 @@
 
                 <x-newly-arrived/>
 
-                <x-top-rated/>
+                <x-featured-product/>
+
             </div>
         </div>
     </section>
@@ -63,11 +66,11 @@
 
 
     <!-- Blog Section Start -->
-    <section>
-        <div class="container-fluid-lg">
-            <x-featured-blog/>
-        </div>
-    </section>
+    {{--    <section>--}}
+    {{--        <div class="container-fluid-lg">--}}
+    {{--                        <x-featured-blog/>--}}
+    {{--        </div>--}}
+    {{--    </section>--}}
     <!-- Blog Section End -->
 
     <!-- Newsletter Section Start -->
@@ -106,7 +109,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="banner-contain hover-effect">
-                        <img src="../assets/images/cake/banner/4.jpg" class="bg-img blur-up lazyload" alt="">
+                        @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::SLIDER_BANNER_3->value)->first())
+                            <img src="{{ asset('storage/' . $banner->image_path ?? null) }}"
+                                 class="bg-img blur-up lazyload"
+                                 alt="">
+                        @endif
                         <div class="banner-details p-center p-sm-4 p-3 text-white text-center">
                             <div>
                                 <h3 class="lh-base fw-bold text-white">

@@ -18,27 +18,16 @@ class BannerController extends Controller
     {
         if ($request->ajax()) {
 
-            $bannerPositions = [
-                'header' => 'header-banner.jpg',
-                'slider' => 'slider-banner.jpg',
-                'featured' => 'featured-banner.jpg',
-                'promotion' => 'promotion-banner.jpg',
-                'footer' => 'footer-banner.jpg'
-            ];
-
             $files = [];
 
+            foreach (BannerPosition::cases() as $banner) {
 
-
-            foreach ($bannerPositions as $position => $filename) {
-
+                $filename = strtolower($banner->value) . '-banner.jpg';
 
                 if (Storage::disk('public')->exists('Banners/' . $filename)) {
-
-
                     $files[] = [
-                        'id' => $position,
-                        'url' => asset('storage/Banners/' . $filename)
+                        'id' => $banner->value,
+                        'url' => asset('storage/Banners/' . $filename),
                     ];
                 }
             }
@@ -51,6 +40,7 @@ class BannerController extends Controller
 
         return view('layouts.dashboard.Banner.banners');
     }
+
     public function store(Request $request)
     {
         if ($request->hasFile('file')) {

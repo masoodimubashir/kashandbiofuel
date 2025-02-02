@@ -6,107 +6,43 @@
                     <h3>Top Rated</h3>
                 </div>
 
-                <div class="top-selling-contain wow fadeInUp">
-                    <a href="product-left-thumbnail.html" class="top-selling-image">
-                        <img src="../assets/images/cake/pro/3.jpg" class="img-fluid blur-up lazyload"
-                            alt="">
-                    </a>
 
-                    <div class="top-selling-detail">
-                        <a href="product-left-thumbnail.html">
-                            <h5>Muffets Burger Bun</h5>
+                @foreach ($topRatedProducts as $product)
+                    <div class="top-selling-contain wow fadeInUp" data-wow-delay="0.4s">
+                        <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
+                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                                 class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
                         </a>
-                        <div class="product-rating">
-                            <ul class="rating">
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star"></i>
-                                </li>
-                            </ul>
-                            <span>(34)</span>
+
+                        <div class="top-selling-detail">
+                            <a href={{ route('product.show', $product->slug) }}>
+                                <h5>
+                                    {{ $product->name }}
+                                </h5>
+                            </a>
+                            <div class="product-rating">
+                                <ul class="rating">
+                                    @php
+                                        $rating = $product->reviews_avg_rating;
+                                    @endphp
+
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <li>
+                                            <i data-feather="star" class="{{ $i <= $rating ? 'fill' : '' }}"></i>
+                                        </li>
+                                    @endfor
+                                </ul>
+                                <span>(
+                                    {{ $product->reviews_count }}
+
+                                    )</span>
+                            </div>
+                            <h6>{{ Number::currency($product->selling_price, 'INR') }}</h6>
                         </div>
-                        <h6>$ 10.00</h6>
                     </div>
-                </div>
+                @endforeach
 
-                <div class="top-selling-contain wow fadeInUp" data-wow-delay="0.2s">
-                    <a href="product-left-thumbnail.html" class="top-selling-image">
-                        <img src="../assets/images/cake/pro/4.jpg" class="img-fluid blur-up lazyload"
-                            alt="">
-                    </a>
 
-                    <div class="top-selling-detail">
-                        <a href="product-left-thumbnail.html">
-                            <h5>Grand Celebration Cake</h5>
-                        </a>
-                        <div class="product-rating">
-                            <ul class="rating">
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star"></i>
-                                </li>
-                            </ul>
-                            <span>(34)</span>
-                        </div>
-                        <h6>$ 40.00</h6>
-                    </div>
-                </div>
-
-                <div class="top-selling-contain wow fadeInUp" data-wow-delay="0.4s">
-                    <a href="product-left-thumbnail.html" class="top-selling-image">
-                        <img src="../assets/images/cake/pro/5.jpg" class="img-fluid blur-up lazyload"
-                            alt="">
-                    </a>
-
-                    <div class="top-selling-detail">
-                        <a href="product-left-thumbnail.html">
-                            <h5>Sweet Cake</h5>
-                        </a>
-                        <div class="product-rating">
-                            <ul class="rating">
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star" class="fill"></i>
-                                </li>
-                                <li>
-                                    <i data-feather="star"></i>
-                                </li>
-                            </ul>
-                            <span>(34)</span>
-                        </div>
-                        <h6>$ 45.00</h6>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -12,7 +12,6 @@ class FrontendProductController extends Controller
     public function show(string $slug)
     {
 
-
         $product = Product::query()
             ->with([
                 'productAttributes',
