@@ -53,13 +53,37 @@
           rel="stylesheet">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"> --}}
+    <style>
+        .gradient-bg {
+            background: linear-gradient(to right, #80a81b, #770a0f, #fff);
+            color: white; /* Ensure text is visible */
+            padding: 20px;
+            text-align: center;
+        }
 
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(to right, #80a81b, #770a0f, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
 
 
     @stack('styles')
 
 </head>
 
+
+{{--rgba(119,10,15,255)--}}
+
+
+
+
+
+{{--#729822--}}
 <body class="bg-effect">
 
 
@@ -67,9 +91,9 @@
 
 <header class="pb-md-4 pb-0">
 
-    <x-header-top/>
+    {{--    <x-header-top/>--}}
 
-    @include('components.navbar')
+    <x-navbar/>
 
     <x-navigation/>
 
@@ -133,7 +157,7 @@
 <div class="theme-option">
     <div class="back-to-top">
         <a id="back-to-top" href="#">
-            <i class="fas fa-chevron-up"></i>
+            <i class="fas fa-chevron-up fs-4"></i>
         </a>
     </div>
 </div>

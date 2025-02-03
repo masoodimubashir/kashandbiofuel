@@ -20,8 +20,6 @@ class NewlyArrived extends Component
 
 
         $this->new_arrivals = Product::query()
-            ->has('reviews')
-            ->has('productAttribute')
             ->with([
                 'review',
                 'productAttribute',

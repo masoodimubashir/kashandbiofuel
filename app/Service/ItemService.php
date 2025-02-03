@@ -52,7 +52,7 @@ class ItemService
     public function getItems(Request $request, string $type): array
     {
 
-        $values = $request->only(['user_id', 'guest_id']);
+        $values = $request->only(['user_id', 'guest_id', 'coupon_code']);
 
         $repository = $this->resolveRepository($type);
 

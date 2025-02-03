@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="top-selling-box">
                 <div class="top-selling-title">
-                    <h3>Fetaured Product</h3>
+                    <h3>Featured Product</h3>
                 </div>
 
 

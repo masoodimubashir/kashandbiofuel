@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
-use function Illuminate\Log\log;
-
 class CouponController extends Controller
 {
 
@@ -51,6 +49,7 @@ class CouponController extends Controller
             }
 
             return view('layouts.dashboard.Coupon.coupons');
+
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -72,7 +71,6 @@ class CouponController extends Controller
                 'end_date' => 'required|date|after:start_date',
                 'usage_limit' => 'required|integer|min:1',
             ]);
-
 
 
             if ($validator->fails()) {

@@ -2,6 +2,8 @@
 
 namespace App\Class;
 
+use App\Service\CouponService;
+
 trait HelperClass
 {
 
@@ -20,9 +22,13 @@ trait HelperClass
      */
     public function calculateItemTotalsAndGrandTotal(array $values, $repository): array
     {
+
         $items = $repository->getItems($values);
 
+        $couponCode = $values['coupon_code'] ?? null;
+
         $checkOutPrice = 0;
+        $discount = 0;
 
         $items = $items->map(function ($item) use (&$checkOutPrice) {
             $this->processItemCalculations($item);
@@ -31,9 +37,22 @@ trait HelperClass
             return $item;
         });
 
-        return [$items, $checkOutPrice];
-    }
+        if ($couponCode) {
 
+            $couponService = app()->make(CouponService::class);
+
+            $coupon = $couponService->validateCoupon($couponCode);
+
+            if ($coupon) {
+                $discount = $checkOutPrice;
+                $checkOutPrice = $couponService->calculateDiscount($checkOutPrice, $coupon);
+                $discount -= $checkOutPrice;
+            }
+
+        }
+
+        return [$items, $checkOutPrice, $discount];
+    }
 
     /**
      * Process item calculations such as grand total, saving amount, and saving percentage.
@@ -46,8 +65,6 @@ trait HelperClass
         $qty = $item->qty;
         $originalPrice = round($item->product->price);
         $sellingPrice = round($item->product->selling_price);
-
-//        dd($sellingPrice, $originalPrice);
 
         // Calculate the item's grand total
         $item->product->grand_total = $this->calculateItemTotal($qty, $sellingPrice);

@@ -12,15 +12,16 @@
             </div>
         </div>
         <div class="logo-icon-wrapper"><a href="index.html"><img class="img-fluid"
-                    src="../assets/images/logo/logo-icon.png" alt=""></a></div>
+                                                                 src="../assets/images/logo/logo-icon.png" alt=""></a>
+        </div>
         <nav class="sidebar-main">
             <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
             <div id="sidebar-menu">
                 <ul class="sidebar-links" id="simple-bar">
                     <li class="back-btn"><a href="index.html"><img class="img-fluid"
-                                src="../assets/images/logo/logo-icon.png" alt=""></a>
+                                                                   src="../assets/images/logo/logo-icon.png" alt=""></a>
                         <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2"
-                                aria-hidden="true"></i></div>
+                                                                              aria-hidden="true"></i></div>
                     </li>
                     <li class="pin-title sidebar-main-title">
                         <div>
@@ -41,22 +42,13 @@
                             <svg class="fill-icon">
                                 <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-home">
                                 </use>
-                            </svg><span>Dashboard </span>
+                            </svg>
+                            <span>Dashboard </span>
                         </a>
 
-                    </li>   
+                    </li>
 
 
-
-                    
-
-
-
-
-
-
-
-                    
                     <li class="sidebar-list">
                         <i class="fa fa-thumb-tack">
                         </i><a class="sidebar-link sidebar-title link-nav" href="{{ route('categories.index') }}">
@@ -68,9 +60,10 @@
                             <svg class="fill-icon">
                                 <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-bookmark">
                                 </use>
-                            </svg><span>Categories</span></a>
+                            </svg>
+                            <span>Categories</span></a>
                     </li>
-                    
+
                     <li class="sidebar-list">
                         <i class="fa fa-thumb-tack">
                         </i><a class="sidebar-link sidebar-title link-nav" href="{{ route('sub-categories.index') }}">
@@ -82,9 +75,10 @@
                             <svg class="fill-icon">
                                 <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-bookmark">
                                 </use>
-                            </svg><span>Subcategories</span></a>
+                            </svg>
+                            <span>Subcategories</span></a>
                     </li>
-                    
+
                     <li class="sidebar-list">
                         <i class="fa fa-thumb-tack">
                         </i><a class="sidebar-link sidebar-title link-nav" href="{{ route('products.index') }}">
@@ -96,12 +90,13 @@
                             <svg class="fill-icon">
                                 <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-bookmark">
                                 </use>
-                            </svg><span>Products</span></a>
+                            </svg>
+                            <span>Products</span></a>
                     </li>
 
 
                     <li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
-                        <a class="sidebar-link sidebar-title" href="{{ route('customers.index') }}">
+                        <a class="sidebar-link sidebar-title" href="{{ route('users.index') }}">
                             <svg class="stroke-icon">
                                 <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#stroke-user">
                                 </use>
@@ -109,11 +104,9 @@
                             <svg class="fill-icon">
                                 <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-user">
                                 </use>
-                            </svg><span>Users</span></a>
+                            </svg>
+                            <span>Users</span></a>
                     </li>
-
-
-                    
 
 
                     <li class="sidebar-main-title">
@@ -133,7 +126,8 @@
                             <svg class="fill-icon">
                                 <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-bookmark">
                                 </use>
-                            </svg><span>Coupons</span></a>
+                            </svg>
+                            <span>Coupons</span></a>
                     </li>
 
                     <li class="sidebar-main-title">
@@ -152,11 +146,12 @@
                                 <use
                                     href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-landing-page">
                                 </use>
-                            </svg><span>Create Banner</span>
+                            </svg>
+                            <span>Create Banner</span>
                         </a>
                     </li>
 
-                   
+
                     <li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
                         <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/banners') }}">
                             <svg class="stroke-icon">
@@ -168,7 +163,8 @@
                                 <use
                                     href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-landing-page">
                                 </use>
-                            </svg><span>Queries</span>
+                            </svg>
+                            <span>Queries</span>
                         </a>
                     </li>
             </div>

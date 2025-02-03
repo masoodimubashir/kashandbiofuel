@@ -10,7 +10,7 @@
                 @foreach ($topRatedProducts as $product)
                     <div class="top-selling-contain wow fadeInUp" data-wow-delay="0.4s">
                         <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
-                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                            <img src="{{  asset('storage/'. $product->productAttribute->image_path ) }}"
                                  class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
                         </a>
 

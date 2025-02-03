@@ -376,7 +376,7 @@
                     FilePondPluginFileValidateSize
                 );
 
-                const inputElement = document.querySelector('.Product-pond');
+                const inputElement = document.querySelector('.product-pond');
                 const pond = FilePond.create(inputElement, {
 
                     maxFileSize: '10MB',

@@ -47,10 +47,9 @@ class ProductController extends Controller
                         $imageUrl = $image ? asset('storage/' . $image->image_path) : asset('dashboard/assets/images/Product/product_default.png');
 
 
-                        // Generate the card HTML
                         return
                             '
-                            <div class="Product-names">
+                            <div class="Product-names d-flex align-items-center gap-2" >
                               <img class="img-fluid rounded" style="height:70px; width:70px" src="' . $imageUrl . '" alt="Product Image">
                                 <p>' . $product->name . '</p>
                             </div>';

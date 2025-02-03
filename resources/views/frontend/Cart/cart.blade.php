@@ -51,7 +51,7 @@
                             <div class="coupon-cart">
                                 <h6 class="text-content mb-2">Coupon Apply</h6>
                                 <form class="mb-3 coupon-box input-group" id="apply-coupon-form">
-                                    <input type="text" class="form-control" id="apply-coupon" name="coupon"
+                                    <input type="text" class="form-control" id="coupon_code" name="coupon"
                                            placeholder="Enter Coupon Code Here...">
                                     <button class="btn-apply">Apply</button>
                                 </form>
@@ -66,7 +66,9 @@
 
                                 <li>
                                     <h4>Coupon Discount</h4>
-                                    <h4 class="price">(-) 0.00</h4>
+                                    <h4 class="price" id="coupon-discount">
+
+                                    </h4>
                                 </li>
 
                                 <li class="align-items-start">
@@ -149,10 +151,11 @@
                         url: "{{route('cart.view-cart')}}", // API endpoint for viewing cart
                         type: "GET",
                         success: function (response) {
-                            // Dynamically render the cart items
+
                             document.querySelector('#cart-items').innerHTML = getItem(response.data);
                             check_out_price.text(response.check_out_price);
                             price.text(response.check_out_price);
+
                         },
                         error: function (error) {
                             handleErrors(error);
@@ -316,30 +319,44 @@
                 });
 
 
-                {{--$('#apply-coupon-form').on('submit', function (e) {--}}
+                $('#apply-coupon-form').on('submit', function (event) {
 
-                {{--    e.preventDefault();--}}
+                    event.preventDefault();
 
-                {{--    let coupon = $('#apply-coupon').val();--}}
+                    const couponCode = $('#coupon_code').val();
 
-                {{--    $.ajax({--}}
-                {{--        url: "{{route('cart.apply-coupon')}}",--}}
-                {{--        type: "POST",--}}
-                {{--        data: {--}}
-                {{--            _token: $('meta[name="csrf-token"]').attr('content'),--}}
-                {{--            coupon: coupon--}}
-                {{--        },--}}
-                {{--        success: function (response) {--}}
-                {{--            if (response.status) {--}}
-                {{--                getCartItems();--}}
-                {{--            }--}}
-                {{--        },--}}
-                {{--        error: function (error) {--}}
-                {{--            handleErrors(error);--}}
-                {{--        }--}}
-                {{--    });--}}
+                    // Check if coupon code is empty and alert the user
+                    if (couponCode === '') {
+                        showAlert('Error', 'Please enter a valid coupon code', 'error');
+                        return;
+                    }
 
-                {{--});--}}
+                    // Perform the AJAX request
+                    $.ajax({
+                        url: "{{ route('apply-coupon') }}",
+                        type: "PUT",
+                        data: {coupon_code: couponCode},
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        },
+                        success: function (response) {
+                            // Log the response for debugging
+                            console.log(response);
+
+                            // Update the cart items dynamically
+                            document.querySelector('#cart-items').innerHTML = getItem(response.data);
+
+                            // Update the checkout price
+                            $('#check_out_price').text(`$${response.check_out_price.toFixed(2)}`);
+
+                            // Update the discount value
+                            $('#coupon-discount').text(`$${response.discount.toFixed(2)}`);
+                        },
+                        error: function (error) {
+                            showAlert('Error!', 'Failed to apply your coupon.', 'error');
+                        },
+                    });
+                });
 
             });
 

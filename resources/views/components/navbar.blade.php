@@ -1,3 +1,8 @@
+{{--<div class="modal-dialog modal-fullscreen-sm-down">--}}
+{{--    ...--}}
+{{--</div>--}}
+
+
 <div class="top-nav top-header sticky-header">
     <div class="container-fluid-lg">
         <div class="row">

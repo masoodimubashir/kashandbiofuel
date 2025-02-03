@@ -16,7 +16,7 @@
 
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="javascript:void(0)"
-                                            data-bs-toggle="dropdown">Pages</a>
+                                           data-bs-toggle="dropdown">Pages</a>
 
                                         <ul class="dropdown-menu">
                                             <li>
@@ -33,7 +33,7 @@
                                         <li
                                             class="nav-item {{ $category->subCategories->count() > 0 ? 'dropdown' : '' }}">
                                             <a class="nav-link {{ $category->subCategories->count() > 0 ? 'dropdown-toggle' : '' }}"
-                                                href="{{ $category->subCategories->count() > 0 ? 'javascript:void(0)' : '' }}"
+                                               href="{{ $category->subCategories->count() > 0 ? 'javascript:void(0)' : '' }}"
                                                 {{ $category->subCategories->count() > 0 ? 'data-bs-toggle=dropdown' : '' }}>
                                                 {{ $category->name }}
                                             </a>
@@ -43,7 +43,8 @@
                                                     <ul class="dropdown-menu">
                                                         @foreach ($category->subCategories as $subCategory)
                                                             <li>
-                                                                <a class="dropdown-item" href="">
+                                                                <a class="dropdown-item"
+                                                                   href="{{route('sub-category-shopping.index', $subCategory->slug)}}">
                                                                     {{ $subCategory->name }}
                                                                 </a>
                                                             </li>
@@ -55,7 +56,8 @@
                                                             @foreach ($category->subCategories->chunk(ceil($category->subCategories->count() / 3)) as $chunk)
                                                                 <div class="dropdown-column col-xl-3">
                                                                     @foreach ($chunk as $subCategory)
-                                                                        <a class="dropdown-item" href="">
+                                                                        <a class="dropdown-item"
+                                                                           href="{{route('sub-category-shopping.index', $subCategory->slug)}}">
                                                                             {{ $subCategory->name }}
                                                                         </a>
                                                                     @endforeach

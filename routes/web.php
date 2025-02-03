@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSeoController;
 use App\Http\Controllers\Admin\StatusUpdateController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CategoryShoppingController;
 use App\Http\Controllers\Frontend\CheckoutController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Frontend\ContactUsController;
 use App\Http\Controllers\Frontend\FrontendProductController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProductReviewController;
+use App\Http\Controllers\Frontend\SubCategoryShoppingController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialiteController;
@@ -42,6 +44,8 @@ Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact
 // Route For Category Shopping
 Route::get('/shop-by-category', [CategoryShoppingController::class, 'index'])->name('category.index');
 
+// Route For SubCategory Shopping
+Route::get('/shop-by-subcategory/{slug}', [SubCategoryShoppingController::class, 'index'])->name('sub-category-shopping.index');
 
 // Routes For Product
 Route::get('/product/{slug}', [FrontendProductController::class, 'show'])->name('product.show');
@@ -62,7 +66,7 @@ Route::middleware('checkUserGuest')->group(function () {
     Route::delete('/wishlist/delete/{id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove-from-wishlist');
     Route::put('/return-to-cart/{id}', [WishlistController::class, 'returnToCart'])->name('return-to-cart');
 
-//    Route::put('apply-coupon', [ApplyCouponController::class, 'applyCoupon'])->name('apply-coupon');
+    Route::put('apply-coupon', [ApplyCouponController::class, 'viewCart'])->name('apply-coupon');
 
 });
 
@@ -95,6 +99,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/products', ProductController::class);
 
         Route::resource('/coupons', CouponController::class);
+
+        Route::resource('/users', UserController::class);
 
         Route::get('banners', [BannerController::class, 'index']);
         Route::post('banners', [BannerController::class, 'store']);

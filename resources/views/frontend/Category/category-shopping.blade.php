@@ -24,145 +24,7 @@
     </section>
     <!-- Breadcrumb Section End -->
 
-    <!-- Category Section Start -->
-    <section class="wow fadeInUp">
-        <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-12">
-                    <div class="slider-7_1 no-space shop-box no-arrow">
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/vegetable.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Vegetables & Fruit</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
 
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/cup.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Beverages</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/meats.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Meats & Seafood</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/breakfast.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Breakfast</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/frozen.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Frozen Foods</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/milk.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Milk & Dairies</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/pet.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Pet Food</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/biscuit.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Biscuits & Snacks</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="shop-category-box">
-                                <a href="shop-left-sidebar.html">
-                                    <div class="shop-category-image">
-                                        <img src="https://themes.pixelstrap.com/fastkart/assets/svg/1/grocery.svg"
-                                            class="blur-up lazyload" alt="">
-                                    </div>
-                                    <div class="category-box-name">
-                                        <h6>Grocery & Staples</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Category Section End -->
-
-    <!-- Shop Section Start -->
     <section class="section-b-space shop-section">
         <div class="container-fluid-lg">
             <div class="row">
@@ -189,7 +51,7 @@
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseOne">
+                                                    data-bs-target="#collapseOne">
                                                 <span>Categories</span>
                                             </button>
                                         </h2>
@@ -197,19 +59,21 @@
                                             <div class="accordion-body">
                                                 <div class="form-floating theme-form-floating-2 search-box">
                                                     <input type="search" class="form-control" id="search-category"
-                                                        placeholder="Search ..">
+                                                           placeholder="Search ..">
                                                     <label for="search-category">Search</label>
                                                 </div>
                                                 <ul class="category-list custom-padding custom-height">
                                                     @foreach ($categories as $category)
                                                         <li>
                                                             <div class="form-check ps-0 m-0 category-list-box">
-                                                                <input class="checkbox_animated filter-category-checkbox"
+                                                                <input
+                                                                    class="checkbox_animated filter-category-checkbox"
                                                                     type="checkbox" name="categories[]"
-                                                                    id="{{ $category->slug }}" value="{{ $category->id }}"
+                                                                    id="{{ $category->slug }}"
+                                                                    value="{{ $category->id }}"
                                                                     {{ in_array($category->id, request()->get('categories', [])) ? 'checked' : '' }}>
                                                                 <label class="form-check-label"
-                                                                    for="{{ $category->slug }}">
+                                                                       for="{{ $category->slug }}">
                                                                     <span class="name">{{ $category->name }}</span>
                                                                     <span class="number">(15)</span>
                                                                 </label>
@@ -225,7 +89,7 @@
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="panelsStayOpen-headingFive">
                                             <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseFive">
                                                 <span>Sub Category</span>
                                             </button>
                                         </h2>
@@ -242,7 +106,7 @@
                                                                     value="{{ $subCategory->id }}"
                                                                     {{ in_array($subCategory->id, request()->get('subcategories', [])) ? 'checked' : '' }}>
                                                                 <label class="form-check-label"
-                                                                    for="{{ $subCategory->slug }}">
+                                                                       for="{{ $subCategory->slug }}">
                                                                     <span class="name">{{ $subCategory->name }}</span>
                                                                     <span class="number">(05)</span>
                                                                 </label>
@@ -258,7 +122,7 @@
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                                             <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseThree">
                                                 <span>Price</span>
                                             </button>
                                         </h2>
@@ -266,7 +130,7 @@
                                             <div class="accordion-body">
                                                 <div class="range-slider">
                                                     <input type="text" class="js-range-slider" name="price"
-                                                        value="{{ request()->get('price') }}">
+                                                           value="{{ request()->get('price') }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -276,7 +140,7 @@
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="panelsStayOpen-headingSix">
                                             <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseSix">
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseSix">
                                                 <span>Rating</span>
                                             </button>
                                         </h2>
@@ -287,8 +151,8 @@
                                                         <li>
                                                             <div class="form-check ps-0 m-0 category-list-box">
                                                                 <input class="checkbox_animated filter-rating-checkbox"
-                                                                    type="checkbox" name="rating[]"
-                                                                    value="{{ $rating }}"
+                                                                       type="checkbox" name="rating[]"
+                                                                       value="{{ $rating }}"
                                                                     {{ in_array($rating, request()->get('rating', [])) ? 'checked' : '' }}>
                                                                 <div class="form-check-label">
                                                                     <ul class="rating">
@@ -331,13 +195,13 @@
                                 <h5 class="text-content">Sort By :</h5>
                                 <div class="dropdown">
                                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                        data-bs-toggle="dropdown">
+                                            data-bs-toggle="dropdown">
                                         <span>Most Popular</span> <i class="fa-solid fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="dropdown-item" id="pop"
-                                                href="javascript:void(0)">Popularity</a>
+                                               href="javascript:void(0)">Popularity</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" id="low" href="javascript:void(0)">Low - High
@@ -373,22 +237,22 @@
                                     <li class="three-grid">
                                         <a href="javascript:void(0)">
                                             <img src="https://themes.pixelstrap.com/fastkart/assets/svg/grid-3.svg"
-                                                class="blur-up lazyload" alt="">
+                                                 class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                     <li class="grid-btn d-xxl-inline-block d-none active">
                                         <a href="javascript:void(0)">
                                             <img src="https://themes.pixelstrap.com/fastkart/assets/svg/grid-4.svg"
-                                                class="blur-up lazyload d-lg-inline-block d-none" alt="">
+                                                 class="blur-up lazyload d-lg-inline-block d-none" alt="">
                                             <img src="https://themes.pixelstrap.com/fastkart/assets/svg/grid.svg"
-                                                class="blur-up lazyload img-fluid d-lg-none d-inline-block"
-                                                alt="">
+                                                 class="blur-up lazyload img-fluid d-lg-none d-inline-block"
+                                                 alt="">
                                         </a>
                                     </li>
                                     <li class="list-btn">
                                         <a href="javascript:void(0)">
                                             <img src="https://themes.pixelstrap.com/fastkart/assets/svg/list.svg"
-                                                class="blur-up lazyload" alt="">
+                                                 class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                 </ul>
@@ -396,102 +260,177 @@
                         </div>
                     </div>
 
-                    <div class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section"
+                    <div
+                        class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section h-screen"
                         id="product-list">
-
-                        @foreach ($products as $product)
-                           
-
-                            <div>
-                                <div class="product-box-3 h-100 wow fadeInUp" data-wow-delay="0.4s">
-                                    <div class="product-header">
-                                        <div class="product-image">
-                                            <a href="{{ route('product.show', $product->slug) }}">
-                                                <img src="storage/{{ $product->productAttribute->image_path }}"
-                                                    class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
-                                            </a>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="product-footer">
-                                        <div class="product-detail">
-                                            <span class="span-name">{{ $product->category->name }}</span>
-                                            <a href="{{ route('product.show', $product->slug) }}">
-                                                <h5 class="name">{{ $product->name }}</h5>
-                                            </a>
-                                            <p class="text-content mt-1 mb-2 product-content">{{ $product->description }}
-                                            </p>
-                                            <div class="product-rating mt-2">
-                                                <div class="product-rating mt-2">
-                                                    <ul class="rating">
-                                                        @for ($i = 0; $i < 5; $i++)
-                                                            <li>
-                                                                <i data-feather="star"
-                                                                    class="{{ $i < round($product->review_avg_rating) ? 'fill' : '' }}"></i>
-                                                            </li>
-                                                        @endfor
-                                                    </ul>
-                                                    <span>({{ round($product->review_avg_rating, 1) }})</span>
-                                                </div>
-                                            </div>
-                                            <h6 class="unit">{{ $product->unit }}</h6>
-                                            <h5 class="price">
-                                                <span class="theme-color">${{ $product->selling_price }}</span>
-                                                <del>${{ $product->price }}</del>
-                                            </h5>
-                                          
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-
-
-
-
-
-
-
-
-
-
-
 
 
                     </div>
 
-                    <nav class="custom-pagination">
+                    <div class="custom-pagination">
                         <ul class="pagination justify-content-center">
-                            {{-- Previous Page Link --}}
-                            <li class="page-item {{ $products->onFirstPage() ? 'disabled' : '' }}">
-                                <a class="page-link" href="{{ $products->previousPageUrl() }}" tabindex="-1">
-                                    <i class="fa-solid fa-angles-left"></i>
-                                </a>
-                            </li>
-                        
-                            {{-- Pagination Elements --}}
-                            @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
-                                <li class="page-item {{ $page == $products->currentPage() ? 'active' : '' }}">
-                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                </li>
-                            @endforeach
-                        
-                            {{-- Next Page Link --}}
-                            <li class="page-item {{ $products->hasMorePages() ? '' : 'disabled' }}">
-                                <a class="page-link" href="{{ $products->nextPageUrl() }}">
-                                    <i class="fa-solid fa-angles-right"></i>
-                                </a>
-                            </li>
+                            <!-- Pagination links will be dynamically injected here -->
                         </ul>
-                        
-                        
-                    </nav>
+                    </div>
+
                 </div>
             </div>
         </div>
     </section>
 
+    @push('frontend.scripts')
+
+        <script>
+            $(document).ready(function () {
+
+                const productList = $('#product-list');
+
+                // Fetch Products Function
+                function fetchProducts(pageUrl = '{{ route("category.index") }}') {
+                    const formData = $('form').serialize();
+
+                    // AJAX request
+                    $.ajax({
+                        url: pageUrl,
+                        type: 'GET',
+                        data: formData,
+                        success: function (response) {
+                            if (response.success) {
+                                productList.empty(); // Clear existing products
+
+                                // Append products dynamically
+                                response.products.forEach(product => {
+                                    const productHTML = generateProductHTML(product);
+                                    productList.append(productHTML);
+                                });
+
+                                updatePagination(response.pagination); // Update pagination controls
+                                feather.replace(); // Re-render Feather icons after dynamic HTML updates
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error fetching products:', error);
+                        }
+                    });
+                }
+
+                // Generate Individual Product HTML
+                function generateProductHTML(product) {
+                    return `
+                <div>
+                    <div class="product-box-3 h-100 wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="product-header">
+                            <div class="product-image">
+                                <a href="/product/${product.slug}">
+                                    <img src="/storage/${product.product_attribute.image_path}"
+                                         class="img-fluid blur-up lazyload" alt="${product.name}">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-detail">
+                                <span class="span-name">${product.category.name}</span>
+                                <a href="/product/${product.slug}">
+                                    <h5 class="name">${product.name}</h5>
+                                </a>
+                                <p class="text-content mt-1 mb-2 product-content">${product.description}</p>
+                                <div class="product-rating mt-2">
+                                    <ul class="rating">
+                                        ${generateRatingHTML(Math.round(product.review_avg_rating))}
+                                    </ul>
+                                    <span>(${Math.round(product.review_avg_rating * 10) / 10})</span>
+                                </div>
+                                <h6 class="unit">${product.unit}</h6>
+                                <h5 class="price">
+                                    <span class="theme-color">$${product.selling_price}</span>
+                                    <del>$${product.price}</del>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            `;
+                }
+
+                // Generate Product Rating Stars HTML
+                function generateRatingHTML(rating) {
+                    let html = '';
+                    for (let i = 0; i < 5; i++) {
+                        html += `
+                    <li>
+                        <i data-feather="star" class="${i < rating ? 'fill' : ''}"></i>
+                    </li>`;
+                    }
+                    return html;
+                }
+
+                // Update Pagination
+                function updatePagination(pagination) {
+                    const paginationContainer = $('.custom-pagination .pagination');
+
+                    paginationContainer.empty(); // Clear old pagination
+
+                    // Previous Page
+                    if (pagination.prev_page_url) {
+                        paginationContainer.append(`
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0)" data-url="${pagination.prev_page_url}">&laquo;</a>
+                    </li>
+                `);
+                    } else {
+                        paginationContainer.append(`
+                    <li class="page-item disabled">
+                        <a class="page-link">&laquo;</a>
+                    </li>
+                `);
+                    }
+
+                    // Page Links
+                    for (let i = 1; i <= pagination.last_page; i++) {
+                        const isActive = i === pagination.current_page ? 'active' : '';
+                        paginationContainer.append(`
+                    <li class="page-item ${isActive}">
+                        <a class="page-link" href="javascript:void(0)" data-url="${pagination.path}?page=${i}">${i}</a>
+                    </li>
+                `);
+                    }
+
+                    // Next Page
+                    if (pagination.next_page_url) {
+                        paginationContainer.append(`
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0)" data-url="${pagination.next_page_url}">&raquo;</a>
+                    </li>
+                `);
+                    } else {
+                        paginationContainer.append(`
+                    <li class="page-item disabled">
+                        <a class="page-link">&raquo;</a>
+                    </li>
+                `);
+                    }
+
+                    // Re-add click event listener for pagination links
+                    $('.pagination .page-link').off('click').on('click', function (e) {
+                        e.preventDefault(); // Stop default anchor behavior
+                        const url = $(this).data('url'); // Get data URL
+                        if (url) {
+                            fetchProducts(url);
+                        }
+                    });
+                }
+
+                // Initial Fetch
+                fetchProducts();
+
+                // Trigger fetch on form inputs (filters, etc.)
+                $('form').on('change', 'input, select', function () {
+                    fetchProducts(); // Fetch products with updated filters
+                });
+            });
+        </script>
+
+    @endpush
 
     <!-- Shop Section End -->
 @endsection

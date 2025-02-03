@@ -1,6 +1,25 @@
 <div class="container-fluid-lg">
-    <div class="title">
-        <h2>Shop By Categories</h2>
+
+    <style>
+        .gradient-bg {
+            background: linear-gradient(to right, #80a81b, #770a0f, #fff);
+            color: white; /* Ensure text is visible */
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(to right, #80a81b, #770a0f, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
+
+    <div class="title ">
+        <h2 style="color: #1A1A19">Shop By Categories</h2>
     </div>
 
     <div class="row">

@@ -19,8 +19,6 @@ class TopRated extends Component
     {
 
         $this->topRatedProducts = Product::query()
-            ->has('reviews')
-            ->has('productAttribute')
             ->with([
                 'review',
                 'productAttribute',

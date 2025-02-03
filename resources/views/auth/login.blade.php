@@ -72,30 +72,29 @@
                 <div class="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
                     <div class="image-contain">
                         <img src="{{ asset('front/assets/images/inner-page/log-in.png') }}" class="img-fluid"
-                            alt="">
+                             alt="">
                     </div>
                 </div>
 
                 <div class="col-xxl-4 col-xl-5 col-lg-6 col-sm-8 mx-auto">
                     <div class="log-in-box">
                         <div class="log-in-title">
-                            <h3>Welcome To Fastkart</h3>
+                            {{--                            <h3>Welcome To Fastkart</h3>--}}
                             <h4>Log In Your Account</h4>
                         </div>
 
-                        <div class="input-box">
+                        <div class="input-box mt-5">
                             <form class="row g-4" method="POST" action="{{ route('login') }}">
                                 @csrf
 
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
                                         <input type="email" name="email" :value="old('email')" class="form-control"
-                                            id="email" placeholder="Email Address">
+                                               id="email" placeholder="Email Address">
                                         <label for="email">Email Address</label>
                                     </div>
-                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                    <x-input-error :messages="$errors->get('socialite')" class="mt-2" />
-
+                                    <x-input-error :messages="$errors->get('email')" class="mt-2"/>
+                                    <x-input-error :messages="$errors->get('socialite')" class="mt-2"/>
 
 
                                 </div>
@@ -103,10 +102,10 @@
                                 <div class="col-12">
                                     <div class="form-floating theme-form-floating log-in-form">
                                         <input class="form-control" id="password" type="password" name="password"
-                                            placeholder="Password">
+                                               placeholder="Password">
                                         <label for="password">Password</label>
                                     </div>
-                                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                                    <x-input-error :messages="$errors->get('password')" class="mt-2"/>
 
                                 </div>
 
@@ -114,8 +113,9 @@
                                     <div class="forgot-box">
                                         <div class="form-check ps-0 m-0 remember-box">
                                             <input class="checkbox_animated check-box" type="checkbox"
-                                                id="flexCheckDefault" name="remember">
-                                            <label class="form-check-label" for="flexCheckDefault">{{ __('Remember me') }}</label>
+                                                   id="flexCheckDefault" name="remember">
+                                            <label class="form-check-label"
+                                                   for="flexCheckDefault">{{ __('Remember me') }}</label>
                                         </div>
                                         @if (Route::has('password.request'))
                                             <a href="{{ route('password.request') }}" class="forgot-password">
@@ -143,7 +143,7 @@
                                 <li>
                                     <a href="{{ route('auth.redirect') }}" class="btn google-button w-100">
                                         <img src="{{ asset('front/assets/images/inner-page/google.png') }}"
-                                            class="blur-up lazyload" alt=""> Log In with Google
+                                             class="blur-up lazyload" alt=""> Log In with Google
                                     </a>
                                 </li>
 
