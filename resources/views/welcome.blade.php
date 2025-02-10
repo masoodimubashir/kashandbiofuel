@@ -76,7 +76,7 @@
 
     {{--    <x-header-top/>--}}
 
-    <x-navbar/>
+    {{--    <x-navbar/>--}}
 
     <x-navigation/>
 
