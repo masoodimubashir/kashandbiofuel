@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Number;
 
 class Product extends Model
 {
@@ -62,6 +64,17 @@ class Product extends Model
     }
 
 
+    /**
+     * Get the productAttribute associated with the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function productAttribute(): HasOne
+    {
+        return $this->hasOne(ProductAttribute::class);
+    }
+
+
     public function reviews(): HasMany
     {
         return $this->hasMany(Reviews::class);
@@ -76,15 +89,6 @@ class Product extends Model
     {
         return $this->hasOne(Reviews::class, 'product_id', 'id');
     }
-    
-    /**
-     * Get the productAttribute associated with the Product
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function productAttribute(): HasOne
-    {
-        return $this->hasOne(ProductAttribute::class);
-    }
+
 
 }

@@ -53,23 +53,6 @@
           rel="stylesheet">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"> --}}
-    <style>
-        .gradient-bg {
-            background: linear-gradient(to right, #80a81b, #770a0f, #fff);
-            color: white; /* Ensure text is visible */
-            padding: 20px;
-            text-align: center;
-        }
-
-        /* Gradient Text */
-        .gradient-text {
-            background: linear-gradient(to right, #80a81b, #770a0f, #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-    </style>
 
 
     @stack('styles')
@@ -202,7 +185,7 @@
 <script src="{{ asset('front/assets/js/timer1.js') }}"></script>
 
 <!-- Fly Cart Js -->
-<script src="{{ asset('front/assets/js/fly-Cart.js') }}"></script>
+{{--<script src="{{ asset('front/assets/js/fly-Cart.js') }}"></script>--}}
 
 <!-- Quantity js -->
 <script src="{{ asset('front/assets/js/quantity-2.js') }}"></script>
@@ -218,7 +201,7 @@
 <script src="{{ asset('front/assets/js/theme-setting.js') }}"></script>
 
 {{-- Noui Slider --}}
-<script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.0/dist/nouislider.min.js"></script>
+{{--<script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.0/dist/nouislider.min.js"></script>--}}
 
 
 <!-- Price Range Js -->

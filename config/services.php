@@ -39,4 +39,9 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI')
     ],
+    'phonePe' => [
+        'merchantId' => env('PHONEPE_MERCHANT_ID'),
+        'salt_key' => env('PHONEPE_SALT_KEY'),
+        'redirect_url' => env('PHONEPE_REDIRECT_URL'),
+    ]
 ];

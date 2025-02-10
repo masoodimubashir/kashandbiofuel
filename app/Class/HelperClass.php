@@ -33,7 +33,6 @@ trait HelperClass
         $items = $items->map(function ($item) use (&$checkOutPrice) {
             $this->processItemCalculations($item);
             $checkOutPrice += $item->product->grand_total;
-
             return $item;
         });
 
@@ -52,6 +51,7 @@ trait HelperClass
         }
 
         return [$items, $checkOutPrice, $discount];
+
     }
 
     /**

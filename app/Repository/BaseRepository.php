@@ -23,6 +23,7 @@ class BaseRepository implements ItemInterface
     public function getItems($values)
     {
 
+
         return $this->model->query()
             ->with(['product' => fn($query) => $query->with('productAttribute')])
             ->where(function ($query) use ($values) {
@@ -63,7 +64,7 @@ class BaseRepository implements ItemInterface
     /**
      * Find  an item by id.
      */
-    public function findItem(?int $id)
+    public function findItem(int $id)
     {
 
         return $this->model->find($id);

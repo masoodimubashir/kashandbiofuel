@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ChangeFlagsController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomersController;
 use App\Http\Controllers\Admin\ExcelProductImportsController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductAttributeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSeoController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\User\ApplyCouponController;
+use App\Http\Controllers\User\FrontendAddressController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserProfileController;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +53,13 @@ Route::get('/shop-by-subcategory/{slug}', [SubCategoryShoppingController::class,
 Route::get('/product/{slug}', [FrontendProductController::class, 'show'])->name('product.show');
 
 
+// Routes For Logging In Via Gmail
+Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
+Route::get('/auth/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
+
+Route::resource('/frontend-address', FrontendAddressController::class);
+
+
 Route::middleware('checkUserGuest')->group(function () {
 
     //Routes For Cart
@@ -68,15 +77,9 @@ Route::middleware('checkUserGuest')->group(function () {
 
     Route::put('apply-coupon', [ApplyCouponController::class, 'viewCart'])->name('apply-coupon');
 
+
 });
 
-
-//Route For Checkout
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-
-// Routes For Logging In Via Gmail
-Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
-Route::get('/auth/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
 
 // Authenticated Routes For User And Admin
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -102,6 +105,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('/users', UserController::class);
 
+        Route::resource('/order', OrderController::class);
+
         Route::get('banners', [BannerController::class, 'index']);
         Route::post('banners', [BannerController::class, 'store']);
         Route::post('banners/update/{id}', [BannerController::class, 'update']);
@@ -117,7 +122,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::put('Product/seo', [ProductSeoController::class, 'index'])->name('Product.seo');
         Route::put('Product/flags/{id}', [ChangeFlagsController::class, 'index'])->name('Product.flags');
-
     });
 
 
@@ -131,10 +135,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/update/profile', [UserProfileController::class, 'update'])->name('user.profile.update');
         Route::put('/update/password', [UserProfileController::class, 'updatePassword'])->name('user.password.update');
 
+        Route::resource('/address', FrontendAddressController::class);
+
+        // Route For Checkout
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/checkout/phonepe', [CheckoutController::class, 'checkout'])->name('checkout.phonepe.store');
+//        Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
+        Route::get('/phonepe/redirect', [CheckoutController::class, 'redirect'])->name('payment.redirect');
 
     });
-
-
 });
 
 

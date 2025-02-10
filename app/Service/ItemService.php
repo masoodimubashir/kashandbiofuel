@@ -15,6 +15,7 @@ class ItemService
     use HelperClass;
 
     private CartRepository $cartRepository;
+
     private WishlistRepository $wishlistRepository;
 
     private UserRepository $userRepository;

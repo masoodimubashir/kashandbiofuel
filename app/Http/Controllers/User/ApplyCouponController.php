@@ -16,10 +16,12 @@ class ApplyCouponController extends Controller
     {
     }
 
+
     public function viewCart(Request $request)
     {
         try {
             if ($request->ajax()) {
+
 
                 [$items, $check_out_price, $discount] = $this->itemService->getItems($request, 'cart');
 

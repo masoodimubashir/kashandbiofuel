@@ -12,13 +12,16 @@ class CouponService
 
     public function validateCoupon(string $coupon_code): ?Coupon
     {
+
         $coupon = Coupon::where('coupon_code', $coupon_code)
             ->where('status', 1)
             ->first();
 
-        if (!$coupon || $coupon->expires_at && $coupon->expires_at->isPast()) {
-            return null;
+        if (!$coupon || $coupon->end_date && $coupon->end_date < now()) {
+            // dd('Coupon is expired');
+            throw new \Exception('Coupon is expired');
         }
+
 
         return $coupon;
     }

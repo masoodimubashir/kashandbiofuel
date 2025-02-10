@@ -21,12 +21,13 @@ class CartController extends Controller
         if ($request->ajax()) {
 
 
-            [$items, $check_out_price] = $this->itemService->getItems($request, 'cart');
+            [$items, $check_out_price, $discount] = $this->itemService->getItems($request, 'cart');
 
             return response()->json([
 
                 'data' => $items,
                 'check_out_price' => $check_out_price,
+                'discount' => $discount,
 
             ]);
 

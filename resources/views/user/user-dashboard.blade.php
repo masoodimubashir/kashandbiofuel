@@ -1,3 +1,4 @@
+@php use Illuminate\Contracts\Auth\MustVerifyEmail; @endphp
 @extends('welcome')
 
 @section('main')
@@ -1556,7 +1557,7 @@
                                                     </div>
 
 
-                                                    @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
+                                                    @if (auth()->user() instanceof MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
                                                         <div>
                                                             <p class="text-sm mt-2 text-gray-800">
                                                                 {{ __('Your email address is unverified.') }}
@@ -2468,9 +2469,9 @@
 
                     <form>
                         <div class="form-floating mb-4 theme-form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="address"
+                            <textarea class="form-control" placeholder="Leave a comment here" id=""
                                       style="height: 100px"></textarea>
-                            <label for="address">Enter Address</label>
+                            <label for="">Enter Address</label>
                         </div>
                     </form>
 
@@ -2604,119 +2605,90 @@
                 </div>
                 <div class="modal-body">
                     <div class="row g-4">
-                        <div class="col-xxl-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="pname" value="Jack Jennas">
-                                    <label for="pname">Full Name</label>
-                                </div>
-                            </form>
-                        </div>
 
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="email" class="form-control" id="email1"
-                                           value="vicki.pope@gmail.com">
-                                    <label for="email1">Email address</label>
-                                </div>
-                            </form>
-                        </div>
+                        <form id="addressForm">
 
-                        <div class="col-xxl-6">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input class="form-control" type="tel" value="4567891234" name="mobile"
-                                           id="mobile" maxlength="10"
-                                           oninput="javascript: if (this.value.length > this.maxLength) this.value =
-                                            this.value.slice(0, this.maxLength);">
-                                    <label for="mobile">Email address</label>
+                            <div class="row g-3">
+                                {{-- Address Field --}}
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="address"
+                                            name="address"
+                                            placeholder="Enter your address">
+                                        <label for="address">Address</label>
+                                        <div class="invalid-feedback" id="addressError"></div>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
 
-                        <div class="col-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address1"
-                                           value="8424 James Lane South San Francisco">
-                                    <label for="address1">Add Address</label>
+                                {{-- City Field --}}
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="city"
+                                            name="city"
+                                            placeholder="Enter your city">
+                                        <label for="city">City</label>
+                                        <div class="invalid-feedback" id="cityError"></div>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
 
-                        <div class="col-12">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address2" value="CA 94080">
-                                    <label for="address2">Add Address 2</label>
+                                {{-- State Field --}}
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="state"
+                                            name="state"
+                                            placeholder="Enter your state">
+                                        <label for="state">State</label>
+                                        <div class="invalid-feedback" id="stateError"></div>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
 
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <select class="form-select" id="floatingSelect1">
-                                        <option selected>Choose Your Country</option>
-                                        <option value="kingdom">United Kingdom</option>
-                                        <option value="states">United States</option>
-                                        <option value="fra">France</option>
-                                        <option value="china">China</option>
-                                        <option value="spain">Spain</option>
-                                        <option value="italy">Italy</option>
-                                        <option value="turkey">Turkey</option>
-                                        <option value="germany">Germany</option>
-                                        <option value="russian">Russian Federation</option>
-                                        <option value="malay">Malaysia</option>
-                                        <option value="mexico">Mexico</option>
-                                        <option value="austria">Austria</option>
-                                        <option value="hong">Hong Kong SAR, China</option>
-                                        <option value="ukraine">Ukraine</option>
-                                        <option value="thailand">Thailand</option>
-                                        <option value="saudi">Saudi Arabia</option>
-                                        <option value="canada">Canada</option>
-                                        <option value="singa">Singapore</option>
-                                    </select>
-                                    <label for="floatingSelect">Country</label>
+                                {{-- Pin Code Field --}}
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="pin_code"
+                                            name="pin_code"
+                                            placeholder="Enter your pin code">
+                                        <label for="pin_code">Pin Code</label>
+                                        <div class="invalid-feedback" id="pinCodeError"></div>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
 
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <select class="form-select" id="floatingSelect">
-                                        <option selected>Choose Your City</option>
-                                        <option value="kingdom">India</option>
-                                        <option value="states">Canada</option>
-                                        <option value="fra">Dubai</option>
-                                        <option value="china">Los Angeles</option>
-                                        <option value="spain">Thailand</option>
-                                    </select>
-                                    <label for="floatingSelect">City</label>
+                                <div class="col-md-6">
+                                    <div class="form-floating theme-form-floating">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="phone"
+                                            name="phone"
+                                            placeholder="Enter your pin code">
+                                        <label for="phone">Phone Number</label>
+                                        <div class="invalid-feedback" id="phoneError"></div>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
 
-                        <div class="col-xxl-4">
-                            <form>
-                                <div class="form-floating theme-form-floating">
-                                    <input type="text" class="form-control" id="address3" value="94080">
-                                    <label for="address3">Pin Code</label>
-                                </div>
-                            </form>
-                        </div>
+
+                            </div>
+
+                            <button type="button" class="btn theme-bg-color btn-md fw-bold text-light mt-2"
+                                    id="submitAddress">Save Address
+                            </button>
+                        </form>
+
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-animation btn-md fw-bold"
-                            data-bs-dismiss="modal">Close
-                    </button>
-                    <button type="button" data-bs-dismiss="modal"
-                            class="btn theme-bg-color btn-md fw-bold text-light">Save changes
-                    </button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -2911,7 +2883,70 @@
                 });
 
 
-            });
+                $('#submitAddress').on('click', function (e) {
+                    e.preventDefault();
+
+                    // Clear previous errors
+                    $('.invalid-feedback').text('');
+                    $('.form-control').removeClass('is-invalid');
+
+                    // Collect form data
+                    let formData = {
+                        address: $('#address').val(),
+                        city: $('#city').val(),
+                        state: $('#state').val(),
+                        pin_code: $('#pin_code').val(),
+                        phone: $('#phone').val(),
+                    };
+
+                    // Send AJAX request
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route("address.store") }}', // Ensure this route is correctly defined in Laravel
+                        data: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}', // Include CSRF token for security
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                // Show success message using Swal.fire
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                });
+
+
+                                $('#editProfile').modal('hide');
+                                $('#addressForm')[0].reset();
+                            }
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 422) {
+                                // Handle validation errors
+                                let errors = xhr.responseJSON.errors;
+
+                                $.each(errors, function (key, value) {
+                                    $(`#${key}Error`).text(value[0]);
+                                    $(`#${key}`).addClass('is-invalid');
+                                });
+                            } else {
+                                // Show general error message
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Something went wrong. Please try again later.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK',
+                                });
+                            }
+                        },
+                    });
+                });
+
+
+            })
+
         </script>
     @endpush
 
