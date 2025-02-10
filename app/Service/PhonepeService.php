@@ -24,7 +24,9 @@ class PhonepeService
     public function checkout($request)
     {
         try {
+
             $amount = (float)$request->input('total_price');
+
             $payload = $this->generatePayload($amount);
             $headers = $this->generateHeaders($payload);
 
@@ -37,9 +39,9 @@ class PhonepeService
                 $responseData = $response->json();
 
                 if (!empty($responseData['data']['instrumentResponse']['redirectInfo']['url'])) {
+
                     $redirectUrl = $responseData['data']['instrumentResponse']['redirectInfo']['url'];
 
-                    session()->put('merchantTransactionId', $responseData['data']['merchantTransactionId']);
                     $this->makeTransaction($responseData['data']['merchantTransactionId'], $request, 0);
 
                     return $redirectUrl;
@@ -116,7 +118,6 @@ class PhonepeService
             'Content-Type' => 'application/json',
         ])->get("https://api-preprod.phonepe.com/apis/pg-sandbox{$endpoint}");
 
-        dd($response);
 
         if ($response->successful()) {
             $data = $response->json();
@@ -131,11 +132,12 @@ class PhonepeService
 
     private function makeTransaction($merchantTransactionId, $request, $status = 0)
     {
+
         return Transaction::create([
             'user_id' => auth()->user()->id,
             'amount' => $request->total_price,
             'status' => $status,
-            'payment_method' => $request->input('payment_method'),
+            'payment_method' => $request->payment_method,
             'transaction_id' => $merchantTransactionId,
         ]);
     }
@@ -175,8 +177,8 @@ class PhonepeService
             "merchantTransactionId" => uniqid('txn_'),
             "merchantUserId" => auth()->user()->id,
             "amount" => $amount * 100,
-            "redirectUrl" => route('payment.redirect'),
-            "callbackUrl" => route('payment.redirect'),
+            "redirectUrl" => route('user.payment.callback'),
+            "callbackUrl" => route('user.payment.callback'),
             "mobileNumber" => auth()->user()->address()->first()->phone,
             "paymentInstrument" => [
                 "type" => "PAY_PAGE"

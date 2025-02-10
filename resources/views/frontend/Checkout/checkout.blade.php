@@ -300,7 +300,6 @@
                     },
                     success: function (response) {
                         if (response.status) {
-                            // Redirect to provided URL on success
                             window.location.href = response.redirect_url;
                         } else {
                             Swal.fire('Error', response.message || 'Failed to place the order. Please try again.', 'error');

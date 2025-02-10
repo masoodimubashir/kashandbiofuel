@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'checkUserGuest' => SetUserAndGuestMiddleware::class,
         ]);
         $middleware->validateCsrfTokens([
-            '/user/phonepe/redirect'
+            '/phonepe/redirect'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

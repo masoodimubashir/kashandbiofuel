@@ -140,7 +140,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Route For Checkout
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout/phonepe', [CheckoutController::class, 'checkout'])->name('checkout.phonepe.store');
-//        Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
+        Route::get('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
         Route::get('/phonepe/redirect', [CheckoutController::class, 'redirect'])->name('payment.redirect');
 
     });
