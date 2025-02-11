@@ -1,10 +1,10 @@
 <div class="title section-t-space">
     <h2>ALL KINDS OF PRODUCTS</h2>
-    <span class="title-leaf">
-        <svg class="icon-width">
-            <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#cake"></use>
-        </svg>
-    </span>
+    {{--    <span class="title-leaf">--}}
+    {{--        <svg class="icon-width">--}}
+    {{--            <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#cake"></use>--}}
+    {{--        </svg>--}}
+    {{--    </span>--}}
 </div>
 
 <div class="slider-3_2 product-wrapper">

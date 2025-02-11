@@ -90,7 +90,7 @@ class CheckoutController extends Controller
         ]);
 
         $response = curl_exec($ch);
-        
+
         if (curl_errno($ch)) {
             Log::error('cURL Error', ['error' => curl_error($ch)]);
             curl_close($ch);
@@ -119,17 +119,17 @@ class CheckoutController extends Controller
     {
         try {
 
-            Transaction::create([
-                'user_id' => auth()->user()->id,
-                'amount' => 100,
-                'status' => 0,
-                'payment_method' => 'online',
-                'transaction_id' => uniqid('txn_'),
-            ]);
+//            Transaction::create([
+//                'user_id' => auth()->user()->id,
+//                'amount' => 100,
+//                'status' => 0,
+//                'payment_method' => 'online',
+//                'transaction_id' => uniqid('txn_'),
+//            ]);
 
 //            dd($request->all());
 
-//            dd(1);
+            dd('Callback', $request->all());
 
 //            $this->phonepeService->createOrder();
 
@@ -156,11 +156,11 @@ class CheckoutController extends Controller
 
 //            $this->phonepeService->handlePaymentResponse();
 
-            $data = $request->all();
+//            $data = $request->all();
 
-//            dd($data);
+            dd('redirect', $request->all());
 
-            return view('frontend.Order.order-confirmation', compact('data'));
+//            return view('frontend.Order.order-confirmation', compact('data'));
 
 
         } catch (Exception $e) {
