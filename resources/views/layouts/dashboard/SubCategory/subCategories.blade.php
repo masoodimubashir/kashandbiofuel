@@ -2,7 +2,8 @@
 
     <!-- Large modal-->
 
-    <div class="modal fade bd-example-modal-lg" class="modal fade" id="subCategoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" class="modal fade" id="subCategoryModal" tabindex="-1"
+         aria-hidden="true">
         <div class="modal-dialog modal-lg ">
             <div class="modal-content">
                 <div class="modal-header">
@@ -31,18 +32,6 @@
                         <div class="invalid-feedback">Please select a category</div>
                     </div>
 
-                    <div class="col-12">
-                        <label class="form-label" for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description"></textarea>
-                        <div class="invalid-feedback">Please enter a description</div>
-                    </div>
-
-                    <div class="col-12">
-                        <label class="form-label" for="show_on_navbar">Show On Navbar</label>
-                        <input class="tgl tgl-flip navbar_show" id="show_on_navbar" type="checkbox"
-                            name="show_on_navbar">
-                        <label class="tgl-btn" data-tg-off="No" data-tg-on="Yes!" for="show_on_navbar"></label>
-                    </div>
 
                     <div class="col-12">
                         <button class="btn btn-primary" type="submit" id="submitBtn">Submit</button>
@@ -63,7 +52,8 @@
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i data-feather="home"></i></a>
                     </li>
                     <li class="breadcrumb-item {{ Request::routeIs('sub-categories.index') ? 'active' : '' }}">Sub
-                        Category</li>
+                        Category
+                    </li>
                 </ol>
             </div>
         </div>
@@ -74,7 +64,7 @@
         <div class="row mb-3">
             <div class="col-md-6 col-sm-12 mb-2 mb-md-0">
                 <button class="btn btn-success " type="button" data-bs-toggle="modal" id="subCategoryBtn"
-                    data-bs-target=".bd-example-modal-lg">
+                        data-bs-target=".bd-example-modal-lg">
                     Add Sub Category
                 </button>
             </div>
@@ -89,14 +79,13 @@
                             <div class="table-responsive">
                                 <table class="table table-md" id="subCategory">
                                     <thead>
-                                        <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Description</th>
-                                            <th scope="col">Category</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Show On Navbar</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Show On Navbar</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
                                     </thead>
                                     <tbody></tbody>
                                 </table>
@@ -110,7 +99,7 @@
 
     @push('dashboard.script')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
 
                 // Load DataTable
                 let subCategory = $('#subCategory').DataTable({
@@ -121,13 +110,10 @@
                         type: 'GET',
                     },
                     columns: [{
-                            data: 'name',
-                            name: 'name'
-                        },
-                        {
-                            data: 'description',
-                            name: 'description'
-                        },
+                        data: 'name',
+                        name: 'name'
+                    },
+
                         {
                             data: 'category.name',
                             name: 'category.name'
@@ -154,7 +140,7 @@
                     ]
                 });
 
-                $('#subCategoryForm').on('submit', function(e) {
+                $('#subCategoryForm').on('submit', function (e) {
                     e.preventDefault();
 
                     // Clear any existing error messages
@@ -164,7 +150,6 @@
                     // Form data
                     const formData = {
                         name: $('#name').val(),
-                        description: $('#description').val(),
                         category_id: $('#category_id').val(),
                         show_on_navbar: $('#show_on_navbar').prop('checked') ? 1 : 0,
                         _token: $('input[name="_token"]').val()
@@ -184,11 +169,6 @@
                         hasErrors = true;
                     }
 
-                    // Validate Description
-                    if (!formData.description.trim()) {
-                        $('#description').addClass('is-invalid').siblings('.invalid-feedback').show();
-                        hasErrors = true;
-                    }
 
                     // If there are errors, stop form submission
                     if (hasErrors) return;
@@ -208,7 +188,7 @@
                         url: url,
                         type: method,
                         data: formData,
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
                                 // Reset the form and hide the modal
                                 resetForm();
@@ -217,7 +197,7 @@
                                 Swal.fire('Success', response.message, 'success');
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             const errors = xhr.responseJSON.errors; // Get errors from the response
 
                             if (errors) {
@@ -236,18 +216,17 @@
                 });
 
                 // Edit Sub Category
-                $(document).on('click', '.editBtn', function() {
+                $(document).on('click', '.editBtn', function () {
                     const subCategoryId = $(this).data('id');
 
                     resetForm();
                     $.ajax({
                         url: `/admin/sub-categories/${subCategoryId}`,
                         type: 'GET',
-                        success: function(response) {
+                        success: function (response) {
 
                             if (response.status === 'success') {
                                 $('#name').val(response.subCategory.name);
-                                $('#description').val(response.subCategory.description);
                                 $('#category_id').val(response.subCategory
                                     .category_id);
                                 $('#show_on_navbar').prop('checked', response.subCategory
@@ -256,14 +235,14 @@
                                 $('#subCategoryModal').modal('show');
                             }
                         },
-                        error: function() {
+                        error: function () {
                             Swal.fire('Error!', 'Failed to fetch subCategory data.', 'error');
                         }
                     });
                 });
 
                 // Delete Sub Category
-                $(document).on('click', '.deleteBtn', function() {
+                $(document).on('click', '.deleteBtn', function () {
                     const subCategoryId = $(this).data('id');
                     Swal.fire({
                         title: 'Are you sure?',
@@ -280,12 +259,12 @@
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content')
                                 },
-                                success: function() {
+                                success: function () {
                                     Swal.fire('Deleted!', 'SubCategory has been deleted.',
                                         'success');
                                     subCategory.ajax.reload();
                                 },
-                                error: function() {
+                                error: function () {
                                     Swal.fire('Error!', 'Failed to delete SubCategory.',
                                         'error');
                                 }
@@ -295,13 +274,13 @@
                 });
 
                 // Clear Form When Showing The Modal
-                $('#subCategoryBtn').on('click', function() {
+                $('#subCategoryBtn').on('click', function () {
                     resetForm();
                     $('#subCategoryModal').modal('show');
                 });
 
                 // Handle checkbox toggle (status change)
-                $(document).on('change', '.changeStatus', function() {
+                $(document).on('change', '.changeStatus', function () {
 
                     var subCategoryId = $(this).attr('id').replace('cb_', '');
                     var newStatus = $(this).prop('checked') ? 1 : 0;
@@ -315,14 +294,14 @@
                             model: 'SubCategory',
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
                                 subCategory.ajax.reload();
                             } else {
                                 Swal.fire('Error!', 'Failed to update status.', 'error');
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             Swal.fire('Error!', 'Something went wrong while updating status.',
                                 'error');
                         }
@@ -330,7 +309,7 @@
                 });
 
                 // Handle show_on_navbar toggle
-                $(document).on('change', '.showOnNavbar', function() {
+                $(document).on('change', '.showOnNavbar', function () {
                     var subCategoryId = $(this).attr('id').replace('navbar_', '');
                     var newStatus = $(this).prop('checked') ? 1 : 0;
 
@@ -342,7 +321,7 @@
                             model: 'SubCategory',
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
                                 subCategory.ajax.reload(null, false);
                             } else {
@@ -350,7 +329,7 @@
                                     'error');
                             }
                         },
-                        error: function() {
+                        error: function () {
                             Swal.fire('Error!',
                                 'Something went wrong while updating Show On Navbar status.',
                                 'error');
@@ -364,7 +343,6 @@
                     $('.is-invalid').removeClass('is-invalid');
                     $('.invalid-feedback').hide();
                 }
-
 
 
             });

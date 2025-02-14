@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ProductSeoController;
 use App\Http\Controllers\Admin\StatusUpdateController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DashboardContactUsController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CategoryShoppingController;
 use App\Http\Controllers\Frontend\CheckoutController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\User\ApplyCouponController;
 use App\Http\Controllers\User\FrontendAddressController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserProfileController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 // Checking Session User For Testing
@@ -38,6 +40,10 @@ Route::get('/s', function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/live.search', function () {
+    return Product::search(request('query'))->get();
+})->name('live.search');
 
 // Routes For Contact
 Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
@@ -51,6 +57,7 @@ Route::get('/shop-by-subcategory/{slug}', [SubCategoryShoppingController::class,
 
 // Routes For Product
 Route::get('/product/{slug}', [FrontendProductController::class, 'show'])->name('product.show');
+Route::get('/check-product-quantity/{slug}', [FrontendProductController::class, 'checkProductQuantity'])->name('product.review.store');
 
 
 // Routes For Logging In Via Gmail
@@ -107,6 +114,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('/order', OrderController::class);
 
+        Route::get('/contact-us', [DashboardContactUsController::class, 'index'])->name('dashboard.contact-us.index');
+
         Route::get('banners', [BannerController::class, 'index']);
         Route::post('banners', [BannerController::class, 'store']);
         Route::post('banners/update/{id}', [BannerController::class, 'update']);
@@ -139,8 +148,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Route For Checkout
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::get('/order-placed', [CheckoutController::class, 'orderPlaced'])->name('checkout.order-placed');
         Route::post('/checkout/phonepe', [CheckoutController::class, 'checkout'])->name('checkout.phonepe.store');
-        Route::get('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
+        Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
         Route::get('/phonepe/redirect', [CheckoutController::class, 'redirect'])->name('payment.redirect');
 
     });

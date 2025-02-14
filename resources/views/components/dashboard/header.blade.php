@@ -4,13 +4,14 @@
 <div class="page-header">
     <div class="header-wrapper row m-0">
         <div class="header-logo-wrapper col-auto p-0">
-            <div class="logo-wrapper"><a href="index.html"><img class="img-fluid for-light"
-                        src="../assets/images/logo/logo-1.png" alt=""><img class="img-fluid for-dark"
-                        src="../assets/images/logo/logo.png" alt=""></a></div>
+            <div class="logo-wrapper"><a href="index.html">
+                <img class="img-fluid for-light"
+                src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt="">
+                <img class="img-fluid for-dark"
+                        src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt=""></a></div>
             <div class="toggle-sidebar">
                 <svg class="sidebar-toggle">
-                    <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-animation">
-                    </use>
+                    <i class="fa-solid fa-bars" style="color: white; display: flex;align-items: center; justify-content: center;"></i>
                 </svg>
             </div>
         </div>
@@ -51,8 +52,7 @@
                 <li class="onhover-dropdown">
                     <div class="notification-box">
                         <svg>
-                            <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#Bell">
-                            </use>
+                            <i class="fa-solid fa-bell"></i>
                         </svg><span class="badge rounded-pill badge-primary">4 </span>
                     </div>
                     <div class="onhover-show-div notification-dropdown">
@@ -77,103 +77,12 @@
                         </ul>
                     </div>
                 </li>
-                <li class="onhover-dropdown">
-                    <svg>
-                        <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#Star"></use>
-                    </svg>
-                    <div class="onhover-show-div bookmark-flip">
-                        <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="front">
-                                    <h4 class="f-18 mb-0 dropdown-title">Bookmark</h4>
-                                    <ul class="bookmark-dropdown">
-                                        <li class="pt-0 px-0">
-                                            <div class="row">
-                                                <div class="col-4 text-center">
-                                                    <div class="bookmark-content">
-                                                        <div class="bookmark-icon"><i data-feather="file-text"></i>
-                                                        </div>
-                                                        <span>Forms</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4 text-center">
-                                                    <div class="bookmark-content">
-                                                        <div class="bookmark-icon"><i data-feather="user"></i>
-                                                        </div><span>Profile</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4 text-center">
-                                                    <div class="bookmark-content">
-                                                        <div class="bookmark-icon"><i data-feather="server"></i></div>
-                                                        <span>Tables</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="text-center"><a class="flip-btn f-w-700" id="flip-btn"
-                                                href="javascript:void(0)">Add New Bookmark</a></li>
-                                    </ul>
-                                </div>
-                                <div class="back">
-                                    <ul>
-                                        <li>
-                                            <div class="bookmark-dropdown flip-back-content">
-                                                <input type="text" placeholder="search...">
-                                            </div>
-                                        </li>
-                                        <li><a class="f-w-700 d-block flip-back" id="flip-back"
-                                                href="javascript:void(0)">Back</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="cart-nav onhover-dropdown">
-                    <div class="cart-box">
-                        <svg>
-                            <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#Bag">
-                            </use>
-                        </svg><span class="badge rounded-pill badge-secondary">2 </span>
-                    </div>
-                    <div class="cart-dropdown onhover-show-div">
-                        <h4 class="f-18 mb-0 dropdown-title">Cart</h4>
-                        <ul class="py-0">
-                            <li>
-                                <div class="d-flex"><img class="img-fluid b-r-5 img-40"
-                                        src="../assets/images/product_list/product-categories/headphone.png"
-                                        alt="">
-                                    <div class="flex-grow-1"><span>Headphone</span>
-                                        <h6>1 X $ 299.00</h6>
-                                    </div>
-                                    <div class="close-circle"><a href="#"><i data-feather="x"></i></a>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="d-flex"><img class="img-fluid b-r-5 img-40"
-                                        src="../assets/images/product_list/product-categories/wireless-headphone.png"
-                                        alt="">
-                                    <div class="flex-grow-1"><span>AirPods</span>
-                                        <h6>1 X $ 299.00</h6>
-                                    </div>
-                                    <div class="close-circle"><a href="#"><i data-feather="x"></i></a>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="total">
-                                <h5 class="mb-0">Subtotal :<span class="f-right">$299.00</span></h5>
-                            </li>
-                            <li><a class="view-cart" href="cart.html">View Cart</a><a class="view-checkout f-right"
-                                    href="checkout.html">Checkout</a></li>
-                        </ul>
-                    </div>
-                </li>
+                
+              
                 <li class="onhover-dropdown">
                     <div class="message">
                         <svg>
-                            <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#Message">
-                            </use>
+                        <i class="fa-solid fa-comment"></i>
                         </svg><span class="rounded-pill badge-secondary"> </span>
                     </div>
                     <div class="onhover-show-div message-dropdown">
@@ -238,11 +147,6 @@
                                 </i><span>   {{ __('Profile') }} </span>
                             </a>
                         </li>
-                        <li><a href="letter-box.html"><i data-feather="mail"></i><span>Inbox</span></a></li>
-                        <li><a href="task.html"><i data-feather="file-text"></i><span>Taskboard</span></a>
-                        </li>
-                        <li><a href="edit-profile.html"><i data-feather="settings"></i><span>Settings</span></a></li>
-
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

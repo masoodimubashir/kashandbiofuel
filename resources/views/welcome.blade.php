@@ -132,18 +132,18 @@
 {{-- Main Section End  --}}
 
 <!-- Footer Section Start -->
-@include('components.footer')
+<x-footer/>
 <!-- Footer Section End -->
 
 
 <!-- Tap to top and theme setting button start -->
-<div class="theme-option">
+{{-- <div class="theme-option">
     <div class="back-to-top">
         <a id="back-to-top" href="#">
             <i class="fas fa-chevron-up fs-4"></i>
         </a>
     </div>
-</div>
+</div> --}}
 <!-- Tap to top and theme setting button end -->
 
 {{-- <!-- Bg overlay Start -->

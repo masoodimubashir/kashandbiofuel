@@ -1308,6 +1308,7 @@
     position: unset;
     border-radius: 10px;
     margin-right: 10px;
+    padding: 13px;
   }
   .page-wrapper.compact-wrapper .page-header .header-wrapper .toggle-sidebar svg {
     width: 20px;

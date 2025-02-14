@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
 
-    
-    protected $fillable = ['name', 'slug', 'status', 'description', 'show_on_navbar'];
 
-    public function subCategories(): HasMany{
+    protected $fillable = ['name', 'slug', 'status', 'show_on_navbar'];
+
+    public function subCategories(): HasMany
+    {
         return $this->hasMany(SubCategory::class);
     }
 }

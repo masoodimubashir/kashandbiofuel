@@ -57,8 +57,9 @@ class CheckoutController extends Controller
             "merchantId" => config('services.phonePe.merchantId'),
             "merchantTransactionId" => uniqid('txn_'),
             "merchantUserId" => auth()->user()->id,
-            "amount" => 1 * 100,
+            "amount" => $request->total_price * 100,
             "redirectUrl" => route('payment.redirect'),
+            'redirectMode'=>"POST",
             "callbackUrl" => route('payment.callback'),
             "mobileNumber" => auth()->user()->address()->first()->phone,
             "paymentInstrument" => [
@@ -109,66 +110,17 @@ class CheckoutController extends Controller
             return response()->json(['status' => true, 'redirect_url' => $redirectUrl]);
         } else {
             Log::error('PhonePe API Invalid Response', ['response' => $responseData]);
-            return response()->json(['status' => false, 'message' => 'Failed to obtain redirect URL.']);
+            // return response()->json(['status' => false, 'message' => 'Failed to obtain redirect URL.']);
         }
-
-
     }
 
     public function callback(Request $request)
     {
-        try {
-
-//            Transaction::create([
-//                'user_id' => auth()->user()->id,
-//                'amount' => 100,
-//                'status' => 0,
-//                'payment_method' => 'online',
-//                'transaction_id' => uniqid('txn_'),
-//            ]);
-
-//            dd($request->all());
-
-            dd('Callback', $request->all());
-
-//            $this->phonepeService->createOrder();
-
-//            return response()->json(['status' => true, 'message' => 'Payment verified successfully'], 200);
-
-        } catch (Exception $e) {
-            Log::error('Callback Error: ' . $e->getMessage());
-            return response()->json(['status' => false, 'message' => 'Payment verification failed'], 500);
-        }
+       Log::info('Callback request received');
     }
 
     public function redirect(Request $request)
     {
-        try {
-//            Transaction::create([
-//                'user_id' => auth()->user()->id,
-//                'amount' => 100,
-//                'status' => 0,
-//                'payment_method' => 'online',
-//                'transaction_id' => uniqid('txn_'),
-//            ]);
-
-//            dd($request->all());
-
-//            $this->phonepeService->handlePaymentResponse();
-
-//            $data = $request->all();
-
-            dd('redirect', $request->all());
-
-//            return view('frontend.Order.order-confirmation', compact('data'));
-
-
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Failed to retrieve cart items: ' . $e->getMessage(),
-            ], 500);
-        }
-
+        return view('frontend.Order.order-confirmation');
     }
 }

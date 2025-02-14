@@ -11,9 +11,7 @@ class Coupon extends Model
         'coupon_code',
         'coupon_type',
         'discount_value',
-        'start_date',
         'end_date',
-        'usage_limit',
         'status'
 
     ];

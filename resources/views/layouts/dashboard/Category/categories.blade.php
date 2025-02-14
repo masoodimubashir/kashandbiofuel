@@ -18,16 +18,16 @@
                         <div class="invalid-feedback">Please enter a valid name</div>
                     </div>
 
-                    <div class="col-12">
-                        <label class="form-label" for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description"></textarea>
-                        <div class="invalid-feedback">Please enter a description</div>
-                    </div>
+                    {{--                    <div class="col-12">--}}
+                    {{--                        <label class="form-label" for="image">Image</label>--}}
+                    {{--                        <input type="file" class="form-control" id="image" name="image"--}}
+                    {{--                               accept="image/jpeg,image/png,image/jpg,image/webp">--}}
+                    {{--                    </div>--}}
 
                     <div class="col-12">
                         <label class="form-label" for="show_on_navbar">Show On Navbar</label>
                         <input class="tgl tgl-flip navbar_show" id="show_on_navbar" type="checkbox"
-                            name="show_on_navbar">
+                               name="show_on_navbar">
                         <label class="tgl-btn" data-tg-off="No" data-tg-on="Yes!" for="show_on_navbar"></label>
                     </div>
 
@@ -38,7 +38,6 @@
             </div>
         </div>
     </div>
-
 
 
     <x-slot name="header">
@@ -64,7 +63,7 @@
         <div class="row mb-3">
             <div class="col-md-6 col-sm-12 mb-2 mb-md-0">
                 <button class="btn btn-success " type="button" data-bs-toggle="modal" id="createCategoryBtn"
-                    data-bs-target=".bd-example-modal-lg">
+                        data-bs-target=".bd-example-modal-lg">
                     Add Category
                 </button>
             </div>
@@ -81,13 +80,12 @@
                             <div class="table-responsive">
                                 <table class="table table-md" id="category">
                                     <thead>
-                                        <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Description</th>
-                                            <th scope="col">status</th>
-                                            <th scope="col">Show On Navbar</th>
-                                            <th scope=col>Action</th>
-                                        </tr>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">status</th>
+                                        <th scope="col">Show On Navbar</th>
+                                        <th scope=col>Action</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
@@ -105,7 +103,7 @@
 
     @push('dashboard.script')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
 
 
                 // Load DataTable
@@ -116,13 +114,10 @@
                         url: '/admin/categories',
                         type: 'GET',
                     },
-                    columns: [{
+                    columns: [
+                        {
                             data: 'name',
                             name: 'name'
-                        },
-                        {
-                            data: 'description',
-                            name: 'description'
                         },
                         {
                             data: 'status',
@@ -147,22 +142,19 @@
 
 
                 // Form validation and submission
-                $('#customerForm').on('submit', function(e) {
+                $('#customerForm').on('submit', function (e) {
                     e.preventDefault();
 
                     // Clear any existing error messages
                     $('.invalid-feedback').hide();
                     $('.is-invalid').removeClass('is-invalid');
 
-                    // Get form data
                     const formData = {
                         name: $('#name').val(),
-                        description: $('#description').val(),
                         show_on_navbar: $('#show_on_navbar').prop('checked') ? 1 : 0,
                         _token: $('input[name="_token"]').val()
                     };
 
-                    // Validation
                     let hasErrors = false;
 
                     if (!formData.name.trim()) {
@@ -170,10 +162,6 @@
                         hasErrors = true;
                     }
 
-                    if (!formData.description.trim()) {
-                        $('#description').addClass('is-invalid').siblings('.invalid-feedback').show();
-                        hasErrors = true;
-                    }
 
                     if (hasErrors) return;
 
@@ -184,7 +172,7 @@
                         url: isUpdate ? `/admin/categories/${customerId}` : '/admin/categories',
                         type: isUpdate ? 'PUT' : 'POST',
                         data: formData,
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
 
                                 // Reset form
@@ -199,7 +187,7 @@
 
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             const errors = xhr.responseJSON.errors;
 
                             // Check if errors are present
@@ -220,7 +208,7 @@
                 });
 
                 // Handle show_on_navbar toggle
-                $(document).on('change', '.showOnNavbar', function() {
+                $(document).on('change', '.showOnNavbar', function () {
                     var categoryId = $(this).attr('id').replace('navbar_', '');
                     var newStatus = $(this).prop('checked') ? 1 : 0;
 
@@ -232,7 +220,7 @@
                             model: 'Category',
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
                                 category.ajax.reload(null, false);
                             } else {
@@ -240,7 +228,7 @@
                                     'error');
                             }
                         },
-                        error: function() {
+                        error: function () {
                             Swal.fire('Error!',
                                 'Something went wrong while updating Show On Navbar status.',
                                 'error');
@@ -250,7 +238,7 @@
 
 
                 // Handle Delete button click
-                $(document).on('click', '.deleteBtn', function() {
+                $(document).on('click', '.deleteBtn', function () {
                     var categoryId = $(this).data('id');
 
                     // Show confirmation dialog
@@ -271,12 +259,12 @@
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content')
                                 },
-                                success: function(response) {
+                                success: function (response) {
                                     Swal.fire('Deleted!', 'The category has been deleted.',
                                         'success');
                                     category.ajax.reload(null, false);
                                 },
-                                error: function() {
+                                error: function () {
                                     Swal.fire('Error!', 'Failed to delete category.',
                                         'error');
                                 }
@@ -286,7 +274,7 @@
                 });
 
                 // Handle checkbox toggle (status change)
-                $(document).on('change', '.changeStatus', function() {
+                $(document).on('change', '.changeStatus', function () {
 
                     var categoryId = $(this).attr('id').replace('cb_', '');
                     var newStatus = $(this).prop('checked') ? 1 : 0;
@@ -299,7 +287,7 @@
                             model: 'Category',
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.status === 'success') {
                                 // Handle success if needed
                                 category.ajax.reload(null, false);
@@ -308,7 +296,7 @@
                                 Swal.fire('Error!', 'Failed to update status.', 'error');
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             Swal.fire('Error!', 'Something went wrong while updating status.',
                                 'error');
                         }
@@ -316,7 +304,7 @@
                 });
 
                 // Add real-time validation
-                $('#name, #description').on('input', function() {
+                $('#name, #description').on('input', function () {
                     if ($(this).val().trim()) {
                         $(this).removeClass('is-invalid').siblings('.invalid-feedback').hide();
                     }
@@ -324,11 +312,8 @@
 
 
                 // Handle Edit button click
-                $(document).on('click', '.editBtn', function() {
+                $(document).on('click', '.editBtn', function () {
                     var categoryId = $(this).data('id'); // Get category ID from the button data-id
-
-                    console.log(categoryId);
-
 
                     // Reset the form to clear previous values before loading the modal
                     resetForm();
@@ -337,7 +322,7 @@
                     $.ajax({
                         url: '/admin/categories/' + categoryId,
                         type: 'GET',
-                        success: function(response) {
+                        success: function (response) {
 
                             if (response.status === 'success') {
                                 $('#name').val(response.category.name);
@@ -351,14 +336,14 @@
                                 Swal.fire('Error!', 'Category data not found.', 'error');
                             }
                         },
-                        error: function() {
+                        error: function () {
                             Swal.fire('Error!', 'Failed to fetch category data.', 'error');
                         }
                     });
                 });
 
                 //  Clear Form When Showing The modal
-                $('#createCategoryBtn').on('click', function() {
+                $('#createCategoryBtn').on('click', function () {
                     resetForm();
                     $('#categoryModal').modal('show');
                 });
@@ -371,8 +356,6 @@
                     $('.is-invalid').removeClass('is-invalid');
                     $('.invalid-feedback').hide();
                 }
-
-
 
 
             });

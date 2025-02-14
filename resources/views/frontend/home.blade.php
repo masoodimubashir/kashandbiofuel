@@ -2,6 +2,8 @@
 
 @section('main')
 
+ 
+
     <!-- Home Section Start -->
     <section class="home-section pt-2">
         <div class="container-fluid-lg">
@@ -10,8 +12,11 @@
     </section>
     <!-- Home Section End -->
 
+  
+
     <!-- Category Section Start -->
     <section class="category-section-2">
+     
         <x-shop-by-category/>
     </section>
     <!-- Category Section End -->
@@ -19,6 +24,7 @@
     <!-- Banner Section Start -->
     <section class="banner-section ratio_60 wow fadeInUp">
         <div class="container-fluid-lg">
+         
             <x-hot-deals/>
         </div>
     </section>

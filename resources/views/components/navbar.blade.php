@@ -1,6 +1,62 @@
-{{--<div class="modal-dialog modal-fullscreen-sm-down">--}}
-{{--    ...--}}
-{{--</div>--}}
+<div class="modal-dialog modal-fullscreen-sm-down">
+</div>
+
+@php
+    $items = \App\Models\Cart::where('user_id', auth()->id())->count();
+@endphp
+
+<style>
+    .search-popup {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        height: 500px;
+        width: 700px
+        overflow-y: auto;
+        border: 1px solid #red;
+
+    }
+
+    .popup-content {
+        padding: 15px;
+    }
+
+    .product-result {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        transition: background 0.2s;
+    }
+
+    .product-result:hover {
+        background: #f8f9fa;
+    }
+
+    .product-result a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .product-result h4 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .product-result p {
+        margin: 5px 0 0;
+        font-size: 14px;
+        color: #666;
+    }
+</style>
+
 
 
 <div class="top-nav top-header sticky-header">
@@ -9,38 +65,49 @@
             <div class="col-12">
                 <div class="navbar-top">
                     <button class="navbar-toggler d-xl-none d-inline navbar-menu-button" type="button"
-                            data-bs-toggle="offcanvas" data-bs-target="#primaryMenu">
-                           <span class="navbar-toggler-icon">
-                               <i class="fa-solid fa-bars"></i>
-                           </span>
+                        data-bs-toggle="offcanvas" data-bs-target="#primaryMenu">
+                        <span class="navbar-toggler-icon">
+                            <i class="fa-solid fa-bars"></i>
+                        </span>
                     </button>
                     <a href="{{ url('/') }}" class="web-logo nav-logo">
                         <img src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}"
-                             class="img-fluid blur-up lazyload" alt="">
+                            class="img-fluid blur-up lazyload" alt="">
                     </a>
 
-                    <div class="middle-box">
+                    <!-- In your Blade view (frontend.home) -->
 
+                    <div class="middle-box">
                         <div class="search-box">
-                            <div class="input-group">
-                                <input type="search" class="form-control" placeholder="I'm searching for...">
-                                <button class="btn" type="button" id="button-addon2">
+                            <form class="input-group" action="{{ route('home') }}" method="GET">
+                                <input type="search" name="search" class="form-control"
+                                    placeholder="I'm searching for..." id="search-input">
+                                <button class="btn" type="submit" id="button-addon2">
                                     <i data-feather="search"></i>
                                 </button>
-                            </div>
+                            </form>
+                        </div>
+
+                        <div id="live-search-results" class="search-results">
+                            <!-- The search results will be dynamically inserted here -->
                         </div>
                     </div>
+
+                    <!-- Add Ajax Script for Live Search -->
+
+
+
 
                     <div class="rightside-box">
                         <div class="search-full">
                             <div class="input-group">
-                                   <span class="input-group-text">
-                                       <i data-feather="search" class="font-light"></i>
-                                   </span>
+                                <span class="input-group-text">
+                                    <i data-feather="search" class="font-light"></i>
+                                </span>
                                 <input type="text" class="form-control search-type" placeholder="Search here..">
                                 <span class="input-group-text close-search">
-                                       <i data-feather="x" class="font-light"></i>
-                                   </span>
+                                    <i data-feather="x" class="font-light"></i>
+                                </span>
                             </div>
                         </div>
                         <ul class="right-side-menu">
@@ -65,78 +132,24 @@
                                 </a>
                             </li>
                             <li class="right-side">
-                                <a href="{{route('wishlist.view-wishlist')}}"
-                                   class="btn p-0 position-relative header-wishlist">
+                                <a href="{{ route('wishlist.view-wishlist') }}"
+                                    class="btn p-0 position-relative header-wishlist">
                                     <i data-feather="heart"></i>
                                 </a>
                             </li>
                             <li class="right-side">
                                 <div class="onhover-dropdown header-badge">
-                                    <button type="button" class="btn p-0 position-relative header-wishlist">
+                                    <a href="{{ route('cart.view-cart') }}" type="button"
+                                        class="btn p-0 position-relative header-wishlist">
                                         <i data-feather="shopping-cart"></i>
-                                        <span class="position-absolute top-0 start-100 translate-middle badge">2
-                                               <span class="visually-hidden">unread messages</span>
-                                           </span>
-                                    </button>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge">
+                                            {{ $items }}
 
-                                    <div class="onhover-div">
-                                        <ul class="cart-list">
-                                            <li class="product-box-contain">
-                                                <div class="drop-cart">
-                                                    <a href="" class="drop-image">
-                                                        <img
-                                                            src="{{ asset('front/assets/images/vegetable/Product/1.png') }}"
-                                                            class="blur-up lazyload" alt="">
-                                                    </a>
-
-                                                    <div class="drop-contain">
-                                                        <a href="">
-                                                            <h5>Fantasy Crunchy Choco Chip Cookies</h5>
-                                                        </a>
-                                                        <h6><span>1 x</span> $80.58</h6>
-                                                        <button class="close-button close_button">
-                                                            <i class="fa-solid fa-xmark"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            <li class="product-box-contain">
-                                                <div class="drop-cart">
-                                                    <a href="" class="drop-image">
-                                                        <img
-                                                            src="{{ asset('front/assets/images/vegetable/Product/2.png') }}"
-                                                            class="blur-up lazyload" alt="">
-                                                    </a>
-
-                                                    <div class="drop-contain">
-                                                        <a href="">
-                                                            <h5>Peanut Butter Bite Premium Butter Cookies 600 g
-                                                            </h5>
-                                                        </a>
-                                                        <h6><span>1 x</span> $25.68</h6>
-                                                        <button class="close-button close_button">
-                                                            <i class="fa-solid fa-xmark"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-
-                                        <div class="price-box">
-                                            <h5>Total :</h5>
-                                            <h4 class="theme-color fw-bold">$106.58</h4>
-                                        </div>
-
-                                        <div class="button-group">
-                                            <a href="{{route('cart.view-cart')}}" class="btn btn-sm cart-button">View
-                                                Cart</a>
-                                            <a href="{{route('checkout.index')}}"
-                                               class="btn btn-sm cart-button theme-bg-color
-                                                text-white">Checkout</a>
-                                        </div>
-                                    </div>
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                    </a>
                                 </div>
+
                             </li>
                             <li class="right-side onhover-dropdown">
 
@@ -168,28 +181,28 @@
                                         <ul class="user-box-name">
 
                                             @role('admin')
-                                            <li class="product-box-contain">
-                                                @role('admin')
-                                                <a href="{{ route('admin.dashboard') }}">
-                                                    Dashboard
-                                                </a>
-                                                @endrole
-                                            </li>
+                                                <li class="product-box-contain">
+                                                    @role('admin')
+                                                        <a href="{{ route('admin.dashboard') }}">
+                                                            Dashboard
+                                                        </a>
+                                                    @endrole
+                                                </li>
                                             @endrole
 
                                             @role('user')
-                                            <li class="product-box-contain">
-                                                <a href="{{ route('user.dashboard') }}">
-                                                    Dashboard
-                                                </a>
-                                            </li>
+                                                <li class="product-box-contain">
+                                                    <a href="{{ route('user.dashboard') }}">
+                                                        Dashboard
+                                                    </a>
+                                                </li>
                                             @endrole
 
                                             <li class="product-box-contain">
                                                 <form method="POST" action="{{ route('logout') }}">
                                                     @csrf
                                                     <a href="{{ route('logout') }}"
-                                                       onclick="event.preventDefault();
+                                                        onclick="event.preventDefault();
                                                                                          this.closest('form').submit();">
                                                         {{ __('Log Out') }}
                                                     </a>
@@ -222,3 +235,63 @@
         </div>
     </div>
 </div>
+
+@push('frontend.scripts')
+    <script>
+        $(document).ready(function() {
+
+
+            $('<div id="search-popup" class="search-popup"></div>').insertAfter('#search-input');
+
+            $('#search-input').on('input', function(event) {
+
+                event.preventDefault();
+
+                var query = $(this).val();
+
+                if (query.length >= 3) {
+                    $.ajax({
+                        url: "{{ route('live.search') }}",
+                        method: "GET",
+                        data: {
+                            query: query
+                        },
+                        success: function(data) {
+                            var resultsHtml = '<div class="popup-content">';
+
+                            if (data.length > 0) {
+                                data.forEach(function(product) {
+                                    resultsHtml += `
+                                <div class="product-result">
+                                    <a href="/product/${product.slug}">
+                                        <h4>${product.name}</h4>
+                                        <p>${product.description}</p>
+                                    </a>
+                                </div>
+                            `;
+                                });
+                            } else {
+                                resultsHtml += '<p>No results found.</p>';
+                            }
+
+                            resultsHtml += '</div>';
+                            $('#search-popup').html(resultsHtml).show();
+                        },
+                        error: function(xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
+                } else {
+                    $('#search-popup').hide();
+                }
+            });
+
+            // Close popup when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#search-input, #search-popup').length) {
+                    $('#search-popup').hide();
+                }
+            });
+        });
+    </script>
+@endpush

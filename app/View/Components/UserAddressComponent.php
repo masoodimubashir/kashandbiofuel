@@ -2,23 +2,27 @@
 
 namespace App\View\Components;
 
-use App\Models\Category;
-use App\Service\NavigationService;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Navigation extends Component
+class UserAddressComponent extends Component
 {
 
-    public $navigation;
+
+    public $address;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(NavigationService $navigationService)
+    public function __construct()
     {
-        $this->navigation = $navigationService->getAllNavigationItems();
+        
+        $user = auth()->user();
+
+        $this->address = $user->address;
+
+
     }
 
     /**
@@ -26,6 +30,6 @@ class Navigation extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.navigation');
+        return view('components.user-address-component');
     }
 }

@@ -1,18 +1,16 @@
 <div class="sidebar-wrapper" data-layout="stroke-svg">
     <div>
         <div class="logo-wrapper">
-            <a href="index.html">
-                {{-- <img class="img-fluid" src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt=""> --}}
+            <a href="route('admin.dashboard')">
+                <img class="img" style="height: 50px; 100px" src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt="">
             </a>
-            <div class="toggle-sidebar">
-                <svg class="sidebar-toggle">
-                    <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#toggle-icon">
-                    </use>
-                </svg>
+            <div class="toggle-sidebar" style="color:white;">
+                <i class="fa-solid fa-bars"></i>
             </div>
         </div>
-        <div class="logo-icon-wrapper"><a href="index.html"><img class="img-fluid"
-                                                                 src="../assets/images/logo/logo-icon.png" alt=""></a>
+        <div class="logo-icon-wrapper">
+            <a href="index.html">
+                <img class="img-fluid" src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt=""></a>
         </div>
         <nav class="sidebar-main">
             <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
@@ -202,7 +200,7 @@
 
 
                     <li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
-                        <a class="sidebar-link sidebar-title link-nav" href="{{ url('/admin/banners') }}">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('dashboard.contact-us.index') }}">
                             <svg class="stroke-icon">
                                 <use
                                     href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#stroke-landing-page">

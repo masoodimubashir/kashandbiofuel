@@ -124,9 +124,7 @@ class CouponController extends Controller
                 'coupon_code' => ['required', 'string', Rule::unique('coupons')->ignore($coupon->id)],
                 'coupon_type' => 'required|in:1,2',
                 'discount_value' => 'required|string',
-                'start_date' => 'required|date',
                 'end_date' => 'required|date|after:start_date',
-                'usage_limit' => 'required|integer|min:1',
             ]);
 
 
@@ -141,9 +139,7 @@ class CouponController extends Controller
                 'coupon_code' => strtoupper($request->coupon_code),
                 'coupon_type' => $request->coupon_type,
                 'discount_value' => $request->discount_value,
-                'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'usage_limit' => $request->usage_limit
             ]);
 
             return response()->json([

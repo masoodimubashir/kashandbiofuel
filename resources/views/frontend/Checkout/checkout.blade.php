@@ -180,7 +180,7 @@
 
                             </ul>
                         </div>
-                        <a href="javascript:void(0);" id="placeOrderButton"
+                        <a href="{{ route('payment.redirect') }}" id="placeOrderButton"
                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</a>
 
                     </div>

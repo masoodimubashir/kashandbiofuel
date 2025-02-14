@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Number;
+use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
 
+    use Searchable;
 
     /**
      * Bit flags for Product statuses
@@ -46,6 +46,23 @@ class Product extends Model
         'discounted',
         'new_arrival',
     ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray()
+    {
+        return array_merge($this->toArray(), [
+            'id' => (string) $this->id,
+            'name' => $this->name,
+            'sku' => $this->sku,
+            'search_tags' => $this->search_tags,
+            'price' => $this->price,
+            'created_at' => $this->created_at->timestamp,
+        ]);
+    }
 
 
     public function category(): BelongsTo
@@ -89,6 +106,4 @@ class Product extends Model
     {
         return $this->hasOne(Reviews::class, 'product_id', 'id');
     }
-
-
 }

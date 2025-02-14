@@ -58,8 +58,8 @@
                     <div class="footer-logo">
                         <div class="theme-logo">
                             <a href="index.html">
-                                <img src="../assets/images/logo/kassh & biofuels (1) (1).png"
-                                    class="blur-up lazyload" alt="">
+                                <img src="../assets/images/logo/kassh & biofuels (1) (1).png" class="blur-up lazyload"
+                                    alt="">
                             </a>
                         </div>
 
@@ -87,24 +87,14 @@
 
                     <div class="footer-contain">
                         <ul>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Vegetables & Fruit</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Beverages</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Meats & Seafood</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Frozen Foods</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Biscuits & Snacks</a>
-                            </li>
-                            <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Grocery & Staples</a>
-                            </li>
+
+                            {{-- @foreach ($navigation as $n)
+                                <li>
+                                    <a href="shop-left-sidebar.html" class="text-content">{{ $navigation->name}}</a>
+                                </li>
+                            @endforeach --}}
+
+
                         </ul>
                     </div>
                 </div>

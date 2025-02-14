@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Carbon\Exceptions\Exception;
+use Illuminate\Http\Request;
 
 class FrontendProductController extends Controller
 {
@@ -42,5 +44,48 @@ class FrontendProductController extends Controller
 
 
         return view('frontend.Product.product-detail', compact('product'));
+    }
+
+
+    public function checkProductQuantity(Request $request, string $slug)
+    {
+            try {
+                $product = Product::where('slug', $slug)->firstOrFail();
+
+                dd($request->input('qty'));
+                
+                $requestedQty = $request->input('qty');
+                
+                if ($requestedQty > $product->qty) {
+
+                    return response()->json([
+                        'status' => false,
+                        'message' => "Only {$product->qty} items available in stock"
+                    ], 422);
+                }
+                
+                if ($requestedQty <= 0) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Quantity must be greater than zero'
+                    ], 422);
+                }
+        
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Product quantity is available',
+                    'data' => [
+                        'requested_qty' => $requestedQty,
+                        'available_qty' => $product->qty
+                    ]
+                ]);
+
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Failed to check product quantity'
+                ], 500);
+            }
+        
     }
 }

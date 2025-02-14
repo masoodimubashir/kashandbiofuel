@@ -79,7 +79,7 @@
                                     <label class="form-label" for="price">Price<span
                                             class="text-danger">*</span></label>
                                     <input type="number" step="0.01" class="form-control" id="price"
-                                           name="price">
+                                        name="price">
                                     <div class="invalid-feedback"></div>
                                 </div>
 
@@ -87,7 +87,7 @@
                                     <label class="form-label" for="selling_price">Selling Price<span
                                             class="text-danger">*</span></label>
                                     <input type="number" step="0.01" class="form-control" id="selling_price"
-                                           name="selling_price">
+                                        name="selling_price">
                                     <div class="invalid-feedback"></div>
                                 </div>
 
@@ -139,16 +139,14 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="short_description">Short Description</label>
-                                    <textarea class="form-control" id="short_description" name="short_description"
-                                              rows="3"></textarea>
+                                    <textarea class="form-control" id="short_description" name="short_description" rows="3"></textarea>
                                     <div class="invalid-feedback"></div>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="additional_description">Additional
                                         Description</label>
-                                    <textarea class="form-control" id="additional_description"
-                                              name="additional_description" rows="3"></textarea>
+                                    <textarea class="form-control" id="additional_description" name="additional_description" rows="3"></textarea>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -171,20 +169,20 @@
                                 <div class="d-flex flex-wrap gap-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="featured"
-                                               name="featured"
-                                               value="{{ $product->featured }}" {{ $product->featured  ? 'checked' : '' }}>
+                                            name="featured" value="{{ $product->featured }}"
+                                            {{ $product->featured ? 'checked' : '' }}>
                                         <label class="form-check-label" for="featured">Featured</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="discounted"
-                                               name="discounted"
-                                               value="{{ $product->discounted }}" {{ $product->discounted  ? 'checked' : '' }}>
+                                            name="discounted" value="{{ $product->discounted }}"
+                                            {{ $product->discounted ? 'checked' : '' }}>
                                         <label class="form-check-label" for="discounted">Discounted</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="new_arrival"
-                                               name="new_arrival"
-                                               value="{{ $product->new_arrival }}" {{ $product->new_arrival  ? 'checked' : '' }}>
+                                            name="new_arrival" value="{{ $product->new_arrival }}"
+                                            {{ $product->new_arrival ? 'checked' : '' }}>
                                         <label class="form-check-label" for="new_arrival">New Arrival</label>
                                     </div>
 
@@ -230,7 +228,7 @@
         <script>
             // Initialize variables
 
-            $(document).ready(function () {
+            $(document).ready(function() {
 
                 let removedAttributes = [];
                 let removedImages = [];
@@ -245,7 +243,7 @@
                     $.ajax({
                         url: `/admin/products/${productId}/edit`,
                         method: 'GET',
-                        success: function (response) {
+                        success: function(response) {
 
                             console.log(response);
                             const product = response.product;
@@ -284,7 +282,7 @@
                         $.ajax({
                             url: `/admin/categories/${categoryId}`,
                             method: "GET",
-                            success: function (response) {
+                            success: function(response) {
                                 const category = response.category;
                                 let options = '<option value="">Select Subcategory</option>';
                                 category.sub_categories.forEach(subcategory => {
@@ -301,7 +299,7 @@
 
 
                 // Handle category change
-                $('#category_id').on('change', function () {
+                $('#category_id').on('change', function() {
                     const categoryId = $(this).val();
                     loadSubCategories(categoryId);
                 });
@@ -320,12 +318,11 @@
                     <input type="file" class="form-control" name="images[]" multiple accept="image/*">
                     <div class="existing-images row mt-2">
 
-                        ${data ? `
-                                                                                                                            <div class="col-md-3 mb-2 image-container">
-                                                                                                                                <div class="position-relative">
-                                                                                                                                    <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
-                                                                                                                                </div>
-                                                                                                                            </div>` : ''}
+                        ${data ? ` <div class="col-md-3 mb-2 image-container">
+                                              <div class="position-relative">
+                                                  <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
+                                              </div>
+                                           </div>` : ''}
 
 
                     </div>
@@ -346,32 +343,23 @@
                 // const $row = $(rowHtml);
                 // $('#variationRows').append($row);
 
-                $('#addRowBtn').click(function () {
+                $('#addRowBtn').click(function() {
                     addVariationRow();
                 });
 
 
                 // Handle existing image deletion
-                $(document).on('click', '.delete-image', function () {
+                $(document).on('click', '.delete-image', function() {
                     const imageId = $(this).data('image-id');
                     const container = $(this).closest('.image-container');
 
-                    Swal.fire({
-                        title: 'Delete Image?',
-                        text: 'This action cannot be undone',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                   
                             removedImages.push(imageId);
                             container.remove();
-                        }
-                    });
                 });
 
                 // Handle row removal
-                $(document).on('click', '.remove-row', function () {
+                $(document).on('click', '.remove-row', function() {
                     const row = $(this).closest('.variation-row');
                     const attributeId = row.find('input[name="attribute_id[]"]').val();
 
@@ -382,7 +370,7 @@
                 });
 
                 // Form submission
-                $('#productForm').on('submit', function (e) {
+                $('#productForm').on('submit', function(e) {
                     e.preventDefault();
                     const formData = new FormData(this);
 
@@ -392,7 +380,7 @@
                     formData.append('search_tags', ($('#tags').val()));
 
                     // Handle Product attributes and images
-                    $('.variation-row').each(function (index) {
+                    $('.variation-row').each(function(index) {
                         const hexCode = $(this).find('input[type="color"]').val();
                         const images = $(this).find('input[type="file"]')[0].files;
                         const attributeId = $(this).find('input[name="attribute_id[]"]').val();
@@ -430,11 +418,11 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             Swal.fire('Success', 'Product updated successfully', 'success')
                                 .then(() => window.location.href = '/admin/products');
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             handleFormErrors(xhr.responseJSON?.errors);
                         }
                     });

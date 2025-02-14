@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SubCategory;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +29,6 @@ class CategoryController extends Controller
                 $categories = Category::query();
 
                 return DataTables::eloquent($categories)
-
                     ->addColumn('status', function ($category) {
                         // Determine if the status is on or off
                         $status = $category->status === 1 ? 'on' : 'off';
@@ -40,7 +40,6 @@ class CategoryController extends Controller
                         <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="' . $checkboxId . '"></label>
                     ';
                     })
-
                     ->addColumn('show_on_navbar', function ($category) {
                         // Determine if show_on_navbar is enabled or disabled
                         $isShown = $category->show_on_navbar === 1 ? 'checked' : '';
@@ -51,7 +50,6 @@ class CategoryController extends Controller
                             <label class="tgl-btn" data-tg-off="No" data-tg-on="Yes!" for="' . $checkboxId . '"></label>
                         ';
                     })
-
                     ->addColumn('action', function ($category) {
                         // Edit button with Font Awesome icon
                         $editButton = '
@@ -66,9 +64,7 @@ class CategoryController extends Controller
                         // Return both buttons together
                         return $editButton . ' ' . $deleteButton;
                     })
-
                     ->rawColumns(['action', 'status', 'show_on_navbar'])
-
                     ->make(true);
             }
 
@@ -85,7 +81,9 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -94,9 +92,10 @@ class CategoryController extends Controller
     {
 
         try {
+
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|unique:categories,name',
-                'description' => 'required|string',
+//                'image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
                 'show_on_navbar' => 'nullable|boolean'
             ]);
 
@@ -107,24 +106,24 @@ class CategoryController extends Controller
                 ], 422);
             }
 
+
             $category = Category::create([
                 'name' => $request->name,
                 'status' => 1,
                 'slug' => Str::of($request->name)->slug('-'),
-                'description' => $request->description,
-                'show_on_navbar' => $request->input('show_on_navbar', 0) // Default to 0 if not provided
+                'show_on_navbar' => $request->input('show_on_navbar', 0)
             ]);
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Category created successfully',
-                'data' => $category // Optionally include the created category in the response
+                'data' => $category
             ], 201);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to create category',
-                'error' => $e->getMessage() // Include error message for debugging purposes
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -141,7 +140,7 @@ class CategoryController extends Controller
                 'status' => 'success',
                 'category' => $category->with('subCategories')->find($category->id)
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -173,14 +172,13 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
 
-        
+
         try {
 
             $category = Category::findOrFail($category->id);
 
             $validator = Validator::make($request->all(), [
                 'name' => ['required', 'string', Rule::unique('categories')->ignore($category->id)],
-                'description' => 'required|string',
                 'show_on_navbar' => 'nullable|boolean'
             ]);
 
@@ -193,7 +191,6 @@ class CategoryController extends Controller
 
             $category->update([
                 'name' => $request->name,
-                'description' => $request->description,
                 'show_on_navbar' => $request->show_on_navbar
             ]);
 

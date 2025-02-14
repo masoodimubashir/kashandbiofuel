@@ -27,7 +27,6 @@ class SubCategoryController extends Controller
                 $subCategories = SubCategory::with('category'); // Eager load category for better performance
 
                 return DataTables::eloquent($subCategories)
-
                     ->addColumn('status', function ($subCategory) {
 
                         $status = $subCategory->status === 1 ? 'on' : 'off';
@@ -39,7 +38,6 @@ class SubCategoryController extends Controller
                             <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="' . $checkboxId . '"></label>
                         ';
                     })
-
                     ->addColumn('show_on_navbar', function ($subCategories) {
                         // Determine if show_on_navbar is enabled or disabled
                         $isShown = $subCategories->show_on_navbar === 1 ? 'checked' : '';
@@ -50,14 +48,13 @@ class SubCategoryController extends Controller
                             <label class="tgl-btn" data-tg-off="No" data-tg-on="Yes!" for="' . $checkboxId . '"></label>
                         ';
                     })
-
                     ->addColumn('action', function ($subCategory) {
                         $editButton = '
-                            <i class="fa-regular fa-pen-to-square editBtn fs-5 text-success me-3" data-id="' . $subCategory->id . '"  title="Edit"></i> 
+                            <i class="fa-regular fa-pen-to-square editBtn fs-5 text-success me-3" data-id="' . $subCategory->id . '"  title="Edit"></i>
                         ';
 
                         $deleteButton = '
-                            <i class="fa-solid fa-trash deleteBtn fs-5 text-danger"  title="Delete" data-id="' . $subCategory->id . '" id="deleteBtn_' . $subCategory->id . '"></i> 
+                            <i class="fa-solid fa-trash deleteBtn fs-5 text-danger"  title="Delete" data-id="' . $subCategory->id . '" id="deleteBtn_' . $subCategory->id . '"></i>
                         ';
 
                         return $editButton . ' ' . $deleteButton;
@@ -80,7 +77,9 @@ class SubCategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create()
+    {
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -92,7 +91,6 @@ class SubCategoryController extends Controller
             $validator = Validator::make($request->all(), [
 
                 'name' => 'required|string|unique:sub_categories,name',
-                'description' => 'required|string',
                 'category_id' => 'required|exists:categories,id',
                 'show_on_navbar' => 'nullable|boolean'
             ]);
@@ -108,7 +106,6 @@ class SubCategoryController extends Controller
                 'name' => $request->name,
                 'status' => 1,
                 'slug' => Str::of($request->name)->slug('-'),
-                'description' => $request->description,
                 'category_id' => $request->category_id,
                 'show_on_navbar' => $request->show_on_navbar,
             ]);
@@ -131,7 +128,6 @@ class SubCategoryController extends Controller
     public function show(SubCategory $subCategory)
     {
 
-        dd($subCategory);
 
         try {
             if (!$subCategory) {
@@ -176,7 +172,6 @@ class SubCategoryController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'name' => ['required', 'string', Rule::unique('sub_categories')->ignore($subCategory->id)],
-                'description' => 'required|string',
                 'category_id' => 'required|exists:categories,id'
             ]);
 
@@ -189,7 +184,6 @@ class SubCategoryController extends Controller
 
             $subCategory->update([
                 'name' => $request->name,
-                'description' => $request->description,
                 'category_id' => $request->category_id
             ]);
 

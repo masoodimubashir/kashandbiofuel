@@ -2,30 +2,23 @@
 
 namespace App\View\Components;
 
-use App\Models\Category;
 use App\Service\NavigationService;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Navigation extends Component
+class footer extends Component
 {
 
     public $navigation;
 
-    /**
-     * Create a new component instance.
-     */
     public function __construct(NavigationService $navigationService)
     {
         $this->navigation = $navigationService->getAllNavigationItems();
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     */
-    public function render(): View|Closure|string
+    public function render(): View
     {
-        return view('components.navigation');
+        return view('components.footer');
     }
 }

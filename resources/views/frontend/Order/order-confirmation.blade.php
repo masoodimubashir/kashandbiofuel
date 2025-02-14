@@ -5,9 +5,9 @@
         <div class="container-fluid-lg">
             <div class="row">
                 <div class="col-12">
-                    @foreach($data as $d)
+                    {{-- @foreach($data as $d)
                         {{dd($d)}}
-                    @endforeach
+                    @endforeach --}}
 
                 </div>
             </div>

@@ -40,8 +40,7 @@ class ProductController extends Controller
                     ->addColumn('product_name', function ($product) {
 
                         $image = $product->productAttributes->first();
-                        $imageUrl = $image ? asset('storage/' . $image->image_path) : asset('dashboard/assets/images/Product/product_default.png');
-
+                        $imageUrl =  asset('storage/' . $image->image_path);
 
                         return
                             '

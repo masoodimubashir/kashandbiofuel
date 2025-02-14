@@ -35,18 +35,6 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label" for="usage_limit">Usage Limit</label>
-                        <input class="form-control" id="usage_limit" name="usage_limit" type="number" min="1">
-                        <div class="invalid-feedback">Please enter a usage limit</div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label" for="start_date">Start Date</label>
-                        <input class="form-control" id="start_date" name="start_date" type="date">
-                        <div class="invalid-feedback">Please select a start date</div>
-                    </div>
-
-                    <div class="col-md-6">
                         <label class="form-label" for="end_date">End Date</label>
                         <input class="form-control" id="end_date" name="end_date" type="date">
                         <div class="invalid-feedback">Please select an end date</div>
@@ -103,8 +91,6 @@
                                             <th scope="col">Type</th>
                                             <th scope="col">Discount Value</th>
                                             <th scope="col">Start Date</th>
-                                            <th scope="col">End Date</th>
-                                            <th scope="col">Usage Limit</th>
                                             <th scope="col">Status</th>
                                             <th scope="col">Action</th>
                                         </tr>
@@ -141,18 +127,12 @@
                             data: 'discount_value',
                             name: 'discount_value'
                         },
-                        {
-                            data: 'start_date',
-                            name: 'start_date'
-                        },
+
                         {
                             data: 'end_date',
                             name: 'end_date'
                         },
-                        {
-                            data: 'usage_limit',
-                            name: 'usage_limit'
-                        },
+                      
                         {
                             data: 'status',
                             name: 'status',
@@ -186,9 +166,7 @@
                                 $('#coupon_code').val(response.coupon.coupon_code);
                                 $('#coupon_type').val(response.coupon.coupon_type);
                                 $('#discount_value').val(response.coupon.discount_value);
-                                $('#start_date').val(response.coupon.start_date);
                                 $('#end_date').val(response.coupon.end_date);
-                                $('#usage_limit').val(response.coupon.usage_limit);
                                 $('#status').prop('checked', response.coupon.status === 1);
                                 $('#couponId').val(response.coupon.id);
                                 $('#couponModal').modal('show');
@@ -208,9 +186,7 @@
                         coupon_code: $('#coupon_code').val(),
                         coupon_type: $('#coupon_type').val(),
                         discount_value: $('#discount_value').val(),
-                        start_date: $('#start_date').val(),
                         end_date: $('#end_date').val(),
-                        usage_limit: $('#usage_limit').val(),
                         status: $('#status').prop('checked') ? 1 : 0,
                         _token: $('input[name="_token"]').val()
                     };
