@@ -11,7 +11,6 @@ use Laravel\Scout\Searchable;
 class Product extends Model
 {
 
-    use Searchable;
 
     /**
      * Bit flags for Product statuses
@@ -52,17 +51,6 @@ class Product extends Model
      *
      * @return array<string, mixed>
      */
-    public function toSearchableArray()
-    {
-        return array_merge($this->toArray(), [
-            'id' => (string) $this->id,
-            'name' => $this->name,
-            'sku' => $this->sku,
-            'search_tags' => $this->search_tags,
-            'price' => $this->price,
-            'created_at' => $this->created_at->timestamp,
-        ]);
-    }
 
 
     public function category(): BelongsTo
