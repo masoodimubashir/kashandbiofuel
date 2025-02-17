@@ -103,6 +103,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <h4>Featured Banner</h4>
+                        </div>
+                        <div class="card-body">
+                            <input class="show-preview my-pond8" type="file" name="file">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -124,6 +135,7 @@
                     'my-pond5': 'slider-3',
                     'my-pond6': 'slider-4',
                     'my-pond7': 'featured',
+                    'my-pond8': 'limited-offer',
 
 
                 };

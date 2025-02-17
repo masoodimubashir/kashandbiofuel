@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductAttributeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSeoController;
+use App\Http\Controllers\Admin\ShipRocketController;
 use App\Http\Controllers\Admin\StatusUpdateController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\UserController;
@@ -114,8 +115,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('/order', OrderController::class);
 
-        Route::get('/contact-us', [DashboardContactUsController::class, 'index'])->name('dashboard.contact-us.index');
+        Route::post('/order/push-to-shiprocket/{order}', ShipRocketController::class)->name('order.push-to-shiprocket');
 
+        Route::get('/contact-us', [DashboardContactUsController::class, 'index'])->name('dashboard.contact-us.index');
         Route::get('banners', [BannerController::class, 'index']);
         Route::post('banners', [BannerController::class, 'store']);
         Route::post('banners/update/{id}', [BannerController::class, 'update']);
@@ -131,6 +133,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::put('Product/seo', [ProductSeoController::class, 'index'])->name('Product.seo');
         Route::put('Product/flags/{id}', [ChangeFlagsController::class, 'index'])->name('Product.flags');
+
     });
 
 
@@ -139,17 +142,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 
+
         Route::post('/product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
 
         Route::put('/update/profile', [UserProfileController::class, 'update'])->name('user.profile.update');
         Route::put('/update/password', [UserProfileController::class, 'updatePassword'])->name('user.password.update');
+        Route::post('/update/photo', [UserProfileController::class, 'updateImage'])->name('user.update.photo');
+
 
         Route::resource('/address', FrontendAddressController::class);
 
         // Route For Checkout
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-        Route::get('/order-placed', [CheckoutController::class, 'orderPlaced'])->name('checkout.order-placed');
+        Route::get('/order-placed/{transaction_id}', [CheckoutController::class, 'orderPlaced'])->name('checkout.order-placed');
         Route::post('/checkout/phonepe', [CheckoutController::class, 'checkout'])->name('checkout.phonepe.store');
+        Route::post('/cash-on-delivery', [CheckoutController::class, 'cashOnDelivery'])->name('checkout.cash-on-delivery');
+
+
         Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
         Route::get('/phonepe/redirect', [CheckoutController::class, 'redirect'])->name('payment.redirect');
 

@@ -1,0 +1,73 @@
+<div class="box-col-12">
+    <div class="card">
+        <div class="card-header card-no-border pb-0">
+            <div class="header-top">
+                <h4>Total Order</h4>
+                <div class="dropdown icon-dropdown">
+                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="icon-more-alt"></i></button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Weekly</a><a
+                            class="dropdown-item" href="#">Monthly</a><a class="dropdown-item"
+                                                                         href="#">Yearly</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body selling-table checkbox-checked">
+            <div class="table-responsive custom-scrollbar">
+                <table class="table" id="sell-product">
+                    <thead>
+                    <tr>
+                        <th>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="">
+                                <label class="form-check-label"></label>
+                            </div>
+                        </th>
+                        <th>Product Name</th>
+                        <th>Order Id</th>
+                        <th>Amount</th>
+                        <th>Payment</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    @foreach ($totalOrders as $order)
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="">
+                                    <label class="form-check-label"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="flex-shrink-0">
+                                        <img class="img-30 b-r-10"
+                                             src="{{ asset('storage/'. $order->product->productAttribute->image_path) }}"
+                                             alt=""></div>
+                                    <div class="flex-grow-1"><a href="product.html">
+                                            <h5 class="f-w-600">{{ $order->product->name }}</h5><span>
+                                                    {{ $order->order->date_of_purchase->format('d-M-y') }}
+                                                </span>
+                                        </a></div>
+                                </div>
+                            </td>
+                            <td>{{ $order->order->custom_order_id }}</td>
+                            <td>{{ $order->price }}</td>
+                            <td>
+                                <div
+                                    class="badge {{$order->order->status === 'Pending' ? 'bg-danger-subtle text-danger-emphasis border-danger-subtle' : 'bg-success-subtle text-success-emphasis border-success-subtle'}} btn">
+                                    {{$order->order->status}}
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -23,19 +23,20 @@ class ProductReviewController extends Controller
             try {
 
 
-//                $validator = Validator::make($request->only(['product_id', 'rating', 'comment', 'user_id']), [
-//                    'rating' => 'required|integer|min:1|max:5',
-//                    'comment' => 'required|string|max:255',
-//                    'product_id' => 'required|exists:products,id',
-//                ]);
+
+               $validator = Validator::make($request->only(['product_id', 'rating', 'comment', 'user_id']), [
+                   'rating' => 'required|integer|min:1|max:5',
+                   'comment' => 'required|string|max:255',
+                   'product_id' => 'required|exists:products,id',
+               ]);
 
 
-//                if ($validator->fails()) {
-//                    return response()->json([
-//                        'status' => 'error',
-//                        'message' => 'Something went wrong. Data cannot be saved.'
-//                    ], 422);
-//                }
+               if ($validator->fails()) {
+                   return response()->json([
+                       'status' => 'error',
+                       'message' => 'Something went wrong. Data cannot be saved.'
+                   ], 422);
+               }
 
                 $review = Reviews::create([
                     'product_id' => $request->product_id,

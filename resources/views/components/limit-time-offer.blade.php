@@ -1,7 +1,9 @@
 <div class="row">
     <div class="col-12">
         <div class="home-contain hover-effect">
-            <img src="../assets/images/cake/banner/11.jpg" class="bg-img blur-up lazyload" alt="">
+            @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::LIMITED_OFFERS->value)->first())
+                <img src="{{asset('storage/' . $banner->image_path ?? null )}}" class="bg-img blur-up lazyload" alt="">
+            @endif
             <div class="home-detail p-center position-relative text-center">
                 <div>
                     <h3 class="text-danger text-uppercase fw-bold mb-0">

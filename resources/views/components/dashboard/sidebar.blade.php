@@ -126,34 +126,8 @@
                             </svg>
                             <span>Orders</span></a>
                     </li>
-                    <li class="sidebar-list">
-                        <i class="fa fa-thumb-tack">
-                        </i><a class="sidebar-link sidebar-title link-nav" href="{{ route('coupons.index') }}">
-                            <svg class="stroke-icon">
-                                <use
-                                    href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#stroke-bookmark">
-                                </use>
-                            </svg>
-                            <svg class="fill-icon">
-                                <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-bookmark">
-                                </use>
-                            </svg>
-                            <span>Coupons</span></a>
-                    </li>
-                    <li class="sidebar-list">
-                        <i class="fa fa-thumb-tack">
-                        </i><a class="sidebar-link sidebar-title link-nav" href="{{ route('coupons.index') }}">
-                            <svg class="stroke-icon">
-                                <use
-                                    href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#stroke-bookmark">
-                                </use>
-                            </svg>
-                            <svg class="fill-icon">
-                                <use href="https://admin.pixelstrap.net/kabul/assets/svg/icon-sprite.svg#fill-bookmark">
-                                </use>
-                            </svg>
-                            <span>Coupons</span></a>
-                    </li>
+                  
+                  
 
 
                     <li class="sidebar-main-title">

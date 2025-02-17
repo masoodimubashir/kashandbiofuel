@@ -2,35 +2,29 @@
 
 namespace App\View\Components;
 
-use App\Models\Order;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
-class UserOrderComponent extends Component
+class UserSidebarComponent extends Component
 {
 
-
-    public $orders;
 
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        $this->orders = $orders = Order::query()
-            ->where('user_id', Auth::id())
-            ->with(['orderItems' => fn($query) => $query->with('product')])
-            ->get();
+
 
     }
+
 
     /**
      * Get the view / contents that represent the component.
      */
     public function render(): View|Closure|string
     {
-        return view('components.user-order-component');
+        return view('components.user-sidebar-component');
     }
 }

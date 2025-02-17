@@ -49,4 +49,30 @@ class Order extends Model
         return $this->belongsTo(Address::class);
     }
 
+    public function transaction(): BelongsTo
+    {
+        return $this->belongsTo(Transaction::class);
+    }
+
+    public function getStatusAttribute()
+    {
+        if ($this->is_cancelled) {
+            return 'Cancelled';
+        }
+
+        if ($this->is_delivered) {
+            return 'Delivered';
+        }
+
+        if ($this->is_confirmed) {
+            return 'Confirmed';
+        }
+
+        return 'Pending';
+    }
+
+    public function getYestardayDateAttribute()
+    {
+        return $this->date_of_purchase->subDay()->format('d-M-Y');
+    }
 }

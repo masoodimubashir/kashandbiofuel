@@ -9,17 +9,14 @@ namespace App\Enum;
 enum BannerPosition: string
 {
 
-//    Hero Banner
     case HEADER = 'hero-1';
 
-//    Hero Banner 2
     case SLIDER = 'hero-2';
 
-//
     case FEATURED = 'featured';
 
+    case LIMITED_OFFERS = 'limited-offer';
 
-//    These Banners Are Shown Under Shop By Category
     case SLIDER_BANNER_1 = 'slider-1';
 
     case SLIDER_BANNER_2 = 'slider-2';

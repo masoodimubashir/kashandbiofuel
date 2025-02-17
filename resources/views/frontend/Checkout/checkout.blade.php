@@ -35,9 +35,8 @@
                                 <li>
                                     <div class="checkout-icon">
                                         <lord-icon target=".nav-item" src="https://cdn.lordicon.com/ggihhudh.json"
-                                                   trigger="loop-on-hover"
-                                                   colors="primary:#121331,secondary:#646e78,tertiary:#0baf9a"
-                                                   class="lord-icon">
+                                            trigger="loop-on-hover"
+                                            colors="primary:#121331,secondary:#646e78,tertiary:#0baf9a" class="lord-icon">
                                         </lord-icon>
                                     </div>
                                     <div class="checkout-box">
@@ -46,40 +45,38 @@
                                         <div class="checkout-detail">
                                             <div class="row g-4">
                                                 <div class="col-12" id="address-list">
-                                                    @if($address)
+                                                    @if ($address)
                                                         <div class="delivery-address-box">
                                                             <div>
                                                                 <div class="form-check">
-                                                                    <input
-                                                                        class="form-check-input"
-                                                                        type="radio"
-                                                                        name="address"
-                                                                        value="{{$address->id}}"
-                                                                        checked/>
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="address" value="{{ $address->id }}"
+                                                                        checked />
                                                                     <!-- Automatically selects the first address -->
                                                                 </div>
                                                                 <div class="label">
-                                                                    <label>{{$address->state}}
-                                                                        , {{$address->city}}</label>
+                                                                    <label>{{ $address->state }}
+                                                                        , {{ $address->city }}</label>
                                                                 </div>
                                                                 <ul class="delivery-address-detail">
                                                                     <li>
-                                                                        <h4 class="fw-500">{{$address->address}}</h4>
+                                                                        <h4 class="fw-500">{{ $address->address }}</h4>
                                                                     </li>
                                                                     <li>
                                                                         <h6 class="text-content"><span
-                                                                                class="text-title">Phone: </span>{{$address->phone}}
+                                                                                class="text-title">Phone:
+                                                                            </span>{{ $address->phone }}
                                                                         </h6>
                                                                     </li>
                                                                     <li>
                                                                         <h6 class="text-content mb-0"><span
-                                                                                class="text-title">Pin Code: </span>{{$address->pin_code}}
+                                                                                class="text-title">Pin Code:
+                                                                            </span>{{ $address->pin_code }}
                                                                         </h6>
                                                                     </li>
                                                                 </ul>
                                                             </div>
                                                         </div>
-
                                                     @else
                                                         <div class="text-danger">
                                                             Add an address to continue.
@@ -95,8 +92,8 @@
                                 <li>
                                     <div class="checkout-icon">
                                         <lord-icon target=".nav-item" src="https://cdn.lordicon.com/qmcsqnle.json"
-                                                   trigger="loop-on-hover" colors="primary:#0baf9a,secondary:#0baf9a"
-                                                   class="lord-icon">
+                                            trigger="loop-on-hover" colors="primary:#0baf9a,secondary:#0baf9a"
+                                            class="lord-icon">
                                         </lord-icon>
                                     </div>
                                     <div class="checkout-box">
@@ -106,18 +103,17 @@
 
                                         <div class="checkout-detail">
                                             <div class="accordion accordion-flush custom-accordion"
-                                                 id="accordionFlushExample">
+                                                id="accordionFlushExample">
 
                                                 <div class="accordion-item col-md-6">
                                                     <div class="accordion-header" id="flush-headingFour">
-                                                        <div class="accordion-button collapsed"
-                                                             data-bs-toggle="collapse"
-                                                             data-bs-target="#flush-collapseFour">
+                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse"
+                                                            data-bs-target="#flush-collapseFour">
                                                             <div class="custom-form-check form-check mb-0">
                                                                 <label class="form-check-label" for="cash">
                                                                     <input class="form-check-input mt-0" type="radio"
-                                                                           value="cod"
-                                                                           name="flexRadioDefault" id="cash" checked>
+                                                                        value="cod" name="flexRadioDefault"
+                                                                        id="cash" checked>
                                                                     Cash On Delivery
                                                                 </label>
                                                             </div>
@@ -128,14 +124,13 @@
 
                                                 <div class="accordion-item col-md-6">
                                                     <div class="accordion-header" id="flush-headingOne">
-                                                        <div class="accordion-button collapsed"
-                                                             data-bs-toggle="collapse"
-                                                             data-bs-target="#flush-collapseOne">
+                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse"
+                                                            data-bs-target="#flush-collapseOne">
                                                             <div class="custom-form-check form-check mb-0">
                                                                 <label class="form-check-label" for="credit"><input
                                                                         class="form-check-input mt-0" type="radio"
-                                                                        value="online"
-                                                                        name="flexRadioDefault" id="credit">
+                                                                        value="online" name="flexRadioDefault"
+                                                                        id="credit">
                                                                     Pay Online
                                                                 </label>
                                                             </div>
@@ -181,7 +176,7 @@
                             </ul>
                         </div>
                         <a href="{{ route('payment.redirect') }}" id="placeOrderButton"
-                           class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</a>
+                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</a>
 
                     </div>
                 </div>
@@ -193,7 +188,6 @@
 
     @push('frontend.scripts')
         <script>
-
             const cartIds = '{{ request('cart_ids') }}'.split(',') || [];
             const totalPrice = '{{ request('checkout_price') }}' || 0;
 
@@ -237,7 +231,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.status) {
                             renderCartSummary(response.cart_items, response.checkout_price);
                         } else {
@@ -248,7 +242,7 @@
                             });
                         }
                     },
-                    error: function (error) {
+                    error: function(error) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Something went wrong',
@@ -259,7 +253,7 @@
             };
 
             // Place Order Functionality
-            $('#placeOrderButton').click(function (e) {
+            $('#placeOrderButton').click(function(e) {
                 e.preventDefault();
 
                 const paymentMethod = $('input[name="flexRadioDefault"]:checked').val();
@@ -287,36 +281,78 @@
                 };
 
 
-                const url = "{{ route('checkout.phonepe.store') }}";
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: orderData,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // Include CSRF token
-                    },
-                    beforeSend: function () {
-                        $('#placeOrderButton').text('Processing...').prop('disabled', true); // Update button state
-                    },
-                    success: function (response) {
-                        if (response.status) {
-                            window.location.href = response.redirect_url;
-                        } else {
-                            Swal.fire('Error', response.message || 'Failed to place the order. Please try again.', 'error');
+                if (paymentMethod === 'online') {
+
+                    const url = "{{ route('checkout.phonepe.store') }}";
+
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: orderData,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // Include CSRF token
+                        },
+                        beforeSend: function() {
+                            $('#placeOrderButton').text('Processing...').prop('disabled',
+                                true); // Update button state
+                        },
+                        success: function(response) {
+                            if (response.status) {
+                                window.location.href = response.redirect_url;
+                            } else {
+                                Swal.fire('Error', response.message ||
+                                    'Failed to place the order. Please try again.', 'error');
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error("Error placing order:", xhr.responseText);
+                            Swal.fire('Error', 'Failed to place the order. Please try again.', 'error');
+                        },
+                        complete: function() {
+                            $('#placeOrderButton').text('Place Order').prop('disabled',
+                                false); // Reset button state
                         }
-                    },
-                    error: function (xhr) {
-                        console.error("Error placing order:", xhr.responseText);
-                        Swal.fire('Error', 'Failed to place the order. Please try again.', 'error');
-                    },
-                    complete: function () {
-                        $('#placeOrderButton').text('Place Order').prop('disabled', false); // Reset button state
-                    }
-                });
+                    });
+
+                } else {
+
+                    const url = "{{ route('checkout.cash-on-delivery') }}";
+
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: orderData,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // Include CSRF token
+                        },
+                        beforeSend: function() {
+                            $('#placeOrderButton').text('Processing...').prop('disabled',
+                                true); // Update button state
+                        },
+                        success: function(response) {
+                            
+                            if (response.status && response.payment_method === 'cod') {
+                                window.location.href = response.redirect_url;
+                            } else {
+                                Swal.fire('Error', response.message ||
+                                    'Failed to place the order. Please try again.', 'error');
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error("Error placing order:", xhr.responseText);
+                            Swal.fire('Error', 'Failed to place the order. Please try again.', 'error');
+                        },
+                        complete: function() {
+                            $('#placeOrderButton').text('Place Order').prop('disabled',
+                                false); // Reset button state
+                        }
+                    });
+                }
+
             });
 
             // On Document Ready
-            $(document).ready(function () {
+            $(document).ready(function() {
                 fetchCartSummary(cartIds, totalPrice); // Fetch and display cart summary
             });
         </script>

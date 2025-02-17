@@ -1,57 +1,6 @@
 <footer class="section-t-space">
+
     <div class="container-fluid-lg">
-        <div class="service-section">
-            <div class="row g-3">
-                <div class="col-12">
-                    <div class="service-contain">
-                        <div class="service-box">
-                            <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/product.svg"
-                                    class="blur-up lazyload" alt="">
-                            </div>
-
-                            <div class="service-detail">
-                                <h5>Every Fresh Products</h5>
-                            </div>
-                        </div>
-
-                        <div class="service-box">
-                            <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/delivery.svg"
-                                    class="blur-up lazyload" alt="">
-                            </div>
-
-                            <div class="service-detail">
-                                <h5>Free Delivery For Order Over $50</h5>
-                            </div>
-                        </div>
-
-                        <div class="service-box">
-                            <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/discount.svg"
-                                    class="blur-up lazyload" alt="">
-                            </div>
-
-                            <div class="service-detail">
-                                <h5>Daily Mega Discounts</h5>
-                            </div>
-                        </div>
-
-                        <div class="service-box">
-                            <div class="service-image">
-                                <img src="https://themes.pixelstrap.com/fastkart/assets/svg/market.svg"
-                                    class="blur-up lazyload" alt="">
-                            </div>
-
-                            <div class="service-detail">
-                                <h5>Best Price On The Market</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="main-footer section-b-space section-t-space">
             <div class="row g-md-4 g-3">
                 <div class="col-xl-3 col-lg-4 col-sm-6">
@@ -59,7 +8,7 @@
                         <div class="theme-logo">
                             <a href="index.html">
                                 <img src="../assets/images/logo/kassh & biofuels (1) (1).png" class="blur-up lazyload"
-                                    alt="">
+                                     alt="">
                             </a>
                         </div>
 
@@ -88,11 +37,16 @@
                     <div class="footer-contain">
                         <ul>
 
-                            {{-- @foreach ($navigation as $n)
-                                <li>
-                                    <a href="shop-left-sidebar.html" class="text-content">{{ $navigation->name}}</a>
-                                </li>
-                            @endforeach --}}
+                            @if(isset($navigations))
+                                @foreach ($navigations as $navigation)
+                                    <li>
+                                        <a href="{{route('category.index', $navigation)}}"
+                                           class="text-content">{{ $navigation->name}}</a>
+                                    </li>
+                                @endforeach
+                            @else
+
+                            @endif
 
 
                         </ul>
@@ -133,13 +87,13 @@
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="order-success.html" class="text-content">Your Order</a>
+                                <a href="{{route('user.dashboard')}}" class="text-content">Your Order</a>
                             </li>
                             <li>
-                                <a href="user-dashboard.html" class="text-content">Your Account</a>
+                                <a href="{{route('user.dashboard')}}" class="text-content">Your Account</a>
                             </li>
                             <li>
-                                <a href="order-tracking.html" class="text-content">Track Order</a>
+                                <a href="{{route('user.dashboard')}}" class="text-content">Track Order</a>
                             </li>
                             <!-- <li>
                                 <a href="wishlist.html" class="text-content">Your Wishlist</a>
@@ -186,14 +140,15 @@
                                 <ul>
                                     <li class="mb-0">
                                         <a href="https://play.google.com/store/apps" target="_blank">
-                                            <img src="https://themes.pixelstrap.com/fastkart/assets/images/playstore.svg"
+                                            <img
+                                                src="https://themes.pixelstrap.com/fastkart/assets/images/playstore.svg"
                                                 class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                     <li class="mb-0">
                                         <a href="https://www.apple.com/in/app-store/" target="_blank">
                                             <img src="https://themes.pixelstrap.com/fastkart/assets/images/appstore.svg"
-                                                class="blur-up lazyload" alt="">
+                                                 class="blur-up lazyload" alt="">
                                         </a>
                                     </li>
                                 </ul>

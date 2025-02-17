@@ -14,5 +14,5 @@ class CartRepository extends BaseRepository
         parent::__construct($model);
     }
 
-
+   
 }

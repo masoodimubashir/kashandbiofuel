@@ -4,9 +4,11 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
@@ -59,5 +61,33 @@ class UserProfileController extends Controller
 
     }
 
+    public function updateImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
 
+        $user = auth()->user();
+
+        if ($request->hasFile('image')) {
+
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = uniqid('user_') . '.' . $extension;
+
+            $imagePath = $request->file('image')->storeAs('user_images', $filename, 'public');
+
+            if ($user->image_path) {
+                Storage::disk('public')->delete($user->image_path);
+            }
+
+            User::updateOrCreate(
+                ['id' => $user->id],
+                ['image_path' => $imagePath]
+            );
+        }
+
+        return redirect()->back();
+
+
+    }
 }

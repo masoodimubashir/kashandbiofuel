@@ -2,25 +2,18 @@
 
 namespace App\View\Components;
 
-use App\Models\OrderedItem;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class TopSelling extends Component
+class AdminDashboardRevenueComponent extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        $topSellingProduct = OrderedItem::query()
-            ->with('product')
-            ->selectRaw('SUM(quantity) as total_sold')
-            ->groupBy('product_id')
-            ->orderByDesc('total_sold')
-            ->first();
-
+        //
     }
 
     /**
@@ -28,6 +21,6 @@ class TopSelling extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.top-selling');
+        return view('components.admin-dashboard-revenue-component');
     }
 }

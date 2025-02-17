@@ -18,6 +18,7 @@ class CategoryShoppingController extends Controller
 
         if ($request->ajax()) {
 
+
             // Build the query
             $query = Product::query()
                 ->has('productAttribute')

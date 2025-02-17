@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -28,6 +29,7 @@ class User extends Authenticatable implements LaratrustUser
         'password',
         'google_token',
         'google_refresh_token',
+        'image_path'
     ];
 
     /**
@@ -67,6 +69,13 @@ class User extends Authenticatable implements LaratrustUser
     public function transaction(): HasOne
     {
         return $this->hasOne(Transaction::class);
+    }
+
+    protected function imagePath(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => is_null($value) ? 'default_images/default_image_product.webp' : $value,
+        );
     }
 
 }

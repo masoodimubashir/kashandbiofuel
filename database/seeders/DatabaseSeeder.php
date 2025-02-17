@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
             ReviewSeeder::class
         ]);
 
-
         $user = User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',

@@ -11,7 +11,7 @@
         </div>
 
         <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0 mt-3" data-bs-toggle="modal"
-            data-bs-target="#editProfile"><i data-feather="plus" class="me-2"></i> Add New Address
+                data-bs-target="#editProfile"><i data-feather="plus" class="me-2"></i> Add New Address
 
         </button>
     </div>
@@ -19,14 +19,15 @@
     <div class="row g-sm-4 g-3">
         <div class="col-md-6">
             <div class="address-box">
-                <div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="jack" id="flexRadioDefault2" checked>
-                    </div>
+                @isset($address)
+                    <div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="jack" id="flexRadioDefault2" checked>
+                        </div>
 
-                    <div class="table-responsive address-table">
-                        <table class="table">
-                            <tbody>
+                        <div class="table-responsive address-table">
+                            <table class="table">
+                                <tbody>
                                 <tr>
                                     <td colspan="2"></td>
                                 </tr>
@@ -53,27 +54,25 @@
                                         {{ $address->phone }}
                                     </td>
                                 </tr>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <div class="button-group">
-                    <button class="btn btn-sm  w-100" id="edit-address-button" data-bs-toggle="modal"
-                        data-id="{{ $address->id }}" data-bs-target="#editProfile"><i data-feather="edit"></i>
-                        Edit
-                    </button>
-                </div>
+                    <div class="button-group">
+                        <button class="btn btn-sm  w-100" id="edit-address-button" data-bs-toggle="modal"
+                                data-id="{{ $address->id }}" data-bs-target="#editProfile"><i data-feather="edit"></i>
+                            Edit
+                        </button>
+                    </div>
+                @else
+                    No Address Found
+                @endisset
             </div>
         </div>
 
 
-
-
     </div>
-
-
-  
 
 
 </div>

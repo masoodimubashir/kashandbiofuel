@@ -24,7 +24,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('front/assets/css/vendors/animate.css') }}">
     <link id="color-link" rel="stylesheet" type="text/css" href=" {{ asset('front/assets/css/style.css') }}">
 
-
     <!-- Template css -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
@@ -55,100 +54,184 @@
           href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"> --}}
 
 
-    {{--    @stack('styles')--}}
+    {{--    @stack('styles') --}}
+
+    <style>
+        /* Fullscreen Skeleton Loader */
+        #skeletonLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f5f5f5; /* Light grey background for loading state */
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Skeleton Box Style */
+        .skeleton {
+            background: linear-gradient(90deg, #e0e0e0 25%, #c7c7c7 50%, #e0e0e0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-animation 1.5s ease infinite;
+        }
+
+        /* Skeleton Animation */
+        @keyframes skeleton-animation {
+            from {
+                background-position: 200% 0;
+            }
+            to {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Skeleton for a Title */
+        .skeleton-title {
+            width: 60%;
+            height: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        /* Skeleton for Text */
+        .skeleton-text {
+            width: 80%;
+            height: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        /* Skeleton for an Image */
+        .skeleton-image {
+            width: 300px;
+            height: 200px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        /* Hide the loader when finished */
+        body.loaded #skeletonLoader {
+            display: none;
+        }
+
+        /* Actual Content */
+        .content {
+            display: none;
+        }
+
+        body.loaded .content {
+            display: block;
+        }
+
+    </style>
 
 </head>
 
 
-{{--rgba(119,10,15,255)--}}
+{{-- rgba(119,10,15,255) --}}
 
 
 
 
 
-{{--#729822--}}
+{{-- #729822 --}}
+
 <body class="bg-effect">
 
-
-<!-- Header Start -->
-
-<header class="pb-md-4 pb-0">
-
-    {{--    <x-header-top/>--}}
-
-    <x-navbar/>
-
-    <x-navigation/>
-
-
-</header>
-
-<!-- Header End -->
-
-<!-- mobile fix menu start -->
-<div class="mobile-menu d-md-none d-block mobile-cart">
-    <ul>
-        <li class="active">
-            <a href="{{ route('home') }}">
-                <i class="iconly-Home icli"></i>
-                <span>Home</span>
-            </a>
-        </li>
-
-        <li class="mobile-category">
-            <a href="{{ route('category.index') }}" class="js-link">
-                <i class="iconly-Category icli js-link"></i>
-                <span>Category</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="search.html" class="search-box">
-                <i class="iconly-Search icli"></i>
-                <span>Search</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="{{ route('wishlist.view-wishlist') }}" class="notifi-wishlist">
-                <i class="iconly-Heart icli"></i>
-                <span>My Wish</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="{{ route('cart.view-cart') }}" class="fly-cate">
-                <i class="iconly-Bag-2 icli fly-cate"></i>
-                <span>Cart</span>
-            </a>
-        </li>
-    </ul>
+<!-- Skeleton Loader -->
+<div id="skeletonLoader">
+    <!-- Example skeletons for an image, title, and text -->
+    <div class="skeleton skeleton-image"></div>
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-text"></div>
+    <div class="skeleton skeleton-text"></div>
+    <div class="skeleton skeleton-text"></div>
 </div>
-<!-- mobile fix menu end -->
 
 
-{{--  Main Section Start  --}}
-@yield('main')
-{{-- Main Section End  --}}
-
-<!-- Footer Section Start -->
-<x-footer/>
-<!-- Footer Section End -->
+<div class="content">
 
 
-<!-- Tap to top and theme setting button start -->
-{{-- <div class="theme-option">
-    <div class="back-to-top">
-        <a id="back-to-top" href="#">
-            <i class="fas fa-chevron-up fs-4"></i>
-        </a>
+    <!-- Header Start -->
+
+    <header class="pb-md-4 pb-0">
+
+        {{--    <x-header-top/> --}}
+
+        <x-navbar/>
+
+        <x-navigation/>
+
+
+    </header>
+
+    <!-- Header End -->
+
+    <!-- mobile fix menu start -->
+    <div class="mobile-menu d-md-none d-block mobile-cart">
+        <ul>
+            <li class="active">
+                <a href="{{ route('home') }}">
+                    <i class="iconly-Home icli"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+
+            <li class="mobile-category">
+                <a href="{{ route('category.index') }}" class="js-link">
+                    <i class="iconly-Category icli js-link"></i>
+                    <span>Category</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="search.html" class="search-box">
+                    <i class="iconly-Search icli"></i>
+                    <span>Search</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('wishlist.view-wishlist') }}" class="notifi-wishlist">
+                    <i class="iconly-Heart icli"></i>
+                    <span>My Wish</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('cart.view-cart') }}" class="fly-cate">
+                    <i class="iconly-Bag-2 icli fly-cate"></i>
+                    <span>Cart</span>
+                </a>
+            </li>
+        </ul>
     </div>
-</div> --}}
-<!-- Tap to top and theme setting button end -->
+    <!-- mobile fix menu end -->
 
-{{-- <!-- Bg overlay Start -->
-<div class="bg-overlay"></div>
-<!-- Bg overlay End --> --}}
+
+    {{--  Main Section Start  --}}
+    @yield('main')
+    {{-- Main Section End  --}}
+
+    <!-- Footer Section Start -->
+    <x-footer-component/>
+    <!-- Footer Section End -->
+
+
+</div>
+
+<script>
+    // Simulate the loading time (e.g., 2 seconds delay)
+    setTimeout(function () {
+        // When done, add the 'loaded' class to body
+        document.body.classList.add('loaded');
+    }); // Adjust this duration (e.g., 2000ms = 2 seconds)
+</script>
+
 
 <!-- latest jquery-->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -185,7 +268,7 @@
 <script src="{{ asset('front/assets/js/timer1.js') }}"></script>
 
 <!-- Fly Cart Js -->
-{{--<script src="{{ asset('front/assets/js/fly-Cart.js') }}"></script>--}}
+{{-- <script src="{{ asset('front/assets/js/fly-Cart.js') }}"></script> --}}
 
 <!-- Quantity js -->
 <script src="{{ asset('front/assets/js/quantity-2.js') }}"></script>
@@ -198,10 +281,10 @@
 <script src="{{ asset('front/assets/js/script.js') }}"></script>
 
 <!-- theme setting js -->
-{{--<script src="{{ asset('front/assets/js/theme-setting.js') }}"></script>--}}
+{{-- <script src="{{ asset('front/assets/js/theme-setting.js') }}"></script> --}}
 
 {{-- Noui Slider --}}
-{{--<script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.0/dist/nouislider.min.js"></script>--}}
+{{-- <script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.0/dist/nouislider.min.js"></script> --}}
 
 
 <!-- Price Range Js -->

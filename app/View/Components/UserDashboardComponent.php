@@ -2,28 +2,23 @@
 
 namespace App\View\Components;
 
-use App\Models\Order;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
-class UserOrderComponent extends Component
+class UserDashboardComponent extends Component
 {
 
-
-    public $orders;
+    public int $order_count;
 
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        $this->orders = $orders = Order::query()
-            ->where('user_id', Auth::id())
-            ->with(['orderItems' => fn($query) => $query->with('product')])
-            ->get();
+        $user = auth()->user();
 
+        $this->order_count = $user->orders()->count();
     }
 
     /**
@@ -31,6 +26,6 @@ class UserOrderComponent extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.user-order-component');
+        return view('components.user-dashboard-component');
     }
 }

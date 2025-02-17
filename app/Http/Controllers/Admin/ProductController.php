@@ -34,14 +34,14 @@ class ProductController extends Controller
             if ($request->ajax()) {
 
                 $products = Product::query()
-                    ->with('productAttributes'); // Load only the images relationship
+                    ->with('productAttributes');
 
                 return DataTables::eloquent($products)
                     ->addColumn('product_name', function ($product) {
 
                         $image = $product->productAttributes->first();
                         $imageUrl =  asset('storage/' . $image->image_path);
-
+                        
                         return
                             '
                             <div class="Product-names d-flex align-items-center gap-2" >
@@ -90,7 +90,6 @@ class ProductController extends Controller
 
 
                         return '<div class="d-flex justify-content-start gap-2 align-items-center">' . $editButton . $showButton . $deleteButton . $seoButton . '</div>';
-
                     })
                     ->editColumn('price', function ($product) {
                         return $product->price; // Format price
@@ -125,8 +124,6 @@ class ProductController extends Controller
 
 
         return view('layouts.dashboard.Product.view-product', compact('product', 'uniqueHexCodes'));
-
-
     }
 
     /**
@@ -238,7 +235,6 @@ class ProductController extends Controller
                 'status' => 'success',
                 'message' => 'Product updated successfully',
             ]);
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());

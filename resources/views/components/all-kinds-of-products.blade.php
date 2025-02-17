@@ -13,9 +13,11 @@
             @for($i = 0; $i < 1; $i++)
                 <div class="product-box-2 wow fadeIn" data-wow-delay="{{ ($loop->index * 0.1) . 's' }}">
                     <!-- Product Image -->
+
+
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         <img
-                            src="{{ asset('storage/' . ($product->productAttributes->first()?->image_path ?? 'default-product.jpg')) }}"
+                            src="{{ asset('storage/' . ($product->productAttributes->first()?->image_path)) }}"
                             class="img-fluid blur-up lazyload"
                             alt="{{ $product->name }}">
                     </a>

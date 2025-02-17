@@ -43,5 +43,12 @@ return [
         'merchantId' => env('PHONEPE_MERCHANT_ID'),
         'salt_key' => env('PHONEPE_SALT_KEY'),
         'redirect_url' => env('PHONEPE_REDIRECT_URL'),
+    ],
+    'shiprocket' => [
+        'api_key' => env('SHIPROCKET_API_KEY'),
+        'api_secret' => env('SHIPROCKET_API_SECRET'),
+        'shiprocket_email' => env('SHIPROCKET_EMAIL'),
+        'shiprocket_password' => env('SHIPROCKET_PASSWORD'),
+        'base_url' => env('SHIPROCKET_BASE_URL'),
     ]
 ];

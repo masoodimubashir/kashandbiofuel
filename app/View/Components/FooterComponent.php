@@ -2,26 +2,22 @@
 
 namespace App\View\Components;
 
+use App\Service\NavigationService;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class UserAddressComponent extends Component
+class FooterComponent extends Component
 {
 
-
-    public $address;
+    public $navigations;
 
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct(NavigationService $navigationService)
     {
-
-        $user = auth()->user();
-
-        $this->address = $user->address;
-
+        $this->navigations = $navigationService->getAllNavigationItems();
 
     }
 
@@ -30,6 +26,6 @@ class UserAddressComponent extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.user-address-component');
+        return view('components.footer-component');
     }
 }

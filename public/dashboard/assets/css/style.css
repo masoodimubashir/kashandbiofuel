@@ -31490,7 +31490,7 @@ footer {
 
 .order-history table th,
 .order-history table td {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .order-history table thead tr th {
