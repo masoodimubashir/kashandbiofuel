@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductReviewController extends Controller
 {
+
     /**
      * Handle the incoming request.
      */
@@ -19,33 +20,32 @@ class ProductReviewController extends Controller
     {
         if ($request->ajax()) {
 
-
             try {
 
+                $validator = Validator::make($request->only(['product_id', 'rating', 'comment', 'user_id']), [
+                    'rating' => 'required|integer|min:1|max:5',
+                    'comment' => 'required|string|max:255',
+                    'product_id' => 'required|exists:products,id',
+                ]);
 
 
-               $validator = Validator::make($request->only(['product_id', 'rating', 'comment', 'user_id']), [
-                   'rating' => 'required|integer|min:1|max:5',
-                   'comment' => 'required|string|max:255',
-                   'product_id' => 'required|exists:products,id',
-               ]);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Something went wrong. Data cannot be saved.'
+                    ], 422);
+                }
 
-
-               if ($validator->fails()) {
-                   return response()->json([
-                       'status' => 'error',
-                       'message' => 'Something went wrong. Data cannot be saved.'
-                   ], 422);
-               }
-
-                $review = Reviews::create([
+                Reviews::create([
                     'product_id' => $request->product_id,
                     'user_id' => Auth::user()->id,
                     'rating' => $request->rating,
                     'comment' => $request->comment,
                 ]);
 
-                $data = Reviews::with('user')->get();
+                $data = Reviews::with('user')
+                    ->where('product_id', $request->product_id)
+                    ->get();
 
 
                 return response()->json([

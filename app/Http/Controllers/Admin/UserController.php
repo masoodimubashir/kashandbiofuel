@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactUs;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,29 +21,36 @@ class UserController extends Controller
         try {
             if ($request->ajax()) {
 
-                $contacts = ContactUs::query();
-
-                return DataTables::eloquent($contacts)
-                    ->addColumn('name', function ($contact_us) {
-                        // Concatenate the user's first name and last name
-                        return $contact_us->firstname . ' ' . $contact_us->lastname;
+                $users = User::query()
+                    ->with(['address', 'roles'])
+                    ->whereHas('roles', function ($q) {
+                        $q->where('name', 'user');
+                    });
+                
+                return DataTables::eloquent($users)
+//                    ->addColumn('user_name_image', function ($user) {
+//
+//                        $imageUrl = asset('storage/' . $user->image_path);
+//
+//                        return '
+//                            <div class="card shadow-sm border-0" style="width: 12rem;">
+//                                <img src="' . $imageUrl . '" class="card-img-top rounded" alt="Product Image" style="height: 150px; object-fit: cover;">
+//                                <div class="card-body text-center">
+//                                    <h6 class="card-title mb-0 text-truncate">' . $user->name . '</h6>
+//                                </div>
+//                            </div>
+//                        ';
+//                    })
+                    ->addColumn('phone', function ($user) {
+                        return $user->address->phone ?? '-';
                     })
-                    ->addColumn('email', function ($contact_us) {
-                        // Email column
-                        return $contact_us->email;
+                    ->addColumn('address', function ($user) {
+                        return
+                            ($user->address->city ?? '') . ' ' .
+                            ($user->address->state ?? '') . ' ' .
+                            ($user->address->pin_code ?? '-');
                     })
-                    ->addColumn('phone', function ($contact_us) {
-                        // Phone column
-                        return $contact_us->phone ?? '-'; // Handle if phone is null
-                    })
-                    ->addColumn('message', function ($contact_us) {
-                        // Message column
-                        return $contact_us->message ?? '-'; // Handle if message is null
-                    })
-                    ->addColumn('created_at', function ($contact_us) {
-                        // Format the created_at column
-                        return $contact_us->created_at ? $contact_us->created_at->format('Y-m-d H:i:s') : '-';
-                    })
+                    ->rawColumns(['user_name_image'])
                     ->make(true);
 
             }

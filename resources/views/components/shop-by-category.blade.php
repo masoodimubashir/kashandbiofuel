@@ -30,14 +30,11 @@
                     <div>
                         <div class="shop-category-box border-0 wow fadeIn"
                              @if(!$loop->first)data-wow-delay="0.35s" @endif>
-                            <a href="{{route('category.index')}}" class="circle-1">
-                                <img src="{{asset('front/assets/images/veg-3/category/1.png')}}"
-                                     class="img-fluid blur-up lazyload"
-                                     alt="">
+                            <a href="{{route('category.index')}}"
+                               class="category-name d-flex align-items-center ">
+                                <i class="fa fa-angle-right"></i>
+                                <h6 class="category-title ">{{$category->name}}</h6>
                             </a>
-                            <div class="category-name">
-                                <h6>{{$category->name}}</h6>
-                            </div>
                         </div>
                     </div>
                 @endforeach

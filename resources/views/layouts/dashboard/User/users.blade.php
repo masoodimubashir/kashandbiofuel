@@ -18,44 +18,32 @@
         </div>
     </x-slot>
 
-    <div class="container-fluid">
-        <!-- Top Controls Section -->
-        <div class="row mb-3">
-            <div class="col-md-6 col-sm-12 mb-2 mb-md-0">
-                <button class="btn btn-success" type="button" data-bs-toggle="modal" id="createCouponBtn"
-                        data-bs-target=".bd-example-modal-lg">
-                    Add Coupon
-                </button>
-            </div>
-        </div>
+    <!-- Table Section -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card p-3">
+                <div class="card-block row">
+                    <div class="col-sm-12 col-lg-12 col-xl-12">
+                        <div class="table-responsive">
+                            <table class="table table-md" id="user">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Address</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
 
-        <!-- Table Section -->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card p-3">
-                    <div class="card-block row">
-                        <div class="col-sm-12 col-lg-12 col-xl-12">
-                            <div class="table-responsive">
-                                <table class="table table-md" id="user">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Phone</th>
-                                        <th scope="col">Message</th>
-                                        <th scope="col">Created At</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 
@@ -69,24 +57,21 @@
                     ajax: '/admin/users',
                     columns: [
                         {
-                            data: 'email',
-                            name: 'email'
-                        },
-                        {
                             data: 'name',
                             name: 'name'
                         },
+                        {
+                            data: 'email',
+                            name: 'email'
+                        },
+
                         {
                             data: 'phone',
                             name: 'phone'
                         },
                         {
-                            data: 'message',
-                            name: 'message'
-                        },
-                        {
-                            data: 'created_at',
-                            name: 'created_at'
+                            data: 'address',
+                            name: 'address'
                         },
                     ]
                 });

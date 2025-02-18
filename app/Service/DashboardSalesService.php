@@ -35,8 +35,8 @@ class DashboardSalesService
 
     public function getDailyOrders()
     {
-        return Order::where('is_confirmed', 1)
-            ->whereBetween('created_at', [now()->subDay()->startOfDay(), now()->subDay()->endOfDay()])
+        return Order::query()
+            ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
             ->count();
     }
 

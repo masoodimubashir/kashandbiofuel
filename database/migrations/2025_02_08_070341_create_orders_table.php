@@ -16,9 +16,9 @@ return new class extends Migration {
             $table->unsignedBigInteger('total_amount');
             $table->enum('payment_method', ['cod', 'online']);
             $table->date('date_of_purchase');
-            $table->boolean('is_cancelled')->nullable();
-            $table->boolean('is_delivered')->nullable();
-            $table->boolean('is_confirmed')->nullable();
+            $table->boolean('is_cancelled')->default(0);
+            $table->boolean('is_delivered')->default(0);
+            $table->boolean('is_confirmed')->default(0);
             $table->timestamps();
         });
     }

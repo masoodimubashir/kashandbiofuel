@@ -56,8 +56,14 @@
                             <td>{{ $order->order->custom_order_id }}</td>
                             <td>{{ $order->price }}</td>
                             <td>
-                                <div
-                                    class="badge {{$order->order->status === 'Pending' ? 'bg-danger-subtle text-danger-emphasis border-danger-subtle' : 'bg-success-subtle text-success-emphasis border-success-subtle'}} btn">
+                                <div class="badge
+                                    {{
+                                        match($order->order->status) {
+                                            'Confirmed', 'Delivered' => 'bg-success-subtle text-success-emphasis border-success-subtle',
+                                            'Cancelled' => 'bg-danger-subtle text-danger-emphasis border-danger-subtle',
+                                            default => 'bg-warning-subtle text-warning-emphasis border-warning-subtle',
+                                        }
+                                    }} btn">
                                     {{$order->order->status}}
                                 </div>
                             </td>

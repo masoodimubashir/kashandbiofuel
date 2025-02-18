@@ -34,20 +34,21 @@ class ProductController extends Controller
             if ($request->ajax()) {
 
                 $products = Product::query()
-                    ->with('productAttributes');
+                    ->with('productAttribute');
 
                 return DataTables::eloquent($products)
                     ->addColumn('product_name', function ($product) {
 
-                        $image = $product->productAttributes->first();
-                        $imageUrl =  asset('storage/' . $image->image_path);
-                        
-                        return
-                            '
-                            <div class="Product-names d-flex align-items-center gap-2" >
-                              <img class="img-fluid rounded" style="height:70px; width:70px" src="' . $imageUrl . '" alt="Product Image">
-                                <p>' . $product->name . '</p>
-                            </div>';
+                        $imageUrl = 'storage/' . $product->productAttribute->image_path;
+
+                        return '
+                            <div class="card shadow-sm border-0" style="width: 12rem;">
+                                <img src="' . asset($imageUrl) . '" class="card-img-top rounded" alt="Product Image" style="height: 150px; object-fit: cover;">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title mb-0 text-truncate">' . $product->name . '</h6>
+                                </div>
+                            </div>
+                        ';
                     })
                     ->addColumn('status', function ($product) {
 

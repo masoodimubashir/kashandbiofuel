@@ -24,28 +24,22 @@ class OrderController extends Controller
 
         if ($request->ajax()) {
 
-            Log::info($request->status);
 
             $orders = Order::query()
                 ->with(['user', 'address'])
                 ->when($request->status, function ($q) use ($request) {
                     list($status, $value) = explode('-', $request->status);
-                    switch ($status) {
-                        case 'cancelled':
-                            return $q->where('is_cancelled', $value)
-                                ->whereNull('is_delivered')
-                                ->whereNull('is_confirmed');
-                        case 'confirmed':
-                            return $q->where('is_confirmed', $value)
-                                ->whereNull('is_delivered')
-                                ->whereNull('is_cancelled');
-                        case 'delivered':
-                            return $q->where('is_delivered', $value)
-                                ->whereNull('is_cancelled')
-                                ->whereNull('is_confirmed');
-                        default:
-                            return $q;
-                    }
+
+                    $value = filter_var($value, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+
+                    \Log::info('Status: ' . $status . ', Value: ' . $value);
+
+                    return match ($status) {
+                        'cancelled' => $q->where('is_cancelled', $value),
+                        'confirmed' => $q->where('is_confirmed', $value),
+                        'delivered' => $q->where('is_delivered', $value),
+                        default => $q,
+                    };
                 })
                 ->when($request->price_range, function ($q) use ($request) {
                     list($min, $max) = explode('-', $request->price_range);
@@ -58,28 +52,24 @@ class OrderController extends Controller
 
             try {
 
-
                 return DataTables::eloquent($orders)
                     ->addColumn('status', function ($order) {
-                        $statusDropdown = '<div class="badge ' .
-                            ($order->status === 'Pending'
-                                ? 'bg-danger-subtle text-danger-emphasis border-danger-subtle'
-                                : 'bg-success-subtle text-success-emphasis border-success-subtle'
-                            ) . ' rounded-pill">' .
-                            $order->status
-                            .
-                            '</div>';
+
+                        $badgeClass = match ($order->status) {
+                            'Confirmed', 'Delivered' => 'bg-success-subtle text-success-emphasis border-success-subtle',
+                            'Cancelled' => 'bg-danger-subtle text-danger-emphasis border-danger-subtle',
+                            default => 'bg-warning-subtle text-warning-emphasis border-warning-subtle',
+                        };
+
+                        $statusDropdown = '<div class="badge ' . $badgeClass . ' rounded-pill">' . $order->status . '</div>';
 
                         $showButton = '<a href="' . route('order.show', $order->id) . '">
-                            <i style="cursor:pointer;" class="fa-regular fa-eye fs-5 text-success me-3 showBtn" title="Show"></i>
-                         </a>';
+                             <i style="cursor:pointer;" class="fa-regular fa-eye fs-5 text-success me-3 showBtn" title="Show"></i>
+                        </a>';
 
                         return '<div class="d-flex align-items-center justify-content-left gap-3">
-                            ' . $statusDropdown . $showButton . '
-                        </div>';
-                    })
-                    ->addColumn('transaction_id', function ($order) {
-                        return $order->user ? $order->transaction->transaction_id : 'N/A';
+                             ' . $statusDropdown . $showButton . '
+                         </div>';
                     })
                     ->addColumn('user_name', function ($order) {
                         return $order->user ? $order->user->name : 'N/A';
@@ -87,9 +77,20 @@ class OrderController extends Controller
                     ->addColumn('address', function ($order) {
                         return $order->address ? $order->address->address : 'N/A';
                     })
-                    ->rawColumns(['status'])
+                    ->addColumn('action', function ($order) {
+                        return '
+                            <select class="form-select form-select-sm changeStatus" style="cursor:pointer" data-id="' . $order->id . '">
+                                <option selected disabled>Choose Action</option>
+                                <option value="is_confirmed" ' . ($order->is_confirmed ? 'selected' : '') . '>Confirmed</option>
+                                <option value="is_delivered" ' . ($order->is_delivered ? 'selected' : '') . '>Delivered</option>
+                                <option value="is_cancelled" ' . ($order->is_cancelled ? 'selected' : '') . '>Cancelled</option>
+                            </select>
+                        ';
+                    })
+                    ->rawColumns(['status', 'action'])
                     ->orderColumn('created_at', 'created_at $1')
                     ->make(true);
+
             } catch (Exception $e) {
                 // Return error response if any exception occurs
                 return response()->json([

@@ -102,12 +102,11 @@
                                     <tr>
                                         <th scope="col">Status</th>
                                         <th scope="col">Date of Purchase</th>
-                                        <th scope="col">Payment</th>
                                         <th scope="col">Order ID</th>
                                         <th scope="col">Customer</th>
-                                        <th scope="col">Transaction ID</th>
                                         <th scope="col">Address</th>
                                         <th scope="col">Total Amount</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -145,10 +144,6 @@
                             name: 'date_of_purchase'
                         },
                         {
-                            data: 'payment_method',
-                            name: 'payment_method'
-                        },
-                        {
                             data: 'custom_order_id',
                             name: 'custom_order_id'
                         },
@@ -156,10 +151,7 @@
                             data: 'user_name',
                             name: 'user_name'
                         },
-                        {
-                            data: 'transaction_id',
-                            name: 'transaction_id'
-                        },
+
                         {
                             data: 'address',
                             name: 'address'
@@ -168,32 +160,33 @@
                             data: 'total_amount',
                             name: 'total_amount'
                         },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            sortable: false
+                        },
 
 
                     ]
                 });
 
                 $(document).on('change', '.changeStatus', function () {
-                    // Get the selected field and order ID
-                    let updateField = $(this)
-                        .val(); // Get the selected option's value (is_cancelled, is_delivered, is_confirmed)
-                    let orderId = $(this).data('id'); // Get the order ID from data-id attribute
 
-                    // Prepare the AJAX request
+                    let updateField = $(this).val();
+                    let orderId = $(this).data('id');
+
                     $.ajax({
                         url: `/admin/order/${orderId}`,
                         type: 'PUT',
                         data: {
-                            _token: $('meta[name="csrf-token"]').attr('content'), // CSRF Token
-                            field: updateField, // Which field to activate
-                            value: 1 // Always set the field to active (1)
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            field: updateField,
+                            value: 1
                         },
                         success: function (response) {
                             if (response.success) {
-                                // Reload the DataTable
-                                ordersTable.ajax.reload(null, false); // Do not reset paging
-                                Swal.fire("Success!", response.message ||
-                                    'Status updated successfully', "success");
+                                ordersTable.ajax.reload(null, false);
                             } else {
                                 Swal.fire("Error!", response.message || 'Failed To Update Status',
                                     "error");

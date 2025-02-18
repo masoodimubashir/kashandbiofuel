@@ -54,7 +54,7 @@
                                 <h6 class="text-content mb-2">Coupon Apply</h6>
                                 <form class="mb-3 coupon-box input-group" id="apply-coupon-form">
                                     <input type="text" class="form-control" id="coupon_code" name="coupon"
-                                        placeholder="Enter Coupon Code Here...">
+                                           placeholder="Enter Coupon Code Here...">
                                     <button class="btn-apply">Apply</button>
 
                                 </form>
@@ -101,7 +101,7 @@
 
                                 <li>
                                     <button onclick="location.href = '{{ route('home') }}';"
-                                        class="btn btn-light shopping-button text-dark">
+                                            class="btn btn-light shopping-button text-dark">
                                         <i class="fa-solid fa-arrow-left-long"></i>Return To Shopping
                                     </button>
                                 </li>
@@ -116,7 +116,7 @@
 
     @push('frontend.scripts')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
 
                 // Global DOM elements
                 const checkOutPrice = $('#check_out_price');
@@ -141,14 +141,14 @@
                 <tr class="product-box-contain" data-product-id="${cartItem.id}">
                     <td class="product-detail">
                         <div class="product border-0">
-                            <a href="product-left-thumbnail.html" class="product-image">
+                            <a href="/product/${cartItem.product.slug}" class="product-image">
                                 <img src="storage/${cartItem.product.product_attribute.image_path}"
                                      class="img-fluid blur-up lazyload" alt="">
                             </a>
                             <div class="product-detail">
                                 <ul>
                                     <li class="name">
-                                        <a href="product-left-thumbnail.html">${cartItem.product.name ?? 'Product Name'}</a>
+                                        <a href="/product/${cartItem.product.slug}">${cartItem.product.name ?? 'Product Name'}</a>
                                     </li>
                                     <li class="text-content">
                                         <span class="text-title">Price Per Item</span> - ${cartItem.product.selling_price}
@@ -293,13 +293,13 @@
                 // Event Listeners
                 getCartItems(); // Load cart items on page ready
 
-                cartItemsContainer.on('click', '.remove', function(e) {
+                cartItemsContainer.on('click', '.remove', function (e) {
                     e.preventDefault();
                     const cartItemId = $(this).data('id');
                     deleteCartItem(cartItemId);
                 });
 
-                $(document).on('click', '.qty-left-minus, .qty-right-plus', function() {
+                $(document).on('click', '.qty-left-minus, .qty-right-plus', function () {
                     const button = $(this);
                     const input = button.closest('.input-group').find('.qty-input');
                     let qty = parseInt(input.val());
@@ -311,14 +311,14 @@
                     updateCartQuantity(productId, qty);
                 });
 
-                $(document).on('click', '#clear-coupon', function(e) {
+                $(document).on('click', '#clear-coupon', function (e) {
                     e.preventDefault();
                     couponInput.val('');
 
                     clearCoupon();
                 });
 
-                $('#apply-coupon-form').on('submit', function(e) {
+                $('#apply-coupon-form').on('submit', function (e) {
 
                     e.preventDefault();
                     const couponCode = $('#coupon_code').val();
@@ -330,12 +330,12 @@
                     applyCoupon(couponCode);
                 });
 
-                $('#checkout-button').on('click', function() {
+                $('#checkout-button').on('click', function () {
 
                     const checkOutPrice = $('#check_out_price').text().replace(/[^\d.-]/g, '');
 
                     const cartDetails = [];
-                    $('#cart-items .product-box-contain').each(function() {
+                    $('#cart-items .product-box-contain').each(function () {
                         const cartId = $(this).data('product-id');
                         if (cartId) cartDetails.push(cartId);
                     });
@@ -343,6 +343,33 @@
                     window.location.href =
                         `{{ route('checkout.index') }}?cart_ids=${cartDetails.join(',')}&checkout_price=${checkOutPrice}`;
                 });
+
+                $(document).on('click', '.save-for-later', function (e) {
+                    e.preventDefault();
+
+                    const cartId = $(this).data('cart-id');// Get cart item ID from `data-cart-id`
+                    const route = `/return-to-wishlist/${cartId}`;
+
+                    $.ajax({
+                        url: route,
+                        type: 'PUT',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                showAlert('Success!', response.message, 'success');
+                                getCartItems();
+                            } else {
+                                showAlert('Error!', response.message || 'Something went wrong.', 'error');
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            showAlert('Error!', 'Unable to process your request. Please try again later.', 'error');
+                        }
+                    });
+                });
+
 
             });
         </script>

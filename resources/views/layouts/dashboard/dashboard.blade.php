@@ -24,6 +24,7 @@
 
     <div class="container-fluid dashboard_ecommerce">
         <div class="row">
+
             <x-admin-sale-component/>
 
             <x-admin-dashboard-revenue-component/>
