@@ -13,16 +13,11 @@ class ProductAttributeFactory extends Factory
 
     public function definition(): array
     {
-
-
         return [
             'product_id' => Product::all()->random(),
             'hex_code' => $this->faker->hexColor,  // Random valid hex color
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
         ];
-
-
     }
 }

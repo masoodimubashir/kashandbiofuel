@@ -39,13 +39,14 @@ class ProductController extends Controller
                 return DataTables::eloquent($products)
                     ->addColumn('product_name', function ($product) {
 
-                        $imageUrl = 'storage/' . $product->productAttribute->image_path;
+                        $imageUrl = isset($product->productAttribute->image_path) ? 'storage/' . $product->productAttribute->image_path : 'default_images/product_image.png';
+
 
                         return '
-                            <div class="card shadow-sm border-0" style="width: 12rem;">
-                                <img src="' . asset($imageUrl) . '" class="card-img-top rounded" alt="Product Image" style="height: 150px; object-fit: cover;">
-                                <div class="card-body text-center">
-                                    <h6 class="card-title mb-0 text-truncate">' . $product->name . '</h6>
+                            <div class="d-flex align-items-center gap-2 border-0">
+                                <img src="' . asset($imageUrl) . '" class="card-img-top rounded" alt="Product Image" style="height: 50px; width:50px; object-fit: cover;">
+                                <div class=" text-center">
+                                    <h6 class=" mb-0 text-truncate">' . $product->name . '</h6>
                                 </div>
                             </div>
                         ';

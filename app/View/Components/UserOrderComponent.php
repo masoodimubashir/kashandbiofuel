@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use App\Models\Order;
+use App\Models\OrderedItem;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -12,18 +13,26 @@ class UserOrderComponent extends Component
 {
 
 
-    public $orders;
+    public $orderedItems;
 
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        $this->orders = $orders = Order::query()
-            ->where('user_id', Auth::id())
-            ->with(['orderItems' => fn($query) => $query->with('product')])
+        $this->orderedItems = $orders = OrderedItem::query()
+            ->with([
+                'product' => fn($query) => $query->with('productAttribute'),
+            ])
+            ->whereHas('order', function ($query) {
+                $query->where([
+                    'user_id' => Auth::id(),
+                    'is_confirmed' => 1,
+                    'is_delivered' => 0,
+                    'is_cancelled' => 0,
+                ]);
+            })
             ->get();
-
     }
 
     /**

@@ -1,25 +1,28 @@
 <div class="title section-t-space">
     <h2>ALL KINDS OF PRODUCTS</h2>
-    {{--    <span class="title-leaf">--}}
-    {{--        <svg class="icon-width">--}}
-    {{--            <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#cake"></use>--}}
-    {{--        </svg>--}}
-    {{--    </span>--}}
+    {{--    <span class="title-leaf"> --}}
+    {{--        <svg class="icon-width"> --}}
+    {{--            <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#cake"></use> --}}
+    {{--        </svg> --}}
+    {{--    </span> --}}
 </div>
 
 <div class="slider-3_2 product-wrapper">
-    @foreach($allProducts as $product)
+    @foreach ($allProducts as $product)
         <div>
-            @for($i = 0; $i < 1; $i++)
-                <div class="product-box-2 wow fadeIn" data-wow-delay="{{ ($loop->index * 0.1) . 's' }}">
+            @for ($i = 0; $i < 1; $i++)
+                <div class="product-box-2 wow fadeIn" data-wow-delay="{{ $loop->index * 0.1 . 's' }}">
                     <!-- Product Image -->
 
 
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
-                        <img
-                            src="{{ asset('storage/' . ($product->productAttributes->first()?->image_path)) }}"
-                            class="img-fluid blur-up lazyload"
-                            alt="{{ $product->name }}">
+                        @isset($product->productAttribute->image_path)
+                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                                class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
+                        @else
+                            <img src="{{ asset('default_images/product_image.png') }}"
+                                class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
+                        @endisset
                     </a>
 
                     <!-- Product Details -->
@@ -39,7 +42,7 @@
 
                         <!-- Price with Discount -->
                         <h5>${{ $product->selling_price }}
-                            @if($product->price)
+                            @if ($product->price)
                                 <del>${{ $product->price }}</del>
                             @endif
                         </h5>

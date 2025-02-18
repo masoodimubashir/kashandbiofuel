@@ -8,6 +8,7 @@
                 <div class="col-12">
                     <div class="breadcrumb-contain">
                         <h2>Wishlist</h2>
+                      
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -79,8 +80,10 @@
                 <div class="product-header">
                     <div class="product-image">
                         <a href="product-left-thumbnail.html">
-                            <img src="storage/${wishlist_data_item.product.product_attribute.image_path}"
-                                 class="img-fluid blur-up lazyload" alt="${wishlist_data_item.product.name}">
+                          
+    <img src="${wishlist_data_item.product.product_attribute?.image_path ? `storage/${wishlist_data_item.product.product_attribute.image_path}` : 'default_images/product_image.png'}"
+                                class="img-fluid blur-up lazyload" 
+                                alt="${wishlist_data_item.product.name}"> 
                         </a>
 
                         <div class="product-header-top">

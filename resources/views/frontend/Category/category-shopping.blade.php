@@ -316,14 +316,17 @@
 
                 // Generate Individual Product HTML
                 function generateProductHTML(product) {
+
+
                     return `
                 <div>
                     <div class="product-box-3 h-100 wow fadeInUp" data-wow-delay="0.4s">
                         <div class="product-header">
                             <div class="product-image">
                                 <a href="/product/${product.slug}">
-                                    <img src="/storage/${product.product_attribute.image_path}"
-                                         class="img-fluid blur-up lazyload" alt="${product.name}">
+                  <img src="${product.product_attribute?.image_path ? `storage/${product.product_attribute.image_path}` : 'default_images/product_image.png'}"
+     class="img-fluid blur-up lazyload" 
+     alt="${product.name}">                
                                 </a>
                             </div>
                         </div>

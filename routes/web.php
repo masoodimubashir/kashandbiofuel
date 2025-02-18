@@ -23,6 +23,7 @@ use App\Http\Controllers\Frontend\ContactUsController;
 use App\Http\Controllers\Frontend\FrontendProductController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProductReviewController;
+use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Frontend\SubCategoryShoppingController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\ProfileController;
@@ -42,9 +43,10 @@ Route::get('/s', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/live.search', function () {
-    return Product::search(request('query'))->get();
-})->name('live.search');
+
+// Route For Searching The Product
+Route::get('/live-search', SearchController::class)->name('live.search');
+
 
 // Routes For Contact
 Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');

@@ -172,39 +172,34 @@
     <!-- Header End -->
 
     <!-- mobile fix menu start -->
-    <div class="mobile-menu d-md-none d-block mobile-cart">
+    <div class="mobile-menu d-md-none d-block mobile-cart pb-4">
         <ul>
-            <li class="active">
+            <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                 <a href="{{ route('home') }}">
-                    <i class="iconly-Home icli"></i>
                     <span>Home</span>
                 </a>
             </li>
 
-            <li class="mobile-category">
+            <li class="mobile-category {{ request()->routeIs('category.index') ? 'active' : '' }}">
                 <a href="{{ route('category.index') }}" class="js-link">
-                    <i class="iconly-Category icli js-link"></i>
                     <span>Category</span>
                 </a>
             </li>
 
             <li>
                 <a href="search.html" class="search-box">
-                    <i class="iconly-Search icli"></i>
                     <span>Search</span>
                 </a>
             </li>
 
-            <li>
+            <li class="{{ request()->routeIs('wishlist.view-wishlist') ? 'active' : '' }}">
                 <a href="{{ route('wishlist.view-wishlist') }}" class="notifi-wishlist">
-                    <i class="iconly-Heart icli"></i>
                     <span>My Wish</span>
                 </a>
             </li>
 
-            <li>
+            <li class="{{ request()->routeIs('cart.view-cart') ? 'active' : '' }}">
                 <a href="{{ route('cart.view-cart') }}" class="fly-cate">
-                    <i class="iconly-Bag-2 icli fly-cate"></i>
                     <span>Cart</span>
                 </a>
             </li>

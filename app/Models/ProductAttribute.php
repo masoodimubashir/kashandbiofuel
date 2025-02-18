@@ -9,10 +9,5 @@ class ProductAttribute extends Model
 {
     protected $fillable = ['image_path', 'product_id', 'hex_code'];
 
-    protected function imagePath(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => is_null($value) ? 'default_images/default_image.webp' : $value,
-        );
-    }
+
 }

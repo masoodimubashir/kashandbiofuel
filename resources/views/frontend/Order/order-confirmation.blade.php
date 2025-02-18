@@ -89,10 +89,19 @@
                                         <tr>
                                             <td class="product-detail">
                                                 <div class="product border-0">
-                                                    <a href="product.left-sidebar.html" class="product-image">
-                                                        <img src="{{ asset('storage/' . $ordered_item->product->productAttribute->image_path) }}"
-                                                            class="img-fluid blur-up lazyload" alt="{{ $ordered_item->product->name }}">
-                                                    </a>
+                                                    @isset($ordered_item->product->productAttribute->image_path)
+                                                        <a href="product.left-sidebar.html" class="product-image">
+                                                            <img src="{{ asset('storage/' . $ordered_item->product->productAttribute->image_path) }}"
+                                                                class="img-fluid blur-up lazyload"
+                                                                alt="{{ $ordered_item->product->name }}">
+                                                        </a>
+                                                    @else
+                                                        <a href="product.left-sidebar.html" class="product-image">
+                                                            <img src="{{ asset('default_images/product_image.png') }}"
+                                                                class="img-fluid blur-up lazyload"
+                                                                alt="{{ $ordered_item->product->name }}">
+                                                        </a>
+                                                    @endisset
                                                     <div class="product-detail">
                                                         <ul>
                                                             <li class="name">
@@ -180,7 +189,8 @@
                                             {{ $transaction->order->address->address }}
                                         </h4>
                                         <h4 class="mt-2">
-                                            {{ $transaction->order->address->city }} - {{ $transaction->order->address->state }}
+                                            {{ $transaction->order->address->city }} -
+                                            {{ $transaction->order->address->state }}
                                         </h4>
                                     </li>
 

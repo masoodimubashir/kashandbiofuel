@@ -27,19 +27,42 @@
 
 
         <div class="row">
-
-
             <div class="col-sm-12 mb-3 mt-3">
+                <div class="row">
+                    <div class="col-12 col-sm-4 col-md-2 mb-3">
+                        <div class="card-body">
+                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
+                                Push To Shiprocket
+                            </button>
+                        </div>
+                    </div>
 
-                <div class="card-body">
-                    <button class="btn btn-primary" id="pushToShiprocket" data-id="{{ $order->id }}">
-                        Push To Shiprocket
-                    </button>
+                    {{-- <div class="col-12 col-sm-4 col-md-2 mb-3">
+                        <div class="card-body">
+                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-4 col-md-2 mb-3">
+                        <div class="card-body">
+                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-4 col-md-2 mb-3">
+                        <div class="card-body">
+                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
+                                Deliver
+                            </button>
+                        </div>
+                    </div> --}}
                 </div>
-
-
-
             </div>
+
 
             <div class="col-xl-9 col-lg-8">
 
@@ -143,14 +166,21 @@
                                                     <tr>
 
                                                         <td class="text-center">
-                                                            <img class="img-fluid img-40"
-                                                                src="{{ asset('storage/' . $item->product->productAttribute->image_path) }}"
-                                                                alt="#">
+                                                            @isset($item->product->productAttribute->image_path)
+                                                                <img class="img-fluid img-40"
+                                                                    src="{{ asset('storage/' . $item->product->productAttribute->image_path) }}"
+                                                                    alt="#">
+                                                            @else
+                                                                <img src="{{ asset('default_images/product_image.png') }}"
+                                                                    class="img-fluid img-50"
+                                                                    alt="{{ $item->product->name }}">
+                                                            @endisset
                                                         </td>
 
                                                         <td>
                                                             <div class="product-name"><a
-                                                                    href="#">{{ $item->product->name }}</a></div>
+                                                                    href="#">{{ $item->product->name }}</a>
+                                                            </div>
                                                         </td>
 
                                                         <td>{{ $item->product->selling_price }}</td>
@@ -158,8 +188,8 @@
                                                         <td>
                                                             <fieldset class="qty-box">
                                                                 <div class="input-group">
-                                                                    <input class="touchspin text-center" type="text"
-                                                                        value="{{ $item->quantity }}">
+                                                                    <input class="touchspin text-center"
+                                                                        type="text" value="{{ $item->quantity }}">
                                                                 </div>
                                                             </fieldset>
                                                         </td>
@@ -264,7 +294,15 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-2">
 
-                            <img src="" alt="" class="avatar rounded-3 border border-light border-3">
+                            @if ($order->address->user->image_path === null)
+                                <img src="{{ asset('storage/' . $order->address->user->image_path) }}" alt=""
+                                    class="avatar rounded-3 border border-light border-3 img-fluid w-25 h-25 rounded-pill">
+                            @else
+                                <img src="{{ asset('default_images/product_image.png') }}" alt=""
+                                    class="avatar rounded-3 border border-light border-3 img-fluid w-25 h-25 rounded-pill">
+                            @endif
+
+
 
                             <div>
                                 <p class="mb-1">{{ $order->address->user->name }}</p>
@@ -335,9 +373,9 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(response) {    
+                        success: function(response) {
                             console.log(response);
-                                                    
+
                             if (response.success) {
                                 Swal.fire('Success', response.message, 'success');
                             } else if (response.status === 422) {

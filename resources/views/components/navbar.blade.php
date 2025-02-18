@@ -5,58 +5,43 @@
     $items = \App\Models\Cart::where('user_id', auth()->id())->count();
 @endphp
 
+
 <style>
-    .search-popup {
-        display: none;
+    .search-box {
+        position: relative;
+    }
+
+    .search-results-container {
         position: absolute;
         top: 100%;
         left: 0;
-        right: 0;
+        width: 100%;
         background: white;
-        border: 1px solid #ddd;
         border-radius: 4px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         z-index: 1000;
-        height: 500px;
-        width: 700px
+        margin-top: 5px;
+    }
+
+    #search-results {
+        max-height: 400px;
         overflow-y: auto;
-        border: 1px solid #red;
-
-    }
-
-    .popup-content {
-        padding: 15px;
-    }
-
-    .product-result {
         padding: 10px;
-        border-bottom: 1px solid #eee;
-        transition: background 0.2s;
     }
 
-    .product-result:hover {
-        background: #f8f9fa;
-    }
-
-    .product-result a {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-    }
-
-    .product-result h4 {
-        margin: 0;
-        font-size: 16px;
-        color: #333;
-    }
-
-    .product-result p {
-        margin: 5px 0 0;
-        font-size: 14px;
-        color: #666;
+    .search-results-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        margin-top: 5px;
+        display: none;
     }
 </style>
-
 
 
 <div class="top-nav top-header sticky-header">
@@ -86,12 +71,12 @@
                                     <i data-feather="search"></i>
                                 </button>
                             </form>
-                        </div>
-
-                        <div id="live-search-results" class="search-results">
-                            <!-- The search results will be dynamically inserted here -->
+                            <div class="search-results-container">
+                                <div id="search-results"></div>
+                            </div>
                         </div>
                     </div>
+
 
                     <!-- Add Ajax Script for Live Search -->
 
@@ -239,14 +224,7 @@
 @push('frontend.scripts')
     <script>
         $(document).ready(function() {
-
-
-            $('<div id="search-popup" class="search-popup"></div>').insertAfter('#search-input');
-
-            $('#search-input').on('input', function(event) {
-
-                event.preventDefault();
-
+            $('#search-input').on('input', function() {
                 var query = $(this).val();
 
                 if (query.length >= 3) {
@@ -257,7 +235,7 @@
                             query: query
                         },
                         success: function(data) {
-                            var resultsHtml = '<div class="popup-content">';
+                            var resultsHtml = '';
 
                             if (data.length > 0) {
                                 data.forEach(function(product) {
@@ -271,25 +249,40 @@
                             `;
                                 });
                             } else {
-                                resultsHtml += '<p>No results found.</p>';
+                                resultsHtml = '<p>No results found.</p>';
                             }
 
-                            resultsHtml += '</div>';
-                            $('#search-popup').html(resultsHtml).show();
-                        },
-                        error: function(xhr, status, error) {
-                            console.log("Error: " + error);
+                            $('#search-results').html(resultsHtml).show();
                         }
                     });
                 } else {
-                    $('#search-popup').hide();
+                    $('#search-results').hide();
                 }
             });
 
-            // Close popup when clicking outside
+            $(document).ready(function() {
+                $('#search-input').on('input', function() {
+                    var query = $(this).val();
+
+                    if (query.length >= 3) {
+                        $('.search-results-container').show();
+                        // Rest of your AJAX code
+                    } else {
+                        $('.search-results-container').hide();
+                    }
+                });
+
+                // Hide on click outside
+                $(document).on('click', function(e) {
+                    if (!$(e.target).closest('.search-box').length) {
+                        $('.search-results-container').hide();
+                    }
+                });
+            });
+
             $(document).on('click', function(e) {
-                if (!$(e.target).closest('#search-input, #search-popup').length) {
-                    $('#search-popup').hide();
+                if (!$(e.target).closest('.search-box').length) {
+                    $('#search-results').hide();
                 }
             });
         });

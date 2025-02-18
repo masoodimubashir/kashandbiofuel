@@ -23,13 +23,13 @@
             /* Pointer cursor for selection */
         }
 
-        .star-rating input:checked ~ label {
+        .star-rating input:checked~label {
             color: gold;
             /* Highlight selected stars */
         }
 
         .star-rating label:hover,
-        .star-rating label:hover ~ label {
+        .star-rating label:hover~label {
             color: gold;
             /* Highlight stars on hover */
         }
@@ -75,13 +75,19 @@
                                             @foreach ($product->productAttributes as $product_attribute)
                                                 <div>
                                                     <div class="slider-image">
-                                                        <img
-                                                            src="{{ asset('storage/' . $product_attribute->image_path) }}"
-                                                            id="img-1"
-                                                            data-zoom-image="{{ asset('storage/' . $product_attribute->image_path) }}"
-                                                            class="
-                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                            alt="">
+                                                        @isset($product_attribute->image_path)
+                                                            <img src="{{ asset('storage/' . $product_attribute->image_path) }}"
+                                                                id="img-1"
+                                                                data-zoom-image="{{ asset('storage/' . $product_attribute->image_path) }}"
+                                                                class="img-fluid image_zoom_cls-0 blur-up lazyload"
+                                                                alt="">
+                                                        @else
+                                                            <img src="{{ asset('default_images/product_image.png') }}"
+                                                                id="img-1"
+                                                                data-zoom-image="{{ asset('storage/' . $product_attribute->image_path) }}"
+                                                                class="img-fluid image_zoom_cls-0 blur-up lazyload"
+                                                                alt="">
+                                                        @endisset
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -95,11 +101,18 @@
 
                                             @foreach ($product->productAttributes as $product_attribute)
                                                 <div>
-                                                    <div class="sidebar-image">
-                                                        <img
-                                                            src="{{ asset('storage/' . $product_attribute->image_path) }}"
-                                                            class="img-fluid blur-up lazyload" alt="">
-                                                    </div>
+                                                    @isset($product_attribute->image_path)
+                                                        <div class="sidebar-image">
+                                                            <img src="{{ asset('storage/' . $product_attribute->image_path) }}"
+                                                                class="img-fluid blur-up lazyload" alt="">
+                                                        </div>
+                                                    @else
+                                                        <div class="sidebar-image">
+                                                            <img src="{{ asset('default_images/product_image.png') }}"
+                                                                class="img-fluid blur-up lazyload" alt="">
+                                                        </div>
+                                                    @endisset
+
                                                 </div>
                                             @endforeach
 
@@ -127,7 +140,7 @@
                                             @for ($i = 0; $i < round($product->reviews_avg_rating); $i++)
                                                 <li>
                                                     <i data-feather="star"
-                                                       class="{{ $i <= round($product->reviews_avg_rating) ? 'fill' : 'star' }}"></i>
+                                                        class="{{ $i <= round($product->reviews_avg_rating) ? 'fill' : 'star' }}"></i>
                                                 </li>
                                             @endfor
 
@@ -153,12 +166,11 @@
                                         @foreach ($product->productAttributes->unique('hex_code') as $product_attribute)
                                             <li class="form-check">
                                                 <input class="form-check-input" type="radio" name="color"
-                                                       id="color-{{ $product_attribute->id }}"
-                                                       value="{{ $product_attribute->id }}">
+                                                    id="color-{{ $product_attribute->id }}"
+                                                    value="{{ $product_attribute->id }}">
                                                 <!-- Ensure value is set -->
 
-                                                <label class="form-check-label"
-                                                       for="color-{{ $product_attribute->id }}">
+                                                <label class="form-check-label" for="color-{{ $product_attribute->id }}">
                                                     <span
                                                         style="background-color: {{ $product_attribute->hex_code }};"></span>
                                                 </label>
@@ -176,19 +188,17 @@
                                         <div class="input-group">
                                             <!-- - Button -->
                                             <button type="button" data-slug="{{ $product->slug }}"
-                                                    data-qty="{{ $product->qty }}"
-                                                    class="qty-left-minus">
+                                                data-qty="{{ $product->qty }}" class="qty-left-minus">
                                                 <i class="fa fa-minus"></i>
                                             </button>
 
                                             <!-- Input Field -->
                                             <input class="form-control input-number qty-input qty" type="text"
-                                                   name="qty" max="{{$product->qty}}" value="1">
+                                                name="qty" max="{{ $product->qty }}" value="1">
 
                                             <!-- + Button -->
                                             <button type="button" data-slug="{{ $product->slug }}"
-                                                    data-qty="{{ $product->qty }}"
-                                                    class="qty-right-plus">
+                                                data-qty="{{ $product->qty }}" class="qty-right-plus">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
@@ -217,36 +227,31 @@
                                     <ul>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img
-                                                    src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/1.svg"
+                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/1.svg"
                                                     class="blur-up lazyload" alt="">
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img
-                                                    src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/2.svg"
+                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/2.svg"
                                                     class="blur-up lazyload" alt="">
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img
-                                                    src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/3.svg"
+                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/3.svg"
                                                     class="blur-up lazyload" alt="">
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img
-                                                    src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/4.svg"
+                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/4.svg"
                                                     class="blur-up lazyload" alt="">
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0)">
-                                                <img
-                                                    src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/5.svg"
+                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/5.svg"
                                                     class="blur-up lazyload" alt="">
                                             </a>
                                         </li>
@@ -263,7 +268,7 @@
                             <div class="vendor-contain">
                                 <div class="vendor-image">
                                     <img src="../assets/images/product/vendor.png" class="blur-up lazyload"
-                                         alt="">
+                                        alt="">
                                 </div>
 
                                 <div class="vendor-name">
@@ -340,20 +345,20 @@
                         <ul class="nav nav-tabs custom-nav" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                                        data-bs-target="#description" type="button" role="tab">Description
+                                    data-bs-target="#description" type="button" role="tab">Description
                                 </button>
                             </li>
 
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
-                                        type="button" role="tab">Additional
+                                    type="button" role="tab">Additional
                                     info
                                 </button>
                             </li>
 
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review"
-                                        type="button" role="tab">Review
+                                    type="button" role="tab">Review
                                 </button>
                             </li>
                         </ul>
@@ -375,9 +380,9 @@
                                 <div class="table-responsive">
                                     <table class="table info-table">
                                         <tbody>
-                                        <tr>
-                                            <td>{!! $product->additional_description !!}</td>
-                                        </tr>
+                                            <tr>
+                                                <td>{!! $product->additional_description !!}</td>
+                                            </tr>
 
                                         </tbody>
                                     </table>
@@ -410,7 +415,7 @@
                                                                     <h5>5<i data-feather="star"></i></h5>
                                                                     <div class="progress">
                                                                         <div class="progress-bar"
-                                                                             style="width: {{ $product->star_percentages[5] }}%">
+                                                                            style="width: {{ $product->star_percentages[5] }}%">
                                                                         </div>
                                                                     </div>
                                                                     <h5 class="total">
@@ -423,7 +428,7 @@
                                                                     <h5>4<i data-feather="star"></i></h5>
                                                                     <div class="progress">
                                                                         <div class="progress-bar"
-                                                                             style="width: {{ $product->star_percentages[4] }}%">
+                                                                            style="width: {{ $product->star_percentages[4] }}%">
                                                                         </div>
                                                                     </div>
                                                                     <h5 class="total">
@@ -436,7 +441,7 @@
                                                                     <h5>3<i data-feather="star"></i></h5>
                                                                     <div class="progress">
                                                                         <div class="progress-bar"
-                                                                             style="width: {{ $product->star_percentages[3] }}%">
+                                                                            style="width: {{ $product->star_percentages[3] }}%">
                                                                         </div>
                                                                     </div>
                                                                     <h5 class="total">
@@ -449,7 +454,7 @@
                                                                     <h5>2<i data-feather="star"></i></h5>
                                                                     <div class="progress">
                                                                         <div class="progress-bar"
-                                                                             style="width: {{ $product->star_percentages[2] }}%">
+                                                                            style="width: {{ $product->star_percentages[2] }}%">
                                                                         </div>
                                                                     </div>
                                                                     <h5 class="total">
@@ -462,7 +467,7 @@
                                                                     <h5>1<i data-feather="star"></i></h5>
                                                                     <div class="progress">
                                                                         <div class="progress-bar"
-                                                                             style="width: {{ $product->star_percentages[1] }}%">
+                                                                            style="width: {{ $product->star_percentages[1] }}%">
                                                                         </div>
                                                                     </div>
                                                                     <h5 class="total">
@@ -477,7 +482,7 @@
                                                             <h4 class="fw-bold">Review this product</h4>
                                                             <p>Let other customers know what you think</p>
                                                             <button class="btn" type="button" data-bs-toggle="modal"
-                                                                    data-bs-target="#writereview">Write a
+                                                                data-bs-target="#writereview">Write a
                                                                 review
                                                             </button>
                                                         </div>
@@ -495,12 +500,11 @@
                                                                 <div>
                                                                     <div class="people-image people-text">
                                                                         <img alt="user" class="img-fluid "
-                                                                             src="../assets/images/review/1.jpg">
+                                                                            src="../assets/images/review/1.jpg">
                                                                     </div>
                                                                 </div>
                                                                 <div class="people-comment">
-                                                                    <div class="people-name"><a
-                                                                            href="javascript:void(0)"
+                                                                    <div class="people-name"><a href="javascript:void(0)"
                                                                             class="name">{{ $review->user->name }}</a>
                                                                         <div class="date-time">
                                                                             <h6 class="text-content">
@@ -512,7 +516,7 @@
                                                                                     @for ($i = 0; $i < $review->rating; $i++)
                                                                                         <li>
                                                                                             <i data-feather="star"
-                                                                                               class="{{ $i <= $review->rating ? 'fill' : '' }}"></i>
+                                                                                                class="{{ $i <= $review->rating ? 'fill' : '' }}"></i>
                                                                                         </li>
                                                                                     @endfor
 
@@ -584,7 +588,7 @@
                                 <form class="form-control">
                                     <label for="colorPick" class="form-label mb-0">Theme Color</label>
                                     <input type="color" class="form-control form-control-color" id="colorPick"
-                                           value="#0da487" title="Choose your color">
+                                        value="#0da487" title="Choose your color">
                                 </form>
                             </div>
                         </li>
@@ -629,7 +633,7 @@
                     <div class="cart-content">
                         <div class="product-image">
                             <img src="../assets/images/product/category/1.jpg" class="img-fluid blur-up lazyload"
-                                 alt="">
+                                alt="">
                             <div class="content">
                                 <h5>{{ $product->name }}</h5>
                                 <h6>$32.96
@@ -651,15 +655,15 @@
                                 <div class="input-group h-100">
                                     <div class="input-group" style="width: 140px;">
                                         <button type="button" class="btn btn-outline-secondary btn-decrement"
-                                                data-slug="{{ $product->slug }}" data-qty="{{ $product->qty }}">
+                                            data-slug="{{ $product->slug }}" data-qty="{{ $product->qty }}">
                                             <i class="bi bi-dash"></i>
                                         </button>
 
-                                        <input type="number" class="form-control text-center quantity-input" value="1"
-                                               min="1" max="{{ $product->qty }}" id="quantityInput">
+                                        <input type="number" class="form-control text-center quantity-input"
+                                            value="1" min="1" max="{{ $product->qty }}" id="quantityInput">
 
                                         <button type="button" class="btn btn-outline-secondary btn-increment"
-                                                data-slug="{{ $product->slug }}" data-qty="{{ $product->qty }}">
+                                            data-slug="{{ $product->slug }}" data-qty="{{ $product->qty }}">
                                             <i class="bi bi-plus"></i>
                                         </button>
                                     </div>
@@ -717,14 +721,13 @@
                             <!-- Review Content Section -->
                             <div class="review-box">
                                 <label for="comment" class="form-label">Your Comment *</label>
-                                <textarea id="comment" name="comment" rows="3" class="form-control"
-                                          placeholder="Write your review here"></textarea>
+                                <textarea id="comment" name="comment" rows="3" class="form-control" placeholder="Write your review here"></textarea>
                             </div>
 
                             <!-- Form Submission Buttons -->
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-md btn-theme-outline fw-bold"
-                                        data-bs-dismiss="modal">
+                                    data-bs-dismiss="modal">
                                     Close
                                 </button>
                                 <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">
@@ -746,9 +749,7 @@
 
 @push('frontend.scripts')
     <script>
-
-
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Constants
             const product_attribute_id = $('input[name="color"]');
             const qtyInput = $('input[name="qty"]');
@@ -765,13 +766,13 @@
 
 
                 // Add to Cart
-                $('#cart-btn').on('click', async function (event) {
+                $('#cart-btn').on('click', async function(event) {
                     event.preventDefault();
                     await handleCartAction('{{ route('cart.add-to-cart') }}', addToCart);
                 });
 
                 // Add to Wishlist
-                $('#wishlist-btn').on('click', async function (event) {
+                $('#wishlist-btn').on('click', async function(event) {
                     event.preventDefault();
                     await handleCartAction('{{ route('wishlist.add-to-wishlist') }}', addToWishlist);
 
@@ -853,14 +854,14 @@
                     },
                     processData: false,
                     contentType: false,
-                    success: function (response) {
+                    success: function(response) {
                         if (response.status === true) {
                             window.location.href = response.redirect_url;
                         } else {
                             showAlert('Success!', response.message, 'success');
                         }
                     },
-                    error: function (error) {
+                    error: function(error) {
 
                         if (error.status === 401) {
                             window.location.href = '{{ route('login') }}';
@@ -970,7 +971,7 @@
                 showAlert('Error!', errorMessage, 'error');
             }
 
-            $(document).on('click', '.qty-left-minus', function () {
+            $(document).on('click', '.qty-left-minus', function() {
                 const input = $(this).siblings('.qty-input');
                 const maxQty = $(this).data('qty');
                 let currentValue = parseInt(input.val());
@@ -983,7 +984,7 @@
                 }
             });
 
-            $(document).on('click', '.qty-right-plus', function () {
+            $(document).on('click', '.qty-right-plus', function() {
                 const input = $(this).siblings('.qty-input');
                 const maxQty = $(this).data('qty');
                 let currentValue = parseInt(input.val());
