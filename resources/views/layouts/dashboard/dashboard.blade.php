@@ -19,19 +19,27 @@
                 </ol>
             </div>
         </div>
+
+
+
+
     </x-slot>
 
 
     <div class="container-fluid dashboard_ecommerce">
         <div class="row">
 
-            <x-admin-sale-component/>
+            <x-admin-sale-component />
 
-            <x-admin-dashboard-revenue-component/>
+            <x-admin-dashboard-revenue-component />
 
-            <x-admin-dashboard-total-order-component/>
+            <x-admin-dashboard-total-order-component />
+
+            <x-admin-dashboard-unconfirmed-orders />
 
         </div>
     </div>
+
+   
 
 </x-app-layout>

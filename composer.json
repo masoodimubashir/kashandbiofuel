@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.2",
         "ext-curl": "*",
+        "consoletvs/charts": "6.*",
         "laravel/framework": "^11.31",
         "laravel/socialite": "^5.17",
         "laravel/tinker": "^2.9",

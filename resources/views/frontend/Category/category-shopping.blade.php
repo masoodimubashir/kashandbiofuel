@@ -343,7 +343,7 @@
                                     </ul>
                                     <span>(${Math.round(product.review_avg_rating * 10) / 10})</span>
                                 </div>
-                                <h6 class="unit">${product.unit}</h6>
+                                <h6 class="unit">Quantity - ${product.qty}</h6>
                                 <h5 class="price">
                                     <span class="theme-color">$${product.selling_price}</span>
                                     <del>$${product.price}</del>

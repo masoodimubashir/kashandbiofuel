@@ -2,18 +2,23 @@
 
 namespace App\View\Components;
 
+use App\Charts\OrderRevenueChart;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class AdminDashboardRevenueComponent extends Component
 {
+
+    public $chart;
+
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $orderChart = new OrderRevenueChart();
+        $this->chart = $orderChart->makeChart();
     }
 
     /**

@@ -144,13 +144,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 
-
         Route::post('/product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
 
         Route::put('/update/profile', [UserProfileController::class, 'update'])->name('user.profile.update');
         Route::put('/update/password', [UserProfileController::class, 'updatePassword'])->name('user.password.update');
         Route::post('/update/photo', [UserProfileController::class, 'updateImage'])->name('user.update.photo');
-
 
         Route::resource('/address', FrontendAddressController::class);
 

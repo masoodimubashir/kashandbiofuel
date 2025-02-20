@@ -153,6 +153,7 @@
                 <!-- Container-fluid Ends-->
 
 
+
                 {{-- main section starts  --}}
                 <main>
                     {{ $slot }}
@@ -285,6 +286,10 @@
     <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
 
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+
+
 
 
     @stack('dashboard.script')
