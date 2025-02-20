@@ -65,7 +65,7 @@ Route::get('/check-product-quantity/{slug}', [FrontendProductController::class, 
 
 // Routes For Logging In Via Gmail
 Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
-Route::get('/auth/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
+Route::get('/auth/google/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
 
 Route::resource('/frontend-address', FrontendAddressController::class);
 

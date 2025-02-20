@@ -26,7 +26,7 @@
                     <div class="d-flex pe-3"><span class="me-2">Year:</span><span>2024<i
                                 class="fa fa-caret-down ms-2"></i></span></div>
                     <div class="total-increase">
-                        <h2>$25,837</h2><span>Total : 23,000</span>
+                        <h2>25,837</h2><span>Total : 23,000</span>
                     </div>
                     <div id="monthlychart"></div>
                     <button class="btn btn-primary">Increase</button>

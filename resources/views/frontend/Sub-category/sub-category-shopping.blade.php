@@ -79,7 +79,7 @@
                                             <h6 class="unit">{{ $product->unit }}</h6>
                                             <h5 class="price">
                                                 <span class="theme-color">${{ $product->selling_price }}</span>
-                                                <del>${{ $product->price }}</del>
+                                                <del>{{ $product->price }}</del>
                                             </h5>
 
                                         </div>

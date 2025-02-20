@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name')->unique();
             $table->string('slug');
+            $table->string('image_path')->nullable();
             $table->boolean('status');
             $table->boolean('show_on_navbar');
             $table->timestamps();

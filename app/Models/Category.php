@@ -9,7 +9,7 @@ class Category extends Model
 {
 
 
-    protected $fillable = ['name', 'slug', 'status', 'show_on_navbar'];
+    protected $fillable = ['name', 'slug', 'status', 'show_on_navbar', 'image_path'];
 
     public function subCategories(): HasMany
     {

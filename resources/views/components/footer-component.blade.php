@@ -7,24 +7,9 @@
                     <div class="footer-logo">
                         <div class="theme-logo">
                             <a href="index.html">
-                                <img src="../assets/images/logo/kassh & biofuels (1) (1).png" class="blur-up lazyload"
+                                <img src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" class="blur-up lazyload"
                                      alt="">
                             </a>
-                        </div>
-
-                        <div class="footer-logo-contain">
-                            <p></p>
-
-                            <ul class="address">
-                                <li>
-                                    <i data-feather="home"></i>
-                                    <a href="javascript:void(0)">1418 Riverwood Drive, CA 96052, US</a>
-                                </li>
-                                <li>
-                                    <i data-feather="mail"></i>
-                                    <a href="javascript:void(0)">support@fastkart.com</a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -95,10 +80,7 @@
                             <li>
                                 <a href="{{route('user.dashboard')}}" class="text-content">Track Order</a>
                             </li>
-                            <!-- <li>
-                                <a href="wishlist.html" class="text-content">Your Wishlist</a>
-                            </li>
-                            <li> -->
+                           
                             <a href="search.html" class="text-content">Search</a>
                             </li>
                             <li>

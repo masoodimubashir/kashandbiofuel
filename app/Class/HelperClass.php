@@ -3,6 +3,7 @@
 namespace App\Class;
 
 use App\Service\CouponService;
+use Log;
 
 trait HelperClass
 {
@@ -63,8 +64,13 @@ trait HelperClass
     private function processItemCalculations(object $item): void
     {
         $qty = $item->qty;
-        $originalPrice = round($item->product->price);
-        $sellingPrice = round($item->product->selling_price);
+
+
+       
+        $originalPrice = (float) str_replace(['₹', ','], '', $item->product->price);
+        $sellingPrice = (float) str_replace(['₹', ','], '', $item->product->selling_price);
+
+
 
         // Calculate the item's grand total
         $item->product->grand_total = $this->calculateItemTotal($qty, $sellingPrice);

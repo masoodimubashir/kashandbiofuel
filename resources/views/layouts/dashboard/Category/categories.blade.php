@@ -8,7 +8,7 @@
                     <h4 class="modal-title" id="modalTitle">Add New Category</h4>
                     <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="customerForm" class="row g-3 p-4">
+                <form id="customerForm" class="row g-3 p-4" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="customerId" name="id">
 
@@ -18,16 +18,16 @@
                         <div class="invalid-feedback">Please enter a valid name</div>
                     </div>
 
-                    {{--                    <div class="col-12">--}}
-                    {{--                        <label class="form-label" for="image">Image</label>--}}
-                    {{--                        <input type="file" class="form-control" id="image" name="image"--}}
-                    {{--                               accept="image/jpeg,image/png,image/jpg,image/webp">--}}
-                    {{--                    </div>--}}
+                    <div class="col-12">
+                        <label class="form-label" for="image">Image</label>
+                        <input type="file" class="form-control" id="image" name="image"
+                            accept="image/jpeg,image/png,image/jpg,image/webp">
+                    </div>
 
                     <div class="col-12">
                         <label class="form-label" for="show_on_navbar">Show On Navbar</label>
                         <input class="tgl tgl-flip navbar_show" id="show_on_navbar" type="checkbox"
-                               name="show_on_navbar">
+                            name="show_on_navbar">
                         <label class="tgl-btn" data-tg-off="No" data-tg-on="Yes!" for="show_on_navbar"></label>
                     </div>
 
@@ -63,7 +63,7 @@
         <div class="row mb-3">
             <div class="col-md-6 col-sm-12 mb-2 mb-md-0">
                 <button class="btn btn-success " type="button" data-bs-toggle="modal" id="createCategoryBtn"
-                        data-bs-target=".bd-example-modal-lg">
+                    data-bs-target=".bd-example-modal-lg">
                     Add Category
                 </button>
             </div>
@@ -80,12 +80,12 @@
                             <div class="table-responsive">
                                 <table class="table table-md" id="category">
                                     <thead>
-                                    <tr>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">status</th>
-                                        <th scope="col">Show On Navbar</th>
-                                        <th scope=col>Action</th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">status</th>
+                                            <th scope="col">Show On Navbar</th>
+                                            <th scope=col>Action</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
@@ -103,7 +103,7 @@
 
     @push('dashboard.script')
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
 
 
                 // Load DataTable
@@ -116,8 +116,8 @@
                     },
                     columns: [
                         {
-                            data: 'name',
-                            name: 'name'
+                            data: 'category_image',
+                            name: 'category_image'
                         },
                         {
                             data: 'status',
@@ -141,74 +141,60 @@
                 });
 
 
-                // Form validation and submission
-                $('#customerForm').on('submit', function (e) {
+                $('#customerForm').on('submit', function(e) {
                     e.preventDefault();
 
                     // Clear any existing error messages
                     $('.invalid-feedback').hide();
                     $('.is-invalid').removeClass('is-invalid');
 
-                    const formData = {
-                        name: $('#name').val(),
-                        show_on_navbar: $('#show_on_navbar').prop('checked') ? 1 : 0,
-                        _token: $('input[name="_token"]').val()
-                    };
+                    // Create FormData object to handle file uploads
+                    const formData = new FormData();
+                    formData.append('name', $('#name').val());
+                    formData.append('show_on_navbar', $('#show_on_navbar').prop('checked') ? 1 : 0);
+                    formData.append('_token', $('input[name="_token"]').val());
+
+                    // Add image if one is selected
+                    if ($('#image')[0].files[0]) {
+                        formData.append('image', $('#image')[0].files[0]);
+                    }
 
                     let hasErrors = false;
 
-                    if (!formData.name.trim()) {
+                    if (!$('#name').val().trim()) {
                         $('#name').addClass('is-invalid').siblings('.invalid-feedback').show();
                         hasErrors = true;
                     }
-
 
                     if (hasErrors) return;
 
                     const customerId = $('#customerId').val();
                     const isUpdate = customerId !== '';
 
+                    // If updating, append the _method field for Laravel to handle PUT request
+                    if (isUpdate) {
+                        formData.append('_method', 'PUT');
+                    }
+
                     $.ajax({
                         url: isUpdate ? `/admin/categories/${customerId}` : '/admin/categories',
-                        type: isUpdate ? 'PUT' : 'POST',
+                        type: 'POST', // Always use POST for FormData
                         data: formData,
-                        success: function (response) {
+                        processData: false, // Don't process the data
+                        contentType: false, // Don't set content type
+                        success: function(response) {
                             if (response.status === 'success') {
-
-                                // Reset form
                                 resetForm();
-
-                                // Close the modal
                                 $('#categoryModal').modal('hide');
-
-                                // Reload the table
                                 category.ajax.reload(null, false);
-
-
                             }
                         },
-                        error: function (xhr) {
-                            const errors = xhr.responseJSON.errors;
 
-                            // Check if errors are present
-                            if (errors) {
-                                let errorMessage = '';
-
-                                for (let key in errors) {
-                                    if (errors.hasOwnProperty(key)) {
-                                        errorMessage += errors[key].join('<br>');
-                                    }
-                                }
-                                Swal.fire('Error!', errorMessage, 'error');
-                            } else {
-                                Swal.fire('Error!', 'Something went wrong.', 'error');
-                            }
-                        }
                     });
                 });
 
                 // Handle show_on_navbar toggle
-                $(document).on('change', '.showOnNavbar', function () {
+                $(document).on('change', '.showOnNavbar', function() {
                     var categoryId = $(this).attr('id').replace('navbar_', '');
                     var newStatus = $(this).prop('checked') ? 1 : 0;
 
@@ -220,7 +206,7 @@
                             model: 'Category',
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             if (response.status === 'success') {
                                 category.ajax.reload(null, false);
                             } else {
@@ -228,17 +214,32 @@
                                     'error');
                             }
                         },
-                        error: function () {
-                            Swal.fire('Error!',
-                                'Something went wrong while updating Show On Navbar status.',
-                                'error');
+                        error: function(xhr) {
+
+                            const errors = xhr.responseJSON.errors;
+
+
+                            // Check if errors are present
+                            if (errors) {
+                                let errorMessage = '';
+
+
+                                for (let key in errors) {
+                                    if (errors.hasOwnProperty(key)) {
+                                        errorMessage += errors[key].join('<br>');
+                                    }
+                                }
+                                Swal.fire('Error!', errorMessage, 'error');
+                            } else {
+                                Swal.fire('Error!', 'Something went wrong.', 'error');
+                            }
                         }
-                    });
+                    })
                 });
 
 
                 // Handle Delete button click
-                $(document).on('click', '.deleteBtn', function () {
+                $(document).on('click', '.deleteBtn', function() {
                     var categoryId = $(this).data('id');
 
                     // Show confirmation dialog
@@ -259,12 +260,12 @@
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content')
                                 },
-                                success: function (response) {
+                                success: function(response) {
                                     Swal.fire('Deleted!', 'The category has been deleted.',
                                         'success');
                                     category.ajax.reload(null, false);
                                 },
-                                error: function () {
+                                error: function() {
                                     Swal.fire('Error!', 'Failed to delete category.',
                                         'error');
                                 }
@@ -274,7 +275,7 @@
                 });
 
                 // Handle checkbox toggle (status change)
-                $(document).on('change', '.changeStatus', function () {
+                $(document).on('change', '.changeStatus', function() {
 
                     var categoryId = $(this).attr('id').replace('cb_', '');
                     var newStatus = $(this).prop('checked') ? 1 : 0;
@@ -287,7 +288,7 @@
                             model: 'Category',
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             if (response.status === 'success') {
                                 // Handle success if needed
                                 category.ajax.reload(null, false);
@@ -296,7 +297,7 @@
                                 Swal.fire('Error!', 'Failed to update status.', 'error');
                             }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             Swal.fire('Error!', 'Something went wrong while updating status.',
                                 'error');
                         }
@@ -304,7 +305,7 @@
                 });
 
                 // Add real-time validation
-                $('#name, #description').on('input', function () {
+                $('#name, #description').on('input', function() {
                     if ($(this).val().trim()) {
                         $(this).removeClass('is-invalid').siblings('.invalid-feedback').hide();
                     }
@@ -312,7 +313,7 @@
 
 
                 // Handle Edit button click
-                $(document).on('click', '.editBtn', function () {
+                $(document).on('click', '.editBtn', function() {
                     var categoryId = $(this).data('id'); // Get category ID from the button data-id
 
                     // Reset the form to clear previous values before loading the modal
@@ -322,7 +323,7 @@
                     $.ajax({
                         url: '/admin/categories/' + categoryId,
                         type: 'GET',
-                        success: function (response) {
+                        success: function(response) {
 
                             if (response.status === 'success') {
                                 $('#name').val(response.category.name);
@@ -336,14 +337,14 @@
                                 Swal.fire('Error!', 'Category data not found.', 'error');
                             }
                         },
-                        error: function () {
+                        error: function() {
                             Swal.fire('Error!', 'Failed to fetch category data.', 'error');
                         }
                     });
                 });
 
                 //  Clear Form When Showing The modal
-                $('#createCategoryBtn').on('click', function () {
+                $('#createCategoryBtn').on('click', function() {
                     resetForm();
                     $('#categoryModal').modal('show');
                 });

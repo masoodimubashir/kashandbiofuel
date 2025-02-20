@@ -6,6 +6,7 @@ use App\Class\HelperClass;
 use App\Http\Controllers\Controller;
 use App\Service\ItemService;
 use Illuminate\Http\Request;
+use Log;
 
 class ApplyCouponController extends Controller
 {
@@ -25,6 +26,7 @@ class ApplyCouponController extends Controller
 
                 [$items, $check_out_price, $discount] = $this->itemService->getItems($request, 'cart');
 
+                    Log::info('Cart items fetched successfully', ['items' => $items]);
 
                 return response()->json([
                     'status' => true,

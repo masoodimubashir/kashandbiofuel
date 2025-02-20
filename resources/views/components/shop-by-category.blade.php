@@ -3,7 +3,8 @@
     <style>
         .gradient-bg {
             background: linear-gradient(to right, #80a81b, #770a0f, #fff);
-            color: white; /* Ensure text is visible */
+            color: white;
+            /* Ensure text is visible */
             padding: 20px;
             text-align: center;
         }
@@ -25,24 +26,51 @@
     <div class="row">
         <div class="col-12">
             <div class="category-slider arrow-slider">
-                @foreach($categories as $category)
-
+                @foreach ($categories as $category)
                     <div>
                         <div class="shop-category-box border-0 wow fadeIn"
-                             @if(!$loop->first)data-wow-delay="0.35s" @endif>
-                            <a href="{{route('category.index')}}"
-                               class="category-name d-flex align-items-center ">
-                                <i class="fa fa-angle-right"></i>
-                                <h6 class="category-title ">{{$category->name}}</h6>
-                            </a>
+                            @if (!$loop->first) data-wow-delay="0.35s" @endif>
+                            <a href="{{ route('category.index') }}" class="circle-1">
+
+                                @isset($category->image_path)
+                                    <img src="{{ asset('storage/' . $category->image_path) }}"
+                                        class="img-fluid blur-up lazyload" alt="" style="width: 110px; height: 110px;">
+                                @else
+                                    <img src="{{ asset('default_images/product_image.png') }}"
+                                        class="img-fluid blur-up lazyload" alt="" style="width: 110px; height: 110px;">
+                                @endisset
+
+
+                      
+                        </a>
+                        <div class="category-name">
+                            <h6>{{ $category->name }}</h6>
                         </div>
                     </div>
-                @endforeach
+                </div>
+            @endforeach
 
 
-            </div>
         </div>
     </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="category-slider arrow-slider">
+
+
+            <div>
+                <div class="shop-category-box border-0 wow fadeIn">
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
 
 
 </div>

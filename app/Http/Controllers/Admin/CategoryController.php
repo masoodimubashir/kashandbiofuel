@@ -6,13 +6,12 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\SubCategory;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
+use Exception;
+use Storage;
 
 class CategoryController extends Controller
 {
@@ -29,6 +28,20 @@ class CategoryController extends Controller
                 $categories = Category::query();
 
                 return DataTables::eloquent($categories)
+                    ->addColumn('category_image', function ($category) {
+
+                        $imageUrl = isset($category->image_path) ? 'storage/' . $category->image_path : 'default_images/product_image.png';
+
+
+                        return '
+                        <div class="d-flex align-items-center gap-2 border-0">
+                            <img src="' . asset($imageUrl) . '" class="card-img-top rounded" alt="Product Image" style="height: 50px; width:50px; object-fit: cover;">
+                            <div class=" text-center">
+                                <h6 class=" mb-0 text-truncate">' . $category->name . '</h6>
+                            </div>
+                        </div>
+                    ';
+                    })
                     ->addColumn('status', function ($category) {
                         // Determine if the status is on or off
                         $status = $category->status === 1 ? 'on' : 'off';
@@ -64,7 +77,7 @@ class CategoryController extends Controller
                         // Return both buttons together
                         return $editButton . ' ' . $deleteButton;
                     })
-                    ->rawColumns(['action', 'status', 'show_on_navbar'])
+                    ->rawColumns(['action', 'status', 'show_on_navbar', 'category_image'])
                     ->make(true);
             }
 
@@ -81,9 +94,7 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -95,9 +106,10 @@ class CategoryController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|unique:categories,name',
-//                'image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+                'image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
                 'show_on_navbar' => 'nullable|boolean'
             ]);
+
 
             if ($validator->fails()) {
                 return response()->json([
@@ -106,10 +118,21 @@ class CategoryController extends Controller
                 ], 422);
             }
 
+            $path = null;
+
+            if ($request->hasFile('image')) {
+
+                $extension = $request->file('image')->getClientOriginalExtension();
+                $filename = uniqid('img_') . '.' . $extension;
+                $path = $request->file('image')->storeAs('Category_Images', $filename, 'public');
+            }
+
+
 
             $category = Category::create([
                 'name' => $request->name,
                 'status' => 1,
+                'image_path' => $path,
                 'slug' => Str::of($request->name)->slug('-'),
                 'show_on_navbar' => $request->input('show_on_navbar', 0)
             ]);
@@ -140,7 +163,6 @@ class CategoryController extends Controller
                 'status' => 'success',
                 'category' => $category->with('subCategories')->find($category->id)
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -163,7 +185,6 @@ class CategoryController extends Controller
                 'categories' => $category->where('status', 1)->get(),
             ]);
         }
-
     }
 
     /**
@@ -175,10 +196,11 @@ class CategoryController extends Controller
 
         try {
 
-            $category = Category::findOrFail($category->id);
+
 
             $validator = Validator::make($request->all(), [
                 'name' => ['required', 'string', Rule::unique('categories')->ignore($category->id)],
+                'image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
                 'show_on_navbar' => 'nullable|boolean'
             ]);
 
@@ -189,8 +211,27 @@ class CategoryController extends Controller
                 ], 422);
             }
 
+            $category = Category::findOrFail($category->id);
+
+            $path = null;
+
+            if ($request->hasFile('image')) {
+
+
+                if (Storage::disk('public')->exists($category->image_path)) {
+                    
+                    Storage::disk('public')->delete($category->image_path);
+                }
+
+                $extension = $request->file('image')->getClientOriginalExtension();
+                $filename = uniqid('img_') . '.' . $extension;
+                $path = $request->file('image')->storeAs('Category_Images', $filename, 'public');
+
+            }
+
             $category->update([
                 'name' => $request->name,
+                'image_path' => $path,
                 'show_on_navbar' => $request->show_on_navbar
             ]);
 
@@ -215,6 +256,10 @@ class CategoryController extends Controller
         try {
 
             $category = Category::findOrFail($category->id);
+
+            if (Storage::disk('public')->exists($category->image_path)) {
+                Storage::disk('public')->delete($category->image_path);
+            }
 
             $category->delete();
 

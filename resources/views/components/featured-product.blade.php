@@ -44,7 +44,7 @@
 
                                     )</span>
                             </div>
-                            <h6>{{ Number::currency($product->selling_price, 'INR') }}</h6>
+                            <h6>{{ $product->selling_price}}</h6>
                         </div>
                     </div>
                 @endforeach

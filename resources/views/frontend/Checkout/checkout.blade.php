@@ -199,19 +199,21 @@
 
                 summaryContainer.html(''); // Clear previous summary
 
+                
+
                 cartItems.forEach(cartItem => {
                     const productName = cartItem.product.name ?? 'Unknown Product';
                     const quantity = cartItem.qty ?? 1;
                     const price = (cartItem.product.selling_price * quantity).toFixed(2);
-                    const productImage = cartItem.product.product_attribute?.image_path;
+                    const productImage = cartItem.product.product_attribute.image_path ? `/storage/${cartItem.product.product_attribute.image_path}` : '/default_images/product_image.png';
                     const cartItemHTML = `
-            <li>
-                <img src="/storage/${productImage}"
-                     class="img-fluid blur-up lazyloaded checkout-image"
-                     alt="${productName}">
-                <h4>${productName} <span>X ${quantity}</span></h4>
-                <h4 class="price">₹${price}</h4>
-            </li>`;
+                    <li>
+                        <img src="${productImage}"
+                            class="img-fluid blur-up lazyloaded checkout-image"
+                            alt="${productName}">
+                        <h4>${productName} <span>X ${quantity}</span></h4>
+                        <h4 class="price">₹${price}</h4>
+                    </li>`;
                     summaryContainer.append(cartItemHTML);
                 });
 

@@ -164,10 +164,10 @@
                     </td>
                     <td class="price">
                         <h4 class="table-title text-content">Price</h4>
-                        <h5>$${parseFloat(cartItem.product.selling_price).toFixed(2)}
-                            <del class="text-content">$${parseFloat(cartItem.product.price).toFixed(2)}</del>
+                        <h5>${cartItem.product.selling_price}
+                            <del class="text-content">${cartItem.product.price}</del>
                         </h5>
-                        <h6 class="theme-color">You Save: $${cartItem.product.saving_amount} (${cartItem.product.saving_percentage}%)</h6>
+                        <h6 class="theme-color">You Save: ${cartItem.product.saving_amount} (${cartItem.product.saving_percentage}%)</h6>
                     </td>
                     <td class="quantity">
                         <h4 class="table-title text-content"></h4>
@@ -187,7 +187,7 @@
                     </td>
                     <td class="subtotal">
                         <h4 class="table-title text-content">Total</h4>
-                        <h5>$${cartItem.product.grand_total.toFixed(2)}</h5>
+                        <h5>${cartItem.product.grand_total.toFixed(2)}</h5>
                     </td>
                     <td class="save-remove">
                         <h4 class="table-title text-content">Action</h4>
@@ -207,9 +207,9 @@
                         type: "GET",
                         success: (response) => {
                             cartItemsContainer.html(renderCartItems(response.data));
-                            checkOutPrice.text(`$${response.check_out_price}`);
-                            price.text(`$${response.check_out_price}`);
-                            couponDiscount.text('$0.00');
+                            checkOutPrice.text(`${response.check_out_price}`);
+                            price.text(`${response.check_out_price}`);
+                            couponDiscount.text('0.00');
                         },
                         error: handleErrors
                     });

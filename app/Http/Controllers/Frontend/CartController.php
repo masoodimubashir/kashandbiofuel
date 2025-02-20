@@ -7,6 +7,7 @@ use App\Http\Requests\CartStoreRequest;
 use App\Service\ItemService;
 use Illuminate\Http\Request;
 use Exception;
+use Log;
 
 class CartController extends Controller
 {

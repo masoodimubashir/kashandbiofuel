@@ -91,7 +91,7 @@
                                                         <a href="product-left-thumbnail.html">
                                                             <h5>Fantasy Crunchy Choco Chip Cookies</h5>
                                                         </a>
-                                                        <h6><span>1 x</span> $80.58</h6>
+                                                        <h6><span>1 x</span> 80.58</h6>
                                                         <button class="close-button close_button">
                                                             <i class="fa-solid fa-xmark"></i>
                                                         </button>
@@ -111,7 +111,7 @@
                                                             <h5>Peanut Butter Bite Premium Butter Cookies 600 g
                                                             </h5>
                                                         </a>
-                                                        <h6><span>1 x</span> $25.68</h6>
+                                                        <h6><span>1 x</span> 25.68</h6>
                                                         <button class="close-button close_button">
                                                             <i class="fa-solid fa-xmark"></i>
                                                         </button>
@@ -122,7 +122,7 @@
 
                                         <div class="price-box">
                                             <h5>Total :</h5>
-                                            <h4 class="theme-color fw-bold">$106.58</h4>
+                                            <h4 class="theme-color fw-bold">106.58</h4>
                                         </div>
 
                                         <div class="button-group">

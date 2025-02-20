@@ -41,9 +41,9 @@
                         </ul>
 
                         <!-- Price with Discount -->
-                        <h5>${{ $product->selling_price }}
+                        <h5>{{ $product->selling_price }}
                             @if ($product->price)
-                                <del>${{ $product->price }}</del>
+                                <del>{{ $product->price }}</del>
                             @endif
                         </h5>
                     </div>

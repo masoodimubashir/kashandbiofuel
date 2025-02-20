@@ -33,6 +33,7 @@ class SocialiteController extends Controller
         ], [
             'name' => $googleUser->name,
             'email' => $googleUser->email,
+            'image_path' => $googleUser->avatar,
             'google_token' => $googleUser->token,
             'google_refresh_token' => $googleUser->refreshToken,
         ]);

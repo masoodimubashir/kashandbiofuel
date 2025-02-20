@@ -63,7 +63,13 @@
 
                             <div class="order-contain">
                                 <h3 class="theme-color">Order Success</h3>
-                                <h5 class="text-content">Payment Is Successfully And Your Order Is On The Way</h5>
+                                <h5 class="text-content">
+                                   <b>
+                                    Your Order Is Placed You Will Get Notified Via Mail Once Your Order Is Confirmed.
+                                    <br>
+                                    Sit back And Relax
+                                   </b>
+                                </h5>
                                 <h6>Transaction ID: {{ $transaction->transaction_id }}</h6>
                             </div>
                         </div>

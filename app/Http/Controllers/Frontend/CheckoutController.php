@@ -149,7 +149,6 @@ class CheckoutController extends Controller
         ]);
       }
     } catch (Exception $e) {
-      Log::error('Cash on Delivery Error: ' . $e->getMessage());
       return response()->json([
         'success' => false,
         'message' => $e->getMessage(),

@@ -10,21 +10,23 @@ class SearchController extends Controller
 {
     public function __invoke(Request $request)
     {
-
         try {
-
-            $query = request('query');
+            $searchQuery = $request->input('query');
 
             $products = Product::query()
                 ->with('productAttribute')
-                ->whereHas('productAttribute')
-                ->where('name', 'like', "%{$query}%")
-                ->orWhere('slug', 'like', "%{$query}%")
+                ->where(function ($query) use ($searchQuery) {
+                    $searchQuery = trim($searchQuery);
+                    if (!empty($searchQuery)) {
+                        $query->where('name', 'like', "{$searchQuery}%")
+                            ->orWhere('slug', 'like', "{$searchQuery}%");
+                    }
+                })
                 ->select('id', 'name', 'description', 'slug')
                 ->limit(10)
                 ->get();
 
-            if (is_null($products) || $products) {
+            if ($products->isEmpty()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'No Product Found',
@@ -32,7 +34,6 @@ class SearchController extends Controller
             }
 
             return response()->json($products);
-
         } catch (\Exception $e) {
 
             return response()->json([
