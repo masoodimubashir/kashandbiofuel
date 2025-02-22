@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\OrderPlacedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\SubCategory;
+use App\Notifications\OrderNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
@@ -89,7 +91,6 @@ class OrderController extends Controller
                     ->rawColumns(['status', 'action'])
                     ->orderColumn('created_at', 'created_at $1')
                     ->make(true);
-
             } catch (Exception $e) {
                 // Return error response if any exception occurs
                 return response()->json([
@@ -171,7 +172,12 @@ class OrderController extends Controller
 
         try {
 
-            $order = Order::find($id);
+            $order = Order::query()
+                ->with([
+                    'user.address',
+                    'orderedItems.product.productAttribute'
+                ])
+                ->find($id);
 
             if (!$order) {
                 return response()->json([
@@ -195,8 +201,20 @@ class OrderController extends Controller
             $order->{$validatedData['field']} = $validatedData['value'];
             $order->save();
 
+            if (in_array($validatedData['field'], ['is_confirmed']) && $order->save()) {
+
+                event(new OrderPlacedEvent($order));
+
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Order confirmed successfully'
+                ]);
+            }
+
+
             return response()->json([
-                'success' => true,
+                'status' => true,
                 'message' => 'Field updated successfully.',
             ]);
         } catch (Exception $e) {

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CartStoreRequest;
+use App\Models\Cart;
+use App\Models\Wishlist;
 use App\Service\ItemService;
+use Exception;
 use Illuminate\Http\Request;
 
 class WishlistController extends Controller
@@ -41,6 +44,15 @@ class WishlistController extends Controller
         try {
 
 
+            $product = Wishlist::where('product_id', $request->product_id)->get();
+
+            if($product->count() > 0){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Item already Exists',
+                ], 404);
+            }
+        
             $this->itemService->addOrUpdateItem($request->validated(), 'wishlist');
 
             return response()->json([
@@ -69,6 +81,15 @@ class WishlistController extends Controller
         try {
 
             $item = $this->itemService->findItem($id, 'wishlist');
+
+            $cart_item = Cart::where('product_id', $item->product_id)->first();
+
+            if ($cart_item) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Item already Exists',
+                ], 404);
+            }
 
             $this->itemService->returnToCart($item, $id, 'wishlist');
 

@@ -16,6 +16,7 @@ class FeaturedProduct extends Component
     public function __construct()
     {
         $this->featuredProduct = Product::query()
+            ->inStock()
             ->with([
                 'review',
                 'productAttribute',

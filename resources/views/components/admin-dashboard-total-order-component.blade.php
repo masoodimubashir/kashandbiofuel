@@ -61,7 +61,7 @@
                                     </div>
                                 </td>
                                 <td>{{ $order->order->custom_order_id }}</td>
-                                <td>{{ $order->price }}</td>
+                                <td>{{ Number::currency($order->price,'INR') }}</td>
                                 <td>
                                     <div
                                         class="badge

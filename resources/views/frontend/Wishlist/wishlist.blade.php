@@ -1,6 +1,5 @@
 @extends('welcome')
 @section('main')
-
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
@@ -8,7 +7,7 @@
                 <div class="col-12">
                     <div class="breadcrumb-contain">
                         <h2>Wishlist</h2>
-                      
+
                         <nav>
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item">
@@ -30,7 +29,7 @@
     <section class="wishlist-section section-b-space">
         <div class="container-fluid-lg">
             <div class="row g-sm-3 g-2" id="wishlist-items">
-                {{--            Showing All Wishlisted Products Here .--}}
+                {{--            Showing All Wishlisted Products Here . --}}
             </div>
         </div>
     </section>
@@ -39,9 +38,7 @@
 
     @push('frontend.scripts')
         <script>
-
-
-            $('document').ready(function () {
+            $('document').ready(function() {
 
                 // Load cart items when the page is ready
                 getCartItems();
@@ -50,12 +47,12 @@
                 // Fetch and render cart items
                 function getCartItems() {
                     $.ajax({
-                        url: "{{route('wishlist.view-wishlist')}}",
+                        url: "{{ route('wishlist.view-wishlist') }}",
                         type: "GET",
-                        success: function (response) {
+                        success: function(response) {
                             document.querySelector('#wishlist-items').innerHTML = getItem(response.data);
                         },
-                        error: function (error) {
+                        error: function(error) {
                             handleErrors(error);
                         }
                     });
@@ -87,8 +84,8 @@
                         </a>
 
                         <div class="product-header-top">
-                            <button class="btn wishlist-button close_button" data-id="${wishlist_data_item.id}">
-                                <i data-feather="x"></i>
+                            <button class="btn wishlist-button wishlist-remove" data-wishlist-id="${wishlist_data_item.id}">
+                                <i class="fa fa-x"></i>
                             </button>
                         </div>
                     </div>
@@ -101,8 +98,8 @@
                         </a>
                         <h6 class="unit mt-1">${wishlist_data_item.product.unit ?? 'Unit'}</h6>
                         <h5 class="price">
-                            <span class="theme-color">$${parseFloat(wishlist_data_item.product.selling_price).toFixed(2)}</span>
-                            <del>$${parseFloat(wishlist_data_item.product.price).toFixed(2)}</del>
+                            <span class="theme-color">&#8377;${parseFloat(wishlist_data_item.product.selling_price)}</span>
+                            <del>&#8377;${parseFloat(wishlist_data_item.product.price)}</del>
                         </h5>
                         <div class="add-to-cart-box bg-white mt-2">
                             <button class="btn btn-add-cart " data-wishlist-id="${wishlist_data_item.id}">
@@ -135,7 +132,7 @@
                 }
 
                 // Dynamically handle the Add to Cart button click
-                $(document).on('click', '.btn-add-cart', function (e) {
+                $(document).on('click', '.btn-add-cart', function(e) {
 
                     e.preventDefault();
 
@@ -159,7 +156,7 @@
                             _token: $('meta[name="csrf-token"]').attr('content'),
                             _method: 'PUT'
                         },
-                        success: function (response) {
+                        success: function(response) {
                             if (response.status) {
 
                                 showAlert('Success!', response.message, 'success');
@@ -167,14 +164,39 @@
                                 getCartItems();
                             }
                         },
-                        error: function (error) {
-                            showAlert('Error!', error.responseJSON?.message || 'Something went wrong. Please try again.', 'error');
+                        error: function(error) {
+                            showAlert('Error!', error.responseJSON?.message ||
+                                'Something went wrong. Please try again.', 'error');
                         }
                     });
                 });
 
+
+
+                $(document).on('click', '.wishlist-remove', function(e) {
+
+                    e.preventDefault();
+                    let wishlist_id = $(this).data('wishlist-id');
+
+                    $.ajax({
+                        url: `/wishlist/delete/${wishlist_id}`,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            showAlert('Success!', 'Item removed from wishlist successfully',
+                                'success');
+                            getCartItems();
+                        },
+                        error: function(xhr) {
+                            showAlert('Error!', xhr.responseJSON.message, 'error');
+                        }
+                    });
+                });
+
+
             });
         </script>
     @endpush
-
 @endsection

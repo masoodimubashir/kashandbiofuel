@@ -20,6 +20,7 @@ class NewlyArrived extends Component
 
 
         $this->new_arrivals = Product::query()
+            ->inStock()
             ->with([
                 'review',
                 'productAttribute',

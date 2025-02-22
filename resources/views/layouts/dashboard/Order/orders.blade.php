@@ -57,7 +57,7 @@
                         <div>
                             <div class="light-box">
                                 <a data-bs-toggle="collapse" href="#collapseProduct" role="button"
-                                   aria-expanded="false" aria-controls="collapseProduct">
+                                    aria-expanded="false" aria-controls="collapseProduct">
                                     <i class="fa fa-filter"></i>
                                 </a>
                             </div>
@@ -99,18 +99,18 @@
                             <div class="table-responsive">
                                 <table class="table table-md" id="orders">
                                     <thead>
-                                    <tr>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Date of Purchase</th>
-                                        <th scope="col">Order ID</th>
-                                        <th scope="col">Customer</th>
-                                        <th scope="col">Address</th>
-                                        <th scope="col">Total Amount</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Date of Purchase</th>
+                                            <th scope="col">Order ID</th>
+                                            <th scope="col">Customer</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Total Amount</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <!-- Content injected via DataTable -->
+                                        <!-- Content injected via DataTable -->
                                     </tbody>
                                 </table>
                             </div>
@@ -123,7 +123,7 @@
 
     @push('dashboard.script')
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 // Load DataTable
                 let ordersTable = $('#orders').DataTable({
                     processing: true,
@@ -132,8 +132,7 @@
                         url: '{{ route('order.index') }}',
                         type: 'GET',
                     },
-                    columns: [
-                        {
+                    columns: [{
                             data: 'status',
                             name: 'status',
                             orderable: false,
@@ -171,7 +170,7 @@
                     ]
                 });
 
-                $(document).on('change', '.changeStatus', function () {
+                $(document).on('change', '.changeStatus', function() {
 
                     let updateField = $(this).val();
                     let orderId = $(this).data('id');
@@ -184,22 +183,23 @@
                             field: updateField,
                             value: 1
                         },
-                        success: function (response) {
-                            if (response.success) {
+                        success: function(response) {
+                            if (response.status) {
                                 ordersTable.ajax.reload(null, false);
+                                Swal.fire("Success!", response.message, "success");
                             } else {
                                 Swal.fire("Error!", response.message || 'Failed To Update Status',
                                     "error");
                             }
                         },
-                        error: function (err) {
+                        error: function(err) {
                             Swal.fire("Error!", 'An error occurred', "error");
                         }
                     });
                 });
 
 
-                $('.product-filter').on('change', function () {
+                $('.product-filter').on('change', function() {
                     let status = $('#status-select').val();
                     let priceRange = $('#price-select').val();
 
@@ -209,7 +209,7 @@
                     })).load();
                 });
 
-                $('.light-box a').on('click', function (event) {
+                $('.light-box a').on('click', function(event) {
                     console.log(event);
 
                     $('.filter-icon').toggleClass('show hide');
@@ -217,7 +217,7 @@
                 });
 
                 // Toggle add product button visibility
-                $('.light-box a').on('click', function () {
+                $('.light-box a').on('click', function() {
                     $('.btn-primary').toggleClass('d-none');
                 });
 

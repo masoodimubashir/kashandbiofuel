@@ -70,6 +70,9 @@ class ItemService
     public function addOrUpdateItem(array $request, string $type): void
     {
 
+
+
+
         $repository = $this->resolveRepository($type);
 
         $repository->updateOrCreateItem($request);
@@ -117,7 +120,6 @@ class ItemService
         $repository = $this->resolveRepository($type);
 
         $item = $repository->findItem($id);
-
 
         if (!$item) {
             throw new \Exception('Item not found');

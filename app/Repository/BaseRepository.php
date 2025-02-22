@@ -23,8 +23,8 @@ class BaseRepository implements ItemInterface
     public function getItems($values)
     {
 
-
         return $this->model->query()
+        
             ->with(['product' => fn($query) => $query->with('productAttribute')])
             ->where(function ($query) use ($values) {
                 if (isset($values['guest_id'])) {
@@ -49,15 +49,16 @@ class BaseRepository implements ItemInterface
 
         return $this->model->updateOrCreate(
             [
-                'user_id' => $data['user_id'],
-                'guest_id' => $data['guest_id'],
-                'product_id' => $data['product_id'],
-                'product_attribute_id' => $data['product_attribute_id'],
+                'product_id' => $data['product_id']
             ],
             [
+                'user_id' => $data['user_id'],
+                'guest_id' => $data['guest_id'],
+                'product_attribute_id' => $data['product_attribute_id'],
                 'qty' => $data['qty'],
             ]
         );
+        
 
     }
 
@@ -112,7 +113,7 @@ class BaseRepository implements ItemInterface
             ->where('guest_id', $guest_id)
             ->update([
                 'user_id' => $user_id,
-                'guest_id' => null
+                'guest_id' => $guest_id
             ]);
     }
 

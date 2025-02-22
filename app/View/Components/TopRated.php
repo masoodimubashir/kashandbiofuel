@@ -19,6 +19,7 @@ class TopRated extends Component
     {
 
         $this->topRatedProducts = Product::query()
+            ->inStock()
             ->with([
                 'review',
                 'productAttribute',
@@ -29,7 +30,6 @@ class TopRated extends Component
             ->orderByDesc('reviews_avg_rating')
             ->take(3)
             ->get();
-
     }
 
     /**

@@ -183,7 +183,7 @@
                                                             </div>
                                                         </td>
 
-                                                        <td>{{ $item->product->selling_price }}</td>
+                                                        <td>{{ Number::currency($item->product->selling_price) }}</td>
 
                                                         <td>
                                                             <fieldset class="qty-box">
@@ -196,7 +196,7 @@
 
 
                                                         <td>
-                                                            {{ $item->price }}
+                                                            {{ Number::currency($item->price, 'INR') }}
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -280,7 +280,7 @@
                         </div>
                         <div>
                             <p class="fw-medium text-dark mb-0">
-                                {{ $order->total_amount }}
+                                {{ Number::currency($order->total_amount) }}
                             </p>
                         </div>
 
@@ -383,8 +383,8 @@
                             }
                         },
                         error: function(error) {
-                            console.log(error);
-                            Swal.fire('Error', 'Failed to push order to ShipRocket', 'error');
+                            Swal.fire('Error', 'Failed to push order to ShipRocket' + error
+                                .responseJSON.message, 'error');
                         },
                         complete: function() {
                             button.prop('disabled', false).html('Push to ShipRocket');

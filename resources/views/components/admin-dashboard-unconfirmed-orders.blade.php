@@ -32,7 +32,7 @@
                     </thead>
                     <tbody>
 
-                        @if (count($unConfirmedOrders) > 0)
+                        @if (count($unConfirmedOrders))
                             @foreach ($unConfirmedOrders as $order)
                                 <tr>
                                     <td>
@@ -55,23 +55,25 @@
                                                 @endisset
                                             </div>
                                             <div class="flex-grow-1"><a href="product.html">
-                                                    <h5 class="f-w-600">{{ $order->product->name }}</h5><span>
-                                                        {{ $order->order->date_of_purchase->format('d-M-y') }}
+                                                    <h5 class="f-w-600">{{ $order->product->name }}</h5>
+                                                    <span>
+                                                        {{ $order->order?->date_of_purchase->format('d-M-y') }}
                                                     </span>
                                                 </a></div>
                                         </div>
                                     </td>
-                                    <td>{{ $order->order->custom_order_id }}</td>
-                                    <td>{{ $order->price }}</td>
+                                    <td>{{ $order->order?->custom_order_id ?? 'N/A' }}</td>
+
+                                    <td>{{ Number::currency($order->price, 'INR') }}</td>
                                     <td>
                                         <div
                                             class="badge
-                                {{ match ($order->order->status) {
+                                {{ match ($order->order?->status) {
                                     'Confirmed', 'Delivered' => 'bg-success-subtle text-success-emphasis border-success-subtle',
                                     'Cancelled' => 'bg-danger-subtle text-danger-emphasis border-danger-subtle',
                                     default => 'bg-warning-subtle text-warning-emphasis border-warning-subtle',
                                 } }} btn">
-                                            {{ $order->order->status }}
+                                            {{ $order->order?->status ?? 'N/A' }}
                                         </div>
                                     </td>
                                 </tr>

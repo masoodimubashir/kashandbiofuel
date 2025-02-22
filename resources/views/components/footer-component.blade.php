@@ -46,19 +46,13 @@
                     <div class="footer-contain">
                         <ul>
                             <li>
-                                <a href="index.html" class="text-content">Home</a>
+                                <a href="{{ route('home') }}" class="text-content">Home</a>
                             </li>
                             <li>
-                                <a href="shop-left-sidebar.html" class="text-content">Shop</a>
+                                <a href="{{ route('wishlist.view-wishlist') }}" class="text-content">Shop</a>
                             </li>
                             <li>
-                                <a href="about-us.html" class="text-content">About Us</a>
-                            </li>
-                            <li>
-                                <a href="blog-list.html" class="text-content">Blog</a>
-                            </li>
-                            <li>
-                                <a href="contact-us.html" class="text-content">Contact Us</a>
+                                <a href="{{ route('contact-us.index') }}" class="text-content">Contact Us</a>
                             </li>
                         </ul>
                     </div>
@@ -81,11 +75,6 @@
                                 <a href="{{route('user.dashboard')}}" class="text-content">Track Order</a>
                             </li>
                            
-                            <a href="search.html" class="text-content">Search</a>
-                            </li>
-                            <li>
-                                <a href="faq.html" class="text-content">FAQ</a>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -143,7 +132,7 @@
 
         <div class="sub-footer section-small-space">
             <div class="reserve">
-                <h6 class="text-content">©2022 Fastkart All rights reserved</h6>
+                <h6 class="text-content">©2022 Developed By Digifista</h6>
             </div>
 
             <div class="payment">

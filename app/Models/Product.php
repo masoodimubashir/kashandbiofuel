@@ -96,23 +96,40 @@ class Product extends Model
         return $this->hasOne(Reviews::class, 'product_id', 'id');
     }
 
+    public function getPercentageAmountOffAttribute()
+    {
+        $originalPrice = $this->price;
+        $sellingPrice = $this->selling_price;
+
+        $difference = $originalPrice - $sellingPrice;
+        $percentageOff = ($difference / $originalPrice) * 100;
+
+        return round($percentageOff);
+    }
+
+    public function scopeInStock($query)
+    {
+        return $query->where('qty', '>', 0);
+    }
+
+
     /**
      * Get the user's Price
      */
-    protected function price(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => Number::currency($value, 'INR'),
-        );
-    }
+    // protected function price(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn($value) => Number::currency($value, 'INR'),
+    //     );
+    // }
 
     /**
      * Get the user's selling price
      */
-    protected function sellingPrice(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => Number::currency($value, 'INR'),
-        );
-    }
+    // protected function sellingPrice(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn($value) => Number::currency($value, 'INR'),
+    //     );
+    // }
 }

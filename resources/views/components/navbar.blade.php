@@ -1,8 +1,5 @@
-<div class="modal-dialog modal-fullscreen-sm-down">
-</div>
-
 @php
-    $items = \App\Models\Cart::where('user_id', auth()->id())->count();
+$items = \App\Models\Cart::checkCartItems()->count();
 @endphp
 
 
@@ -104,6 +101,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </li>
                             <li class="right-side">
                                 <a href="{{ route('contact-us.index') }}" class="delivery-login-box">
@@ -123,13 +121,14 @@
                                 </a>
                             </li>
                             <li class="right-side">
+
                                 <div class="onhover-dropdown header-badge">
                                     <a href="{{ route('cart.view-cart') }}" type="button"
                                         class="btn p-0 position-relative header-wishlist">
                                         <i data-feather="shopping-cart"></i>
                                         <span class="position-absolute top-0 start-100 translate-middle badge">
                                             {{ $items }}
-
+                                            
                                             <span class="visually-hidden">unread messages</span>
                                         </span>
                                     </a>

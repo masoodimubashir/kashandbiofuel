@@ -1,17 +1,21 @@
-
+@php
+    $notifications = auth()->user()->unreadNotifications;
+@endphp
 
 
 <div class="page-header">
     <div class="header-wrapper row m-0">
         <div class="header-logo-wrapper col-auto p-0">
             <div class="logo-wrapper"><a href="index.html">
-                <img class="img-fluid for-light"
-                src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt="">
-                <img class="img-fluid for-dark"
-                        src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt=""></a></div>
+                    <img class="img-fluid for-light"
+                        src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt="">
+                    <img class="img-fluid for-dark"
+                        src="{{ asset('front/assets/images/logo/kassh & biofuels (1) (1).png') }}" alt=""></a>
+            </div>
             <div class="toggle-sidebar">
                 <svg class="sidebar-toggle">
-                    <i class="fa-solid fa-bars" style="color: white; display: flex;align-items: center; justify-content: center;"></i>
+                    <i class="fa-solid fa-bars"
+                        style="color: white; display: flex;align-items: center; justify-content: center;"></i>
                 </svg>
             </div>
         </div>
@@ -53,36 +57,32 @@
                     <div class="notification-box">
                         <svg>
                             <i class="fa-solid fa-bell"></i>
-                        </svg><span class="badge rounded-pill badge-primary">4 </span>
+                        </svg>
+                        <span class="badge rounded-pill badge-primary">4 </span>
                     </div>
                     <div class="onhover-show-div notification-dropdown">
                         <h4 class="f-18 mb-0 dropdown-title">Notifications</h4>
                         <ul>
-                            <li class="b-l-primary bg-light-primary border-4">
-                                <p class="font-primary">Delivery processing <span class="font-primary">10
-                                        min.</span></p>
-                            </li>
-                            <li class="b-l-secondary bg-light-secondary border-4 mt-3">
-                                <p class="font-secondary">Order Complete<span class="font-secondary">1
-                                        hr</span></p>
-                            </li>
-                            <li class="b-l-success bg-light-success border-4 mt-3">
-                                <p class="font-success">Tickets Generated<span class="font-success">3
-                                        hr</span></p>
-                            </li>
-                            <li class="b-l-info bg-light-info border-4 mt-3">
-                                <p class="font-info">Delivery Complete<span class="font-info">6 hr</span></p>
-                            </li>
-                            <li><a class="f-w-700" href="private-chat.html">Check all</a></li>
+                            @foreach ($notifications as $notification)
+                                <li class="b-l-primary bg-light-primary border-4">
+                                    <p class="font-primary">
+                                        {{ $notification->data['message'] }}
+                                        <span class="font-primary">{{ $notification->created_at->diffForHumans() }}</span>
+                                    </p>
+                                </li>
+                            @endforeach
+
+                            <li><a class="f-w-700" href="{{ route('admin.notifications') }}">Check all</a></li>
+
                         </ul>
                     </div>
                 </li>
-                
-              
+
+
                 <li class="onhover-dropdown">
                     <div class="message">
                         <svg>
-                        <i class="fa-solid fa-comment"></i>
+                            <i class="fa-solid fa-comment"></i>
                         </svg><span class="rounded-pill badge-secondary"> </span>
                     </div>
                     <div class="onhover-show-div message-dropdown">
@@ -144,7 +144,7 @@
 
                         <li>
                             <a href="{{ route('profile.edit') }}"><i data-feather="user">
-                                </i><span>   {{ __('Profile') }} </span>
+                                </i><span> {{ __('Profile') }} </span>
                             </a>
                         </li>
                         <li>

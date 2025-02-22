@@ -5,6 +5,9 @@ namespace App\Service;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\User;
+use App\Models\Wishlist;
+use App\Notifications\OrderNotification;
 use App\Repository\CartRepository;
 use DB;
 use Exception;
@@ -55,6 +58,16 @@ class PhonepeService
             );
 
             $order = $this->createOrder($request, $transaction);
+
+            $user = User::query()
+                ->with('roles')
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', 'admin');
+                })
+                ->first();
+
+            $user->notify(new OrderNotification('A New Order Has Been Placed.', $order));
+
 
             DB::commit();
 
@@ -193,6 +206,7 @@ class PhonepeService
 
     private function createOrder($request, $transaction)
     {
+
         $cartItems = $this->getCartItems();
 
         if ($cartItems->isEmpty()) {
@@ -209,11 +223,18 @@ class PhonepeService
             'payment_method' => $request['payment_method'],
         ]);
 
+
         foreach ($cartItems as $item) {
+
             $product = Product::find($item['product_id']);
 
-            $order->orderedItems()->create([
+            $wishlist = Wishlist::where('product_id', $product->id)->first();
 
+            if ($wishlist) {
+                $wishlist->delete();
+            }
+
+            $order->orderedItems()->create([
                 'product_id' => $item['product_id'],
                 'order_id' => $order->id,
                 'quantity' => $item['qty'],
@@ -221,14 +242,13 @@ class PhonepeService
                 'date_of_purchase' => now(),
                 'custom_order_id' => $order->custom_order_id,
             ]);
+
             $product->update([
                 'qty' => $product->qty - $item['qty'],
             ]);
         }
 
-
         $this->clearCart($cartItems);
-
 
         return $order;
     }
@@ -279,6 +299,7 @@ class PhonepeService
     private function clearCart($cartItems)
     {
         foreach ($cartItems as $item) {
+
             $product = $item->product;
 
             if ($product->qty < $item->qty) {

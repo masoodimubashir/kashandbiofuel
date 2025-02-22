@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\OrderPlacedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Coupon;
@@ -98,7 +99,7 @@ class StatusUpdateController extends Controller
 
             case 'Product':
                 return Product::find($id);
-                
+
             default:
                 return null;
         }

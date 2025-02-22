@@ -32,6 +32,7 @@ class AdminDashboardUnconfirmedOrders extends Component
         ->latest()
         ->take(5)
         ->get();
+
     }
 
     /**

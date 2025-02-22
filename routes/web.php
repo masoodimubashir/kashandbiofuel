@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\OrderPlacedEvent;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Admin\ShipRocketController;
 use App\Http\Controllers\Admin\StatusUpdateController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\DashboardContactUsController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CategoryShoppingController;
@@ -32,17 +34,18 @@ use App\Http\Controllers\User\ApplyCouponController;
 use App\Http\Controllers\User\FrontendAddressController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserProfileController;
+use App\Mail\OrderShipped;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 // Checking Session User For Testing
 Route::get('/s', function () {
-    $user = session()->all();
-    dd($user);
+    dd(request()->cookie('guest_id'));
+
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
+    
 
 // Route For Searching The Product
 Route::get('/live-search', SearchController::class)->name('live.search');
@@ -135,6 +138,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::put('Product/seo', [ProductSeoController::class, 'index'])->name('Product.seo');
         Route::put('Product/flags/{id}', [ChangeFlagsController::class, 'index'])->name('Product.flags');
+
+        Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications');
+
+        Route::post('/notifications/mark-as-read/{id}', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.markAsRead');
 
     });
 

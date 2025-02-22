@@ -41,9 +41,9 @@
                         </ul>
 
                         <!-- Price with Discount -->
-                        <h5>{{ $product->selling_price }}
+                        <h5>{{ Number::currency($product->selling_price, 'INR') }}
                             @if ($product->price)
-                                <del>{{ $product->price }}</del>
+                                <del>{{ Number::currency( $product->price, 'INR') }}</del>
                             @endif
                         </h5>
                     </div>

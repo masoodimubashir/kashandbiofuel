@@ -74,16 +74,12 @@
                                     </h4>
                                 </li>
 
-                                <li class="align-items-start">
-                                    <h4>Shipping</h4>
-                                    <h4 class="price text-end">$6.90</h4>
-                                </li>
                             </ul>
                         </div>
 
                         <ul class="summery-total">
                             <li class="list-total border-top-0">
-                                <h4>Total (USD)</h4>
+                                <h4>Total (INR)</h4>
                                 <h4 class="price theme-color" id="check_out_price">
 
                                 </h4>
@@ -153,7 +149,7 @@
                                         <a href="/product/${cartItem.product.slug}">${cartItem.product.name ?? 'Product Name'}</a>
                                     </li>
                                     <li class="text-content">
-                                        <span class="text-title">Price Per Item</span> - ${cartItem.product.selling_price}
+                                        <span class="text-title">Price Per Item</span> - &#8377;${cartItem.product.selling_price}
                                     </li>
                                     <li class="text-content">
                                         <span class="text-title">Quantity</span> - ${cartItem.qty}
@@ -164,10 +160,10 @@
                     </td>
                     <td class="price">
                         <h4 class="table-title text-content">Price</h4>
-                        <h5>${cartItem.product.selling_price}
-                            <del class="text-content">${cartItem.product.price}</del>
+                        <h5>&#8377;${cartItem.product.selling_price}
+                            <del class="text-content">&#8377;${cartItem.product.price}</del>
                         </h5>
-                        <h6 class="theme-color">You Save: ${cartItem.product.saving_amount} (${cartItem.product.saving_percentage}%)</h6>
+                        <h6 class="theme-color">You Save: &#8377;${cartItem.product.saving_amount} (${cartItem.product.saving_percentage}%)</h6>
                     </td>
                     <td class="quantity">
                         <h4 class="table-title text-content"></h4>
@@ -187,7 +183,7 @@
                     </td>
                     <td class="subtotal">
                         <h4 class="table-title text-content">Total</h4>
-                        <h5>${cartItem.product.grand_total.toFixed(2)}</h5>
+                        <h5>&#8377;${cartItem.product.grand_total.toFixed(2)}</h5>
                     </td>
                     <td class="save-remove">
                         <h4 class="table-title text-content">Action</h4>
@@ -249,8 +245,8 @@
                         },
                         success: (response) => {
                             cartItemsContainer.html(renderCartItems(response.data));
-                            checkOutPrice.text(`$${response.check_out_price.toFixed(2)}`);
-                            couponDiscount.text(`$${response.discount?.toFixed(2) ?? '0.00'}`);
+                            checkOutPrice.text(`&#8377;${response.check_out_price.toFixed(2)}`);
+                            couponDiscount.text(`&#8377;${response.discount?.toFixed(2) ?? '0.00'}`);
                         },
                         error: (xhr) => {
                             console.log(xhr);
@@ -367,10 +363,18 @@
                                     'error');
                             }
                         },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            showAlert('Error!',
-                                'Unable to process your request. Please try again later.',
-                                'error');
+                        error: function(error) {
+
+                            console.log('Error', error.responseJSON);
+
+                            if (error.status == 404) {
+                                showAlert('Error!', error.responseJSON.message, 'error');
+                            } else {
+                                showAlert('Error!',
+                                    'Unable to process your request. Please try again later.',
+                                    'error');
+                            }
+
                         }
                     });
                 });

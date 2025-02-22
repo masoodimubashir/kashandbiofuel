@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Number;
 use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
@@ -94,10 +95,10 @@ class ProductController extends Controller
                         return '<div class="d-flex justify-content-start gap-2 align-items-center">' . $editButton . $showButton . $deleteButton . $seoButton . '</div>';
                     })
                     ->editColumn('price', function ($product) {
-                        return $product->price; // Format price
+                        return Number::currency($product->price, 'INR'); // Format price
                     })
                     ->editColumn('selling_price', function ($product) {
-                        return $product->selling_price; // Format selling price
+                        return Number::currency($product->selling_price, 'INR'); // Format selling price
                     })
                     ->rawColumns(['product_name', 'status', 'action']) // Allow rendering of HTML for these columns
 

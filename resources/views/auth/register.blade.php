@@ -149,18 +149,6 @@
                             <h6>or</h6>
                         </div>
 
-                        <div class="log-in-button">
-                            <ul>
-                                <li>
-                                    <a href="https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin"
-                                        class="btn google-button w-100">
-                                        <img src="{{ asset('front/assets/images/inner-page/google.png') }}" class="blur-up lazyload"
-                                            alt="">
-                                        Sign up with Google
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
 
                         <div class="other-log-in">
                             <h6></h6>

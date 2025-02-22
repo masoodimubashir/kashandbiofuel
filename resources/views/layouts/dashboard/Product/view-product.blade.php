@@ -86,10 +86,9 @@
                                     <div class="item">
                                         @if ($attribute->image_path)
                                             <img src="{{ asset('storage/' . $attribute->image_path) }}"
-                                                 alt="Product Image" class="img-fluid">
+                                                alt="Product Image" class="img-fluid">
                                         @else
-                                            <img
-                                                src="{{ asset('dashboard/assets/images/Product/product_default.png') }}"
+                                            <img src="{{ asset('default_images/product_image.png') }}"
                                                 alt="Product Image" class="img-fluid">
                                         @endif
                                     </div>
@@ -104,10 +103,9 @@
                                     <div class="item">
                                         @if ($attribute->image_path)
                                             <img src="{{ asset('storage/' . $attribute->image_path) }}"
-                                                 alt="Product Image" class="img-fluid">
+                                                alt="Product Image" class="img-fluid">
                                         @else
-                                            <img
-                                                src="{{ asset('dashboard/assets/images/Product/product_default.png') }}"
+                                            <img src="{{ asset('default_images/product_image.png') }}"
                                                 alt="Product Image" class="img-fluid">
                                         @endif
                                     </div>
@@ -122,8 +120,8 @@
                             <div class="product-page-details">
                                 <h3 class="f-w-600">{{ $product->name }}</h3>
                             </div>
-                            <div class="product-price">{{ $product->selling_price }}
-                                <del>{{ $product->price }} </del>
+                            <div class="product-price">{{ Number::currency($product->selling_price) }}
+                                <del>{{ Number::currency($product->price) }} </del>
                             </div>
                             <ul class="product-color">
                                 @foreach ($uniqueHexCodes as $codes)
@@ -136,26 +134,26 @@
                             <div>
                                 <table class="product-page-width">
                                     <tbody>
-                                    <tr>
-                                        <td><b>Category &nbsp;&nbsp;&nbsp;:</b></td>
-                                        <td>{{ $product->category->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Sub Category &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                        <td class="txt-success">{{ $product->subCategory->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>SKU &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                        <td>{{ $product->sku }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Quantity &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                        <td>{{ $product->qty }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Carfted Date &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
-                                        <td>{{ $product->crafted_date }}</td>
-                                    </tr>
+                                        <tr>
+                                            <td><b>Category &nbsp;&nbsp;&nbsp;:</b></td>
+                                            <td>{{ $product->category->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Sub Category &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                            <td class="txt-success">{{ $product->subCategory->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>SKU &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                            <td>{{ $product->sku }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Quantity &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                            <td>{{ $product->qty }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Carfted Date &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                            <td>{{ $product->crafted_date }}</td>
+                                        </tr>
 
                                     </tbody>
                                 </table>
@@ -174,13 +172,11 @@
                                                 </a>
                                             </li>
                                             <li class="d-inline-block"><a href="https://accounts.google.com/"
-                                                                          target="_blank"><i
-                                                        class="fa-brands fa-google-plus"></i></a></li>
+                                                    target="_blank"><i class="fa-brands fa-google-plus"></i></a></li>
                                             <li class="d-inline-block"><a href="https://twitter.com/" target="_blank"><i
                                                         class="fa-brands fa-twitter"></i></a></li>
                                             <li class="d-inline-block"><a href="https://www.instagram.com/"
-                                                                          target="_blank"><i
-                                                        class="fa-brands fa-instagram"></i></a></li>
+                                                    target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
                                         </ul>
 
                                     </div>
@@ -189,7 +185,7 @@
                             <hr>
                             <div class="m-t-15 btn-showcase">
                                 <a class="btn btn-success" href="{{ route('products.edit', $product->id) }}"
-                                   title="">
+                                    title="">
                                     <i class="fa-solid fa-pen-to-square me-1"></i>
                                     Edit Product
                                 </a>
@@ -262,24 +258,24 @@
                 <div class="col-sm-12">
                     <ul class="nav nav-pills nav-primary mb-0" id="top-tab" role="tablist">
                         <li class="nav-item"><a class="nav-link active" id="contact-top-tab" data-bs-toggle="tab"
-                                                href="#top-contact" role="tab" aria-controls="top-contact"
-                                                aria-selected="true">Short Description</a>
+                                href="#top-contact" role="tab" aria-controls="top-contact"
+                                aria-selected="true">Short Description</a>
                             <div class="material-border"></div>
                         </li>
                         <li class="nav-item"><a class="nav-link " id="top-home-tab" data-bs-toggle="tab"
-                                                href="#top-home" role="tab" aria-controls="top-home"
-                                                aria-selected="false">Description</a>
+                                href="#top-home" role="tab" aria-controls="top-home"
+                                aria-selected="false">Description</a>
                             <div class="material-border"></div>
                         </li>
                         <li class="nav-item"><a class="nav-link" id="profile-top-tab" data-bs-toggle="tab"
-                                                href="#top-profile" role="tab" aria-controls="top-profile"
-                                                aria-selected="false">Addtional Description</a>
+                                href="#top-profile" role="tab" aria-controls="top-profile"
+                                aria-selected="false">Addtional Description</a>
                             <div class="material-border"></div>
                         </li>
                     </ul>
                     <div class="tab-content" id="top-tabContent">
                         <div class="tab-pane fade active show" id="top-contact" role="tabpanel"
-                             aria-labelledby="contact-top-tab">
+                            aria-labelledby="contact-top-tab">
                             <p class="mb-0 m-t-20">
                                 {!! $product->short_description !!}
                             </p>
@@ -292,7 +288,7 @@
                             </p>
                         </div>
                         <div class="tab-pane fade" id="top-profile" role="tabpanel"
-                             aria-labelledby="profile-top-tab">
+                            aria-labelledby="profile-top-tab">
                             <p class="mb-0 m-t-20">
 
                                 {!! $product->additional_description !!}
@@ -308,7 +304,7 @@
 
     @push('dashboard.script')
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 var sync1 = $("#sync1");
                 var sync2 = $("#sync2");
                 var slidesPerPage = 4; // Number of thumbnails per page
@@ -327,7 +323,7 @@
                     ],
                 }).on('changed.owl.carousel', syncPosition);
 
-                sync2.on('initialized.owl.carousel', function () {
+                sync2.on('initialized.owl.carousel', function() {
                     sync2.find(".owl-item").eq(0).addClass("current");
                 }).owlCarousel({
                     items: slidesPerPage,
@@ -375,7 +371,7 @@
                     }
                 }
 
-                sync2.on("click", ".owl-item", function (e) {
+                sync2.on("click", ".owl-item", function(e) {
                     e.preventDefault();
                     var number = $(this).index();
                     sync1.data('owl.carousel').to(number, 300, true);

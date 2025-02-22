@@ -18,6 +18,12 @@ class Cart extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function scopeCheckCartItems()
+    {
+        if (auth()->check()) {
+            return $this->where('user_id', auth()->id());
+        }
 
-
+        return $this->where('guest_id', request()->cookie('guest_id'));
+    }
 }

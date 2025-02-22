@@ -14,6 +14,7 @@ class AllKindsOfProducts extends Component
     public function __construct()
     {
         $this->allProducts = Product::query()
+            ->inStock()
             ->has('productAttributes')
             ->with([
                 'productAttributes' => function ($query) {

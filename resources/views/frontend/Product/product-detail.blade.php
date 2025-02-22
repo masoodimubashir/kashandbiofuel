@@ -64,7 +64,7 @@
     <section class="product-section">
         <div class="container-fluid-lg">
             <div class="row">
-                <div class="col-xxl-9 col-xl-8 col-lg-7 wow fadeInUp">
+                <div class="col-12 wow fadeInUp">
                     <div class="row g-4">
                         <div class="col-xl-6 wow fadeInUp">
                             <div class="product-left-box">
@@ -125,14 +125,13 @@
 
                         <div class="col-xl-6 wow fadeInUp">
                             <div class="right-box-contain">
-                                <h6 class="offer-top">30% Off</h6>
+                                <h6 class="offer-top">{{ $product->percentage_amount_off }}% OFF</h6>
                                 <h2 class="name">{{ $product->name }}</h2>
                                 <div class="price-rating">
-                                    <h3 class="theme-color price">{{ $product->selling_price }}
+                                    <h3 class="theme-color price">{{ Number::currency($product->selling_price, 'INR') }}
                                         <del class="text-content">
-                                            {{ $product->price }}
+                                            {{ Number::currency($product->price, 'INR') }}
                                         </del>
-                                        <span class="offer theme-color">(8% off)</span>
                                     </h3>
                                     <div class="product-rating custom-rate">
                                         <ul class="rating">
@@ -220,117 +219,10 @@
                                 </div>
 
 
-                                <div class="payment-option">
-                                    <div class="product-title">
-                                        <h4>Guaranteed Safe Checkout</h4>
-                                    </div>
-                                    <ul>
-                                        <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/1.svg"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/2.svg"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/3.svg"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/4.svg"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)">
-                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/product/payment/5.svg"
-                                                    class="blur-up lazyload" alt="">
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+
+
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="col-xxl-3 col-xl-4 col-lg-5 d-none d-lg-block wow fadeInUp">
-                    <div class="right-sidebar-box">
-                        <div class="vendor-box">
-                            <div class="vendor-contain">
-                                <div class="vendor-image">
-                                    <img src="../assets/images/product/vendor.png" class="blur-up lazyload"
-                                        alt="">
-                                </div>
-
-                                <div class="vendor-name">
-                                    <h5 class="fw-500">Noodles Co.</h5>
-
-                                    <div class="product-rating mt-1">
-                                        <ul class="rating">
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star" class="fill"></i>
-                                            </li>
-                                            <li>
-                                                <i data-feather="star"></i>
-                                            </li>
-                                        </ul>
-                                        <span>(36 Reviews)</span>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <p class="vendor-detail">Noodles & Company is an American fast-casual
-                                restaurant that offers international and American noodle dishes and pasta.</p>
-
-                            <div class="vendor-list">
-                                <ul>
-                                    <li>
-                                        <div class="address-contact">
-                                            <i data-feather="map-pin"></i>
-                                            <h5>Address: <span class="text-content">1288 Franklin Avenue</span></h5>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="address-contact">
-                                            <i data-feather="headphones"></i>
-                                            <h5>Contact Seller: <span class="text-content">(+1)-123-456-789</span></h5>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="pt-25">
-                            <div class="hot-line-number">
-                                <h5>Hotline Order:</h5>
-                                <h6>Mon - Fri: 07:00 am - 08:30PM</h6>
-                                <h3>(+1) 123 456 789</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
     <!-- Product Left Sidebar End -->
 
@@ -572,50 +464,8 @@
 
     <!-- Tap to top and theme setting button start -->
     <div class="theme-option theme-option-2">
-        <div class="setting-box">
-            <button class="btn setting-button">
-                <i class="fa-solid fa-gear"></i>
-            </button>
 
-            <div class="theme-setting-2">
-                <div class="theme-box">
-                    <ul>
-                        <li>
-                            <div class="setting-name">
-                                <h4>Color</h4>
-                            </div>
-                            <div class="theme-setting-button color-picker">
-                                <form class="form-control">
-                                    <label for="colorPick" class="form-label mb-0">Theme Color</label>
-                                    <input type="color" class="form-control form-control-color" id="colorPick"
-                                        value="#0da487" title="Choose your color">
-                                </form>
-                            </div>
-                        </li>
 
-                        <li>
-                            <div class="setting-name">
-                                <h4>Dark</h4>
-                            </div>
-                            <div class="theme-setting-button">
-                                <button class="btn btn-2 outline" id="darkButton">Dark</button>
-                                <button class="btn btn-2 unline" id="lightButton">Light</button>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="setting-name">
-                                <h4>RTL</h4>
-                            </div>
-                            <div class="theme-setting-button rtl">
-                                <button class="btn btn-2 rtl-unline">LTR</button>
-                                <button class="btn btn-2 rtl-outline">RTL</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
 
         <div class="back-to-top">
             <a id="back-to-top" href="#">
@@ -855,6 +705,7 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
+                        
                         if (response.status === true) {
                             window.location.href = response.redirect_url;
                         } else {
@@ -863,11 +714,16 @@
                     },
                     error: function(error) {
 
+                
+
                         if (error.status === 401) {
                             window.location.href = '{{ route('login') }}';
                         }
                         if (error.status === 422) {
                             handleError(error);
+                        }
+                        if (error.status === 404) {
+                            showAlert('Error!', error.responseJSON.message, 'error');
                         }
                     }
 
@@ -967,6 +823,7 @@
             }
 
             function handleError(error) {
+                
                 const errorMessage = error.responseJSON?.message || 'Something went wrong.';
                 showAlert('Error!', errorMessage, 'error');
             }

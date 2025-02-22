@@ -50,7 +50,7 @@ class SocialiteController extends Controller
         }
 
         $user_id = \auth()->user()->id;
-        $guest_id = Cookie::get('guest_id');
+        $guest_id = request()->cookie('guest_id');
 
 
         $this->itemService->mergeItems($guest_id, $user_id);

@@ -22,7 +22,7 @@ class UserOrderComponent extends Component
     {
         $this->orderedItems = $orders = OrderedItem::query()
             ->with([
-                'product' => fn($query) => $query->with('productAttribute'),
+                'product' => fn($query) => $query->inStock()->with('productAttribute'),
             ])
             ->whereHas('order', function ($query) {
                 $query->where([

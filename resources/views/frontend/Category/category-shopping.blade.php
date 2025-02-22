@@ -345,8 +345,8 @@
                                 </div>
                                 <h6 class="unit">Quantity - ${product.qty}</h6>
                                 <h5 class="price">
-                                    <span class="theme-color">$${product.selling_price}</span>
-                                    <del>$${product.price}</del>
+                                    <span class="theme-color">&#8377;${product.selling_price}</span>
+                                    <del>&#8377;${product.price}</del>
                                 </h5>
                             </div>
                         </div>

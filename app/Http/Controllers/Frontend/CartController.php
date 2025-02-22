@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CartStoreRequest;
+use App\Models\Cart;
+use App\Models\Wishlist;
 use App\Service\ItemService;
 use Illuminate\Http\Request;
 use Exception;
@@ -21,7 +23,6 @@ class CartController extends Controller
 
         if ($request->ajax()) {
 
-
             [$items, $check_out_price, $discount] = $this->itemService->getItems($request, 'cart');
 
             return response()->json([
@@ -31,7 +32,6 @@ class CartController extends Controller
                 'discount' => $discount,
 
             ]);
-
         }
 
         return view('frontend.Cart.cart');
@@ -44,7 +44,21 @@ class CartController extends Controller
         try {
 
 
+            $product = Cart::where('product_id', $request->product_id)->get();
+
+            if($product->count() > 0){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Item already Exists',
+                ], 404);
+            }
+
+            if($request->product_id){
+
+            }
+
             $this->itemService->addOrUpdateItem($request->validated(), 'cart');
+
 
             return response()->json([
                 'status' => true,
@@ -128,6 +142,15 @@ class CartController extends Controller
         try {
 
             $item = $this->itemService->findItem($id, 'cart');
+
+            $wish_list_item = Wishlist::where('product_id', $item->product_id)->first();
+
+            if ($wish_list_item) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Item already Exists',
+                ], 404);
+            }
 
             $this->itemService->returnToCart($item, $id, 'cart');
 
