@@ -157,26 +157,9 @@
                                     <h5 class="ms-auto theme-color">({{ $transaction->order->ordered_items_count }})</h5>
                                 </div>
 
-                                <ul class="summery-contain">
-                                    <li>
-                                        <h4>Vegetables Total</h4>
-                                        <h4 class="price">$32.34</h4>
-                                    </li>
-
-                                    <li>
-                                        <h4>Vegetables Saving</h4>
-                                        <h4 class="price theme-color">$12.23</h4>
-                                    </li>
-
-                                    <li>
-                                        <h4>Coupon Discount</h4>
-                                        <h4 class="price text-danger">$6.27</h4>
-                                    </li>
-                                </ul>
-
                                 <ul class="summery-total">
                                     <li class="list-total">
-                                        <h4>Total (USD)</h4>
+                                        <h4>Total (INR)</h4>
                                         <h4 class="price">{{ $transaction->order->total_amount }}</h4>
                                     </li>
                                 </ul>
@@ -184,7 +167,7 @@
                         </div>
 
                         <div class="col-lg-12 col-sm-6">
-                            <div class="summery-box">
+                            <div class="summery-box pb-4">
                                 <div class="summery-header d-block">
                                     <h3>Shipping Address</h3>
                                 </div>
@@ -201,18 +184,12 @@
                                     </li>
 
                                     <li class="pb-0">
-                                        <h4>Expected Date Of Delivery:</h4>
                                         <h4 class="price theme-color">
-                                            <a href="order-tracking.html" class="text-danger">Track Order</a>
+                                            <a href="{{ route('user.dashboard') }}" class="text-danger">Track Order</a>
                                         </h4>
                                     </li>
                                 </ul>
 
-                                <ul class="summery-total">
-                                    <li class="list-total border-top-0 pt-2">
-                                        <h4 class="fw-bold">Oct 21, 2021</h4>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
 

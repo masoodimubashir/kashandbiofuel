@@ -70,9 +70,6 @@ class ItemService
     public function addOrUpdateItem(array $request, string $type): void
     {
 
-
-
-
         $repository = $this->resolveRepository($type);
 
         $repository->updateOrCreateItem($request);

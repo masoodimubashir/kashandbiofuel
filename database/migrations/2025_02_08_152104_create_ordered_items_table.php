@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('product_id')->constrained('products');
             $table->foreignId('order_id')->constrained('orders');
+            $table->foreignId('product_attribute_id')->constrained('product_attributes');
             $table->string('quantity');
             $table->string('price');
             $table->dateTime('date_of_purchase');

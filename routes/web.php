@@ -159,12 +159,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('/address', FrontendAddressController::class);
 
-        // Route For Checkout
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::get('/order-placed/{transaction_id}', [CheckoutController::class, 'orderPlaced'])->name('checkout.order-placed');
         Route::post('/checkout/phonepe', [CheckoutController::class, 'checkout'])->name('checkout.phonepe.store');
         Route::post('/cash-on-delivery', [CheckoutController::class, 'cashOnDelivery'])->name('checkout.cash-on-delivery');
-
 
         Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
         Route::get('/phonepe/redirect', [CheckoutController::class, 'redirect'])->name('payment.redirect');

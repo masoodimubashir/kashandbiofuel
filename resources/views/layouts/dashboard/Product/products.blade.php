@@ -42,7 +42,7 @@
 
 
     <!-- Product Form Modal -->
-    <div class="modal fade bd-example-modal-lg" id="productModal" tabindex="-1" aria-hidden="true">
+    {{-- <div class="modal fade bd-example-modal-lg" id="productModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -52,7 +52,7 @@
 
 
                     <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                </div> --}}
                 <form id="productForm" class="row g-3 p-4" enctype='multipart/form-data'>
                     @csrf
                     <input type="hidden" id="productId" name="product_id">
@@ -97,11 +97,11 @@
                         </div>
 
                     </div>
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <label class="form-label" for="qty">Quantity</label>
                         <input class="form-control" id="qty" name="qty" type="text">
                         <div class="invalid-feedback">Enter Quantity</div>
-                    </div>
+                    </div> --}}
 
                     <!-- Price -->
                     <div class="col-12 col-md-4">
@@ -111,19 +111,21 @@
                     </div>
 
                     <!-- SKU -->
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-2">
                         <label class="form-label" for="sku">SKU</label>
                         <input class="form-control" id="sku" name="sku" type="text">
                         <div class="invalid-feedback">Please enter SKU</div>
                     </div>
 
                     <!-- Selling Price -->
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-2">
                         <label class="form-label" for="selling_price">Selling Price</label>
                         <input class="form-control" id="selling_price" name="selling_price" type="text">
                         <div class="invalid-feedback">Please enter Selling Price</div>
                     </div>
-                    <!-- Tags Multi-select -->
+
+
+                    {{-- <!-- Tags Multi-select -->
                     <div class="col-12 col-md-4">
 
                         <label class="form-label" for="search_tags">Tags</label>
@@ -131,7 +133,7 @@
                         </select>
                         <div class="invalid-feedback">Please enter Search Tags</div>
 
-                    </div>
+                    </div> --}}
 
                     <!-- Description Fields -->
                     <div class="col-12 col-lg-6 mt-3">
@@ -190,9 +192,9 @@
                         <button type="submit" class="btn btn-success">Save Product</button>
                     </div>
                 </form>
-            </div>
+            {{-- </div>
         </div>
-    </div>
+    </div> --}}
 
 
     {{-- Seo Manager Model --}}
@@ -484,10 +486,13 @@
 
 
                         const hexCode = $(this).find('input[type="color"]').val();
+                        const quantity = $(this).find('input[type="number"]').val();
                         const images = $(this).find('input[type="file"]')[0].files;
 
                         // Add hex code
                         formData.append(`product_attributes[${index}][hex_code]`, hexCode);
+                        formData.append(`product_attributes[${index}][qty]`, quantity);
+
 
                         // Add all images for this color
                         for (let i = 0; i < images.length; i++) {
@@ -614,7 +619,7 @@
                     const newRow = `
                         <div class="variation-row border rounded p-3 mt-3">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-1">
                                     <div class="color-input">
                                         <label class="form-label">Color</label>
                                         <div class="d-flex align-items-center">
@@ -622,10 +627,18 @@
                                         </div>
                                     </div>
                                 </div>
+                                 <div class="col-md-4">
+                                    <div class="color-input">
+                                        <label class="form-label">Quantity</label>
+                                        <div class="d-flex align-items-center">
+                                            <input type="number" class="form-control me-2" name="colors[${rowIndex}][qty]" value="" required>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-7">
                                     <div class="image-upload">
                                         <label class="form-label">Images for this color</label>
-                                        <input type="file" class="form-control" name="images[]" multiple accept="image/jpeg,png,jpg,webp">
+                                        <input type="file" class="form-control" name="images"  accept="image/jpeg,png,jpg,webp">
                                         <small class="text-muted">Select multiple images for this color</small>
                                         <div class="file-preview row mt-2"></div>
                                     </div>

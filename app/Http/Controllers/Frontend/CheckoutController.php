@@ -26,30 +26,31 @@ class CheckoutController extends Controller
 
   public function index(Request $request)
   {
-
-
     $address = Address::where('user_id', auth()->user()->id)->first();
 
     if ($request->ajax()) {
-
-      $cart_ids = explode(',', $request->query('cart_ids'));
-
-      $checkout_price = $request->query('total_price');
+      $cart_data = $request->cart_data;
+      $cart_ids = collect($cart_data)->pluck('cart_id')->toArray();
+      $checkout_price = $request->checkout_price;
 
       $cart_items = Cart::with(['product' => fn($query) => $query->with('productAttribute')])
-        ->whereIn('id', $cart_ids)->get();
+        ->whereIn('id', $cart_ids)
+        ->get();
 
       return response()->json([
         'message' => 'Cart items fetched successfully',
         'cart_items' => $cart_items,
         'checkout_price' => (int)$checkout_price,
-        'status' => true,
+        'cart_data' => $cart_data,
+        'status' => true
       ]);
     }
 
 
+
     return view('frontend.Checkout.checkout', compact('address'));
   }
+
 
   public function checkout(Request $request)
   {
@@ -137,6 +138,7 @@ class CheckoutController extends Controller
     try {
 
       if ($request->ajax()) {
+
 
         $response = $this->phonepeService->checkout($request->validated());
 

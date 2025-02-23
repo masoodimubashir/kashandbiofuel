@@ -14,6 +14,7 @@ class OrderedItem extends Model
         'price',
         'date_of_purchase',
         'custom_order_id',
+        'product_attribute_id',
     ];
 
     public function product(): BelongsTo

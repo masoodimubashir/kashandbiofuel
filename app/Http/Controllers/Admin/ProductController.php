@@ -166,6 +166,7 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             $productFolder = 'products/' . $product->slug;
 
+
             $tags = explode(',', $request->search_tags);
             $request->merge(['search_tags' => json_encode($tags)]);
 
@@ -212,6 +213,7 @@ class ProductController extends Controller
                             ProductAttribute::create([
                                 'product_id' => $product->id,
                                 'image_path' => $imagePath,
+                                'qty' => $attributeData['qty'],
                                 'hex_code' => $attributeData['hex_code']
                             ]);
                         }
@@ -250,11 +252,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
         DB::beginTransaction();
-
+    
         try {
-
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'sku' => 'required|string|unique:products,sku',
@@ -269,25 +269,25 @@ class ProductController extends Controller
                 'product_attributes.*.hex_code' => 'required|string|max:7',
                 'product_attributes.*.images' => 'required|array|min:1',
                 'product_attributes.*.images.*' => 'required|file|mimes:jpeg,png,jpg,webp|max:2048',
+                'product_attributes.*.qty' => 'required|integer|min:0',
                 'search_tags' => 'required',
                 'crafted_date' => 'required|date',
-                'qty' => 'required|string|min:1'
             ]);
 
-
+    
             if ($validator->fails()) {
                 return response()->json([
                     'status' => 'error',
                     'errors' => $validator->errors()
                 ], 422);
             }
-
-
+    
             $tags = explode(',', $request->search_tags);
             $request->merge(['search_tags' => json_encode($tags)]);
-
+    
+            $totalQty = collect($request->product_attributes)->sum('qty');
+    
             $product = Product::create([
-
                 'name' => $request->name,
                 'sku' => $request->sku,
                 'price' => $request->price,
@@ -301,35 +301,34 @@ class ProductController extends Controller
                 'search_tags' => $request->search_tags,
                 'slug' => Str::slug($request->name),
                 'status' => 1,
-                'qty' => $request->qty,
+                'qty' => $totalQty, // Use calculated total quantity
                 'featured' => $request->filled('featured') ? 1 : 0,
                 'discounted' => $request->filled('discounted') ? 1 : 0,
                 'new_arrival' => $request->filled('new_arrival') ? 1 : 0,
-
             ]);
-
-
+    
             $productFolder = 'products/' . $product->slug;
             Storage::makeDirectory('public/' . $productFolder);
-
-
+    
             $productAttributes = [];
+    
             foreach ($request->product_attributes as $attribute) {
                 foreach ($attribute['images'] as $image) {
                     $imagePath = $image->store($productFolder, 'public');
-
+    
                     $productAttributes[] = [
                         'product_id' => $product->id,
                         'image_path' => $imagePath,
+                        'qty' => $attribute['qty'],
                         'hex_code' => $attribute['hex_code'],
                         'created_at' => now()
                     ];
                 }
             }
-
+    
             DB::table('product_attributes')->insert($productAttributes);
             DB::commit();
-
+    
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product created successfully'

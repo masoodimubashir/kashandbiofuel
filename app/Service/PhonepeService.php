@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ProductAttribute;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wishlist;
@@ -38,8 +40,7 @@ class PhonepeService
         }
     }
 
-
-    public function payOffline($request)
+    public function payOffline($request): array
     {
         try {
 
@@ -57,17 +58,10 @@ class PhonepeService
                 $payment_method
             );
 
+
             $order = $this->createOrder($request, $transaction);
 
-            $user = User::query()
-                ->with('roles')
-                ->whereHas('roles', function ($query) {
-                    $query->where('name', 'admin');
-                })
-                ->first();
-
-            $user->notify(new OrderNotification('A New Order Has Been Placed.', $order));
-
+            $this->sendOrderNotification($order);
 
             DB::commit();
 
@@ -85,7 +79,6 @@ class PhonepeService
             throw new HttpException(500, 'Failed to process offline payment: ' . $e->getMessage());
         }
     }
-
 
     private function payOnline($request)
     {
@@ -129,16 +122,14 @@ class PhonepeService
         }
     }
 
-
-
     public function handlePaymentResponse($request)
     {
         try {
+
             DB::beginTransaction();
 
             $merchantTransactionId = session()->pull('merchantTransactionId');
             $paymentStatus = $this->verifyPaymentStatus($merchantTransactionId);
-
 
             if (!$paymentStatus['success']) {
                 throw new Exception('Payment verification failed');
@@ -193,8 +184,6 @@ class PhonepeService
 
     private function makeTransaction($merchantTransactionId, $status, $amount, $payment_method)
     {
-
-
         return Transaction::create([
             'user_id' => auth()->user()->id,
             'amount' => $amount,
@@ -206,53 +195,79 @@ class PhonepeService
 
     private function createOrder($request, $transaction)
     {
-
-        $cartItems = $this->getCartItems();
-
-        if ($cartItems->isEmpty()) {
+        // Get cart items from the request data
+        $cartData = $request['cart_data'];
+        
+        if (empty($cartData)) {
             throw new Exception('Cart is empty');
         }
-
+    
         $order = Order::create([
             'user_id' => $transaction->user_id,
             'custom_order_id' => uniqid('cus_'),
-            'address_id' => $request['address'],
+            'address_id' => $request['address_id'],
             'total_amount' => $transaction->amount,
             'date_of_purchase' => now(),
             'transaction_id' => $transaction->id,
             'payment_method' => $request['payment_method'],
         ]);
-
-
-        foreach ($cartItems as $item) {
-
-            $product = Product::find($item['product_id']);
-
-            $wishlist = Wishlist::where('product_id', $product->id)->first();
-
-            if ($wishlist) {
-                $wishlist->delete();
+    
+        // Process each cart item
+        foreach ($cartData as $item) {
+            // Get the cart item details
+            $cartItem = Cart::findOrFail($item['cart_id']);
+            $product = Product::findOrFail($cartItem->product_id);
+            
+            Wishlist::where('product_id', $product->id)
+                    ->where('user_id', $transaction->user_id)
+                    ->delete();
+    
+            // Create order item
+            $this->createOrderItem([
+                'product_id' => $product->id,
+                'product_attribute_id' => $item['product_attribute_id'],
+                'qty' => $cartItem->qty
+            ], $order, $product);
+    
+            if ($item['product_attribute_id']) {
+                $productAttribute = ProductAttribute::where('id', $item['product_attribute_id'])
+                    ->where('product_id', $product->id)
+                    ->firstOrFail();
+                    
+                if ($productAttribute->qty < $cartItem->qty) {
+                    throw new Exception("Insufficient quantity for product attribute: {$product->name} - {$productAttribute->name}");
+                }
+                
+                $productAttribute->qty -= $cartItem->qty;
+                $productAttribute->save();
             }
-
-            $order->orderedItems()->create([
-                'product_id' => $item['product_id'],
-                'order_id' => $order->id,
-                'quantity' => $item['qty'],
-                'price' => $product->selling_price * $item['qty'],
-                'date_of_purchase' => now(),
-                'custom_order_id' => $order->custom_order_id,
-            ]);
-
-            $product->update([
-                'qty' => $product->qty - $item['qty'],
-            ]);
+    
+            // Update main product quantity
+            if ($product->qty < $cartItem->qty) {
+                throw new Exception("Insufficient quantity for product: {$product->name}");
+            }
+            
+            $product->qty -= $cartItem->qty;
+            $product->save();
+    
+            $cartItem->delete();
         }
-
-        $this->clearCart($cartItems);
-
+    
         return $order;
     }
-
+    
+    private function createOrderItem($item, $order, $product)
+    {
+        return $order->orderedItems()->create([
+            'product_id' => $item['product_id'],
+            // 'product_attribute_id' => $item['product_attribute_id'],
+            'order_id' => $order->id,
+            'quantity' => $item['qty'],
+            'price' => $product->selling_price * $item['qty'],
+            'date_of_purchase' => now(),
+            'custom_order_id' => $order->custom_order_id,
+        ]);
+    }
     private function generatePayload(float $amount)
     {
         $payload = [
@@ -306,14 +321,22 @@ class PhonepeService
                 throw new Exception("Insufficient quantity for product: {$product->name}");
             }
 
-            $product->qty -= $item->qty;
-            $product->save();
-
-            if ($item->productAttribute) {
-                $item->productAttribute->delete();
-            }
-
             $this->repository->deleteItem($item->id);
         }
+    }
+
+    
+
+    private function sendOrderNotification($order)
+    {
+
+        $user = User::query()
+            ->with('roles')
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'admin');
+            })
+            ->first();
+
+        $user->notify(new OrderNotification('A New Order Has Been Placed.', $order));
     }
 }

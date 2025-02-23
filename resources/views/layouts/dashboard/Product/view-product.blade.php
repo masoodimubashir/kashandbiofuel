@@ -1,46 +1,58 @@
 <x-app-layout>
 
     <style>
-        .product-slider .owl-nav {
-            position: absolute;
-            top: 50%;
+        .fixed-image {
+            width: 500px;
+            /* Set your desired width */
+            height: 400px;
+            /* Set your desired height */
+            object-fit: cover;
+            /* Ensures the image covers the area without distortion */
+            object-position: center;
+            /* Centers the image within the fixed dimensions */
+        }
+
+        .fixed-thumbnail {
+            width: 100px;
+            /* Set your desired width for thumbnails */
+            height: 80px;
+            /* Set your desired height for thumbnails */
+            object-fit: cover;
+            /* Ensures the image covers the area without distortion */
+            object-position: center;
+            /* Centers the image within the fixed dimensions */
+        }
+
+        /* Responsive fixed dimensions for main carousel images */
+        .fixed-image {
             width: 100%;
-            transform: translateY(-50%);
-            display: flex;
-            justify-content: space-between;
-            padding: 0 15px;
+            /* Full width of the container */
+            height: 300px;
+            /* Fixed height */
+            object-fit: cover;
+            object-position: center;
         }
 
-        .product-slider .owl-nav button {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.8) !important;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+        /* Responsive fixed dimensions for thumbnail images */
+        .fixed-thumbnail {
+            width: 100%;
+            /* Full width of the container */
+            height: 80px;
+            /* Fixed height */
+            object-fit: cover;
+            object-position: center;
         }
 
-        .product-slider .owl-nav button:hover {
-            background: white !important;
-        }
+        @media (max-width: 768px) {
+            .fixed-image {
+                height: 200px;
+                /* Adjust height for smaller screens */
+            }
 
-        #sync2 .item {
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.3s;
-        }
-
-        #sync2 .current .item {
-            border-color: #007bff;
-        }
-
-        #sync2 .owl-item {
-            opacity: 0.6;
-            transition: all 0.3s;
-        }
-
-        #sync2 .owl-item.current {
-            opacity: 1;
+            .fixed-thumbnail {
+                height: 60px;
+                /* Adjust height for smaller screens */
+            }
         }
     </style>
 
@@ -80,21 +92,19 @@
                     <div class="card">
                         <!-- Main Image Carousel -->
                         <div class="card-body">
-
+                            <!-- Main Carousel -->
                             <div class="product-slider owl-carousel owl-theme" id="sync1">
                                 @foreach ($product->productAttributes as $attribute)
                                     <div class="item">
                                         @if ($attribute->image_path)
                                             <img src="{{ asset('storage/' . $attribute->image_path) }}"
-                                                alt="Product Image" class="img-fluid">
+                                                alt="Product Image" class="img-fluid fixed-image">
                                         @else
                                             <img src="{{ asset('default_images/product_image.png') }}"
-                                                alt="Product Image" class="img-fluid">
+                                                alt="Product Image" class="img-fluid fixed-image">
                                         @endif
                                     </div>
                                 @endforeach
-
-
                             </div>
 
                             <!-- Thumbnail Navigation -->
@@ -103,10 +113,10 @@
                                     <div class="item">
                                         @if ($attribute->image_path)
                                             <img src="{{ asset('storage/' . $attribute->image_path) }}"
-                                                alt="Product Image" class="img-fluid">
+                                                alt="Product Image" class="img-fluid fixed-thumbnail">
                                         @else
                                             <img src="{{ asset('default_images/product_image.png') }}"
-                                                alt="Product Image" class="img-fluid">
+                                                alt="Product Image" class="img-fluid fixed-thumbnail">
                                         @endif
                                     </div>
                                 @endforeach

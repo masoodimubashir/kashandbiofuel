@@ -34,32 +34,31 @@
                             <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
                                 Push To Shiprocket
                             </button>
+
                         </div>
+
+
                     </div>
 
-                    {{-- <div class="col-12 col-sm-4 col-md-2 mb-3">
-                        <div class="card-body">
-                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
 
                     <div class="col-12 col-sm-4 col-md-2 mb-3">
                         <div class="card-body">
-                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
-                                Confirm
-                            </button>
+                            <select class="form-select form-select-md changeStatus " style="cursor:pointer"
+                                data-id="{{ $order->id }}">
+                                <option selected disabled>Choose Action</option>
+                                <option value="is_confirmed" {{ $order->is_confirmed ? 'selected' : '' }}>Confirmed
+                                </option>
+                                <option value="is_delivered" {{ $order->is_delivered ? 'selected' : '' }}>Delivered
+                                </option>
+                                <option value="is_cancelled" {{ $order->is_cancelled ? 'selected' : '' }}>Cancelled
+                                </option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-4 col-md-2 mb-3">
-                        <div class="card-body">
-                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
-                                Deliver
-                            </button>
-                        </div>
-                    </div> --}}
+
+
+
                 </div>
             </div>
 
@@ -155,6 +154,7 @@
                                                 <tr>
                                                     <th>Product</th>
                                                     <th>Product Name</th>
+                                                    {{-- <th>Color</th> --}}
                                                     <th>Price</th>
                                                     <th>Quantity</th>
                                                     <th>Total</th>
@@ -182,6 +182,18 @@
                                                                     href="#">{{ $item->product->name }}</a>
                                                             </div>
                                                         </td>
+
+                                                        {{-- <td>
+                                                            <div class="color-swatch mt-1"
+                                                                style="background-color: {{$item->product->productAttribute->hex_code}};
+                                                                   width: 25px;
+                                                                   height: 25px;
+                                                                   display: inline-block;
+                                                                   border-radius: 50%;"
+                                                                title="Color: {{$item->product->productAttribute->hex_code}}"
+                                                                data-product-attribute-id="{{$item->product->productAttribute->id}}">
+                                                            </div>
+                                                        </td> --}}
 
                                                         <td>{{ Number::currency($item->product->selling_price) }}</td>
 
@@ -360,6 +372,7 @@
             $(document).ready(function() {
 
                 $(document).on('click', '#pushToShiprocket', function(e) {
+
                     const orderId = $(this).data('id');
                     const button = $(this);
 
@@ -383,13 +396,43 @@
                             }
                         },
                         error: function(error) {
-                            Swal.fire('Error', 'Failed to push order to ShipRocket' + error
-                                .responseJSON.message, 'error');
+                            Swal.fire('Error', error.responseJSON.message ||
+                                'Failed to push order to ShipRocket', 'error');
                         },
                         complete: function() {
                             button.prop('disabled', false).html('Push to ShipRocket');
                         }
                     });
+                });
+
+               
+                $('.changeStatus').on('change', function() {
+                  
+
+                    let updateField = $(this).val();
+                    let orderId = $(this).data('id');
+
+                    $.ajax({
+                        url: `/admin/order/${orderId}`,
+                        type: 'PUT',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            field: updateField,
+                            value: 1
+                        },
+                        success: function(response) {
+                            if (response.status) {
+                                Swal.fire("Success!", response.message, "success");
+                            } else {
+                                Swal.fire("Error!", response.message || 'Failed To Update Status',
+                                    "error");
+                            }
+                        },
+                        error: function(err) {
+                            Swal.fire("Error!", 'An error occurred', "error");
+                        }
+                    });
+
                 });
 
             });

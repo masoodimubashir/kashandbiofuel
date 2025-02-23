@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
         $this->call(SubCategorySeeder::class);
         $this->call([
-            // ProductSeeder::class,
-            // ProductAttributeSeeder::class,
-            // ReviewSeeder::class
+            ProductSeeder::class,
+            ProductAttributeSeeder::class,
+            ReviewSeeder::class
         ]);
 
         $user = User::factory()->create([

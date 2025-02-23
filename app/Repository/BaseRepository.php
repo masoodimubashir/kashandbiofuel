@@ -16,16 +16,14 @@ class BaseRepository implements ItemInterface
     /**
      * Constructor to bind model to repository.
      */
-    public function __construct(private Model $model)
-    {
-    }
+    public function __construct(private Model $model) {}
 
     public function getItems($values)
     {
 
         return $this->model->query()
-        
-            ->with(['product' => fn($query) => $query->with('productAttribute')])
+
+            ->with(['product' => fn($query) => $query->with('productAttributes')])
             ->where(function ($query) use ($values) {
                 if (isset($values['guest_id'])) {
                     $query->where('guest_id', $values['guest_id']);
@@ -38,7 +36,6 @@ class BaseRepository implements ItemInterface
             })
             ->latest()
             ->get();
-
     }
 
     /**
@@ -49,17 +46,16 @@ class BaseRepository implements ItemInterface
 
         return $this->model->updateOrCreate(
             [
-                'product_id' => $data['product_id']
+                'product_id' => $data['product_id'],
+                'product_attribute_id' => $data['product_attribute_id'],
+
             ],
             [
                 'user_id' => $data['user_id'],
                 'guest_id' => $data['guest_id'],
-                'product_attribute_id' => $data['product_attribute_id'],
                 'qty' => $data['qty'],
             ]
         );
-        
-
     }
 
     /**
@@ -69,7 +65,6 @@ class BaseRepository implements ItemInterface
     {
 
         return $this->model->find($id);
-
     }
 
     /**
@@ -97,11 +92,9 @@ class BaseRepository implements ItemInterface
         if (!$item) {
 
             return $item;
-
         }
 
         return $item->update(['qty' => $qty]);
-
     }
 
 
@@ -116,6 +109,4 @@ class BaseRepository implements ItemInterface
                 'guest_id' => $guest_id
             ]);
     }
-
-
 }

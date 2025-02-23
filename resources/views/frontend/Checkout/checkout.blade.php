@@ -188,174 +188,146 @@
 
     @push('frontend.scripts')
         <script>
-            const cartIds = '{{ request('cart_ids') }}'.split(',') || [];
-            const totalPrice = '{{ request('checkout_price') }}' || 0;
+            $(document).ready(function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const cartData = JSON.parse(urlParams.get('cart_data'));
+                const checkoutPrice = urlParams.get('checkout_price');
 
-
-            // Render Cart Summary
-            const renderCartSummary = (cartItems, totalPrice) => {
-                const summaryContainer = $('#summery-contain');
-                const totalPriceElement = $('#cart-total-price');
-
-                summaryContainer.html(''); // Clear previous summary
-
-                
-
-                cartItems.forEach(cartItem => {
-                    const productName = cartItem.product.name ?? 'Unknown Product';
-                    const quantity = cartItem.qty ?? 1;
-                    const price = (cartItem.product.selling_price * quantity).toFixed(2);
-                    const productImage = cartItem.product.product_attribute.image_path ? `/storage/${cartItem.product.product_attribute.image_path}` : '/default_images/product_image.png';
-                    const cartItemHTML = `
-                    <li>
-                        <img src="${productImage}"
-                            class="img-fluid blur-up lazyloaded checkout-image"
-                            alt="${productName}">
-                        <h4>${productName} <span>X ${quantity}</span></h4>
-                        <h4 class="price">₹${price}</h4>
-                    </li>`;
-                    summaryContainer.append(cartItemHTML);
-                });
-
-                totalPriceElement.text(`₹${parseFloat(totalPrice).toFixed(2)}`);
-            };
-
-            // Fetch Cart Items and Render the Summary
-            const fetchCartSummary = (cartIds, totalPrice) => {
-
-                $.ajax({
-                    url: "{{ route('checkout.index') }}",
-                    type: "GET",
-                    data: {
-                        cart_ids: cartIds.join(','),
-                        total_price: totalPrice,
+                const config = {
+                    urls: {
+                        checkout: "{{ route('checkout.index') }}",
+                        phonepe: "{{ route('checkout.phonepe.store') }}",
+                        cashOnDelivery: "{{ route('checkout.cash-on-delivery') }}"
                     },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    },
-                    success: function(response) {
-                        if (response.status) {
-                            renderCartSummary(response.cart_items, response.checkout_price);
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Something went wrong',
-                                text: response.message
-                            });
-                        }
-                    },
-                    error: function(error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Something went wrong',
-                            text: error.responseJSON?.message ?? 'An error occurred. Please try again!',
-                        });
+                    cartData: {
+                        data: cartData,
+                        totalPrice: checkoutPrice
                     }
-                });
-            };
-
-            // Place Order Functionality
-            $('#placeOrderButton').click(function(e) {
-                e.preventDefault();
-
-                const paymentMethod = $('input[name="flexRadioDefault"]:checked').val();
-
-                const selectedAddress = $('input[name="address"]:checked').val();
-
-                if (!selectedAddress) {
-                    Swal.fire('Error', 'Please select an address to continue.', 'error');
-                    return;
-                }
-                if (!paymentMethod) {
-                    Swal.fire('Error', 'Please select a payment method to continue.', 'error');
-                    return;
-                }
-                if (!totalPrice) {
-                    Swal.fire('Error', 'Please add items to cart to continue.', 'error');
-                    return;
-                }
-
-                const orderData = {
-                    cart_ids: cartIds.join(','),
-                    total_price: totalPrice,
-                    address: selectedAddress,
-                    payment_method: paymentMethod
                 };
 
+                const elements = {
+                    summaryContainer: $('#summery-contain'),
+                    totalPriceElement: $('#cart-total-price'),
+                    placeOrderButton: $('#placeOrderButton'),
+                    paymentMethod: $('input[name="flexRadioDefault"]'),
+                    addressInput: $('input[name="address"]')
+                };
 
-                if (paymentMethod === 'online') {
+                const templates = {
+                    cartItem: (item) => `
+            <li>
+                <img src="${item.product.product_attribute.image_path ? `/storage/${item.product.product_attribute.image_path}` : '/default_images/product_image.png'}"
+                    class="img-fluid blur-up lazyloaded checkout-image"
+                    alt="${item.product.name}">
+                <h4>${item.product.name} <span>X ${item.qty}</span></h4>
+                <h4 class="price">₹${(item.product.selling_price * item.qty).toFixed(2)}</h4>
+            </li>`
+                };
 
-                    const url = "{{ route('checkout.phonepe.store') }}";
+                const cartActions = {
+                    renderSummary: (cartItems, totalPrice) => {
+                        elements.summaryContainer.html(cartItems.map(item => templates.cartItem(item)).join(
+                            ''));
+                        elements.totalPriceElement.text(`₹${parseFloat(totalPrice).toFixed(2)}`);
+                    },
 
-                    $.ajax({
-                        url: url,
-                        type: "POST",
-                        data: orderData,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // Include CSRF token
-                        },
-                        beforeSend: function() {
-                            $('#placeOrderButton').text('Processing...').prop('disabled',
-                                true); // Update button state
-                        },
-                        success: function(response) {
-                            if (response.status) {
-                                window.location.href = response.redirect_url;
-                            } else {
-                                Swal.fire('Error', response.message ||
-                                    'Failed to place the order. Please try again.', 'error');
-                            }
-                        },
-                        error: function(xhr) {
-                            console.error("Error placing order:", xhr.responseText);
-                            Swal.fire('Error', 'Failed to place the order. Please try again.', 'error');
-                        },
-                        complete: function() {
-                            $('#placeOrderButton').text('Place Order').prop('disabled',
-                                false); // Reset button state
+                    fetchSummary: () => {
+                        $.ajax({
+                            url: config.urls.checkout,
+                            type: "GET",
+                            data: {
+                                cart_data: config.cartData.data,
+                                checkout_price: config.cartData.totalPrice
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: (response) => {
+                                if (response.status) {
+                                    cartActions.renderSummary(response.cart_items, response
+                                        .checkout_price);
+                                } else {
+                                    utils.showError('Something went wrong', response.message);
+                                }
+                            },
+                            error: (error) => utils.showError('Error', error.responseJSON?.message)
+                        });
+                    }
+                };
+
+                const orderProcessor = {
+
+                    validateOrder: () => {
+                        const selectedAddress = elements.addressInput.filter(':checked').val();
+
+                        const paymentMethod = elements.paymentMethod.filter(':checked').val();
+
+                        if (!selectedAddress || selectedAddress === undefined) {
+                            utils.showError('Error', 'Please select an address to continue.');
+                            return false;
                         }
-                    });
-
-                } else {
-
-                    const url = "{{ route('checkout.cash-on-delivery') }}";
-
-                    $.ajax({
-                        url: url,
-                        type: "POST",
-                        data: orderData,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), // Include CSRF token
-                        },
-                        beforeSend: function() {
-                            $('#placeOrderButton').text('Processing...').prop('disabled',
-                                true); // Update button state
-                        },
-                        success: function(response) {
-                            
-                            if (response.status && response.payment_method === 'cod') {
-                                window.location.href = response.redirect_url;
-                            } else {
-                                Swal.fire('Error', response.message ||
-                                    'Failed to place the order. Please try again.', 'error');
-                            }
-                        },
-                        error: function(xhr) {
-                            console.error("Error placing order:", xhr.responseText);
-                            Swal.fire('Error', 'Failed to place the order. Please try again.', 'error');
-                        },
-                        complete: function() {
-                            $('#placeOrderButton').text('Place Order').prop('disabled',
-                                false); // Reset button state
+                        if (!paymentMethod || paymentMethod === undefined) {
+                            utils.showError('Error', 'Please select a payment method to continue.');
+                            return false;
                         }
-                    });
-                }
+                        if (!config.cartData.totalPrice) {
+                            utils.showError('Error', 'Please add items to cart to continue.');
+                            return false;
+                        }
 
-            });
+                        return true;
+                    },
 
-            // On Document Ready
-            $(document).ready(function() {
-                fetchCartSummary(cartIds, totalPrice); // Fetch and display cart summary
+                    processOrder: (paymentMethod) => {
+                        const orderData = {
+                            cart_data: config.cartData.data,
+                            total_price: config.cartData.totalPrice,
+                            address_id: elements.addressInput.filter(':checked').val(),
+                            payment_method: paymentMethod
+                        };
+
+                        const url = paymentMethod === 'online' ? config.urls.phonepe : config.urls
+                            .cashOnDelivery;
+
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            data: orderData,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            beforeSend: () => utils.updateButton(true),
+                            success: (response) => {
+                                if (response.status) {
+                                    window.location.href = response.redirect_url;
+                                } else {
+                                    utils.showError('Error', response.message);
+                                }
+                            },
+                            error: (xhr) => utils.showError('Error', 'Failed to place the order'),
+                            complete: () => utils.updateButton(false)
+                        });
+                    }
+                };
+
+                const utils = {
+                    showError: (title, message) => Swal.fire(title, message, 'error'),
+                    updateButton: (processing) => {
+                        elements.placeOrderButton
+                            .text(processing ? 'Processing...' : 'Place Order')
+                            .prop('disabled', processing);
+                    }
+                };
+
+                elements.placeOrderButton.on('click', function(e) {
+                    e.preventDefault();
+                    if (orderProcessor.validateOrder()) {
+                        const paymentMethod = elements.paymentMethod.filter(':checked').val();
+                        orderProcessor.processOrder(paymentMethod);
+                    }
+                });
+
+                cartActions.fetchSummary();
             });
         </script>
     @endpush

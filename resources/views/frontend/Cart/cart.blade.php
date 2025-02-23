@@ -92,7 +92,6 @@
                                     <button id="checkout-button" class="btn btn-animation proceed-btn fw-bold">Process
                                         To Checkout
                                     </button>
-
                                 </li>
 
                                 <li>
@@ -113,273 +112,283 @@
     @push('frontend.scripts')
         <script>
             $(document).ready(function() {
-
-                // Global DOM elements
-                const checkOutPrice = $('#check_out_price');
-                const price = $('#price');
-                const couponDiscount = $('#coupon-discount');
-                const cartItemsContainer = $('#cart-items');
-                const couponInput = $('#apply-coupon-form input[name="coupon"]')
+                // DOM Elements
+                const elements = {
+                    checkOutPrice: $('#check_out_price'),
+                    price: $('#price'),
+                    couponDiscount: $('#coupon-discount'),
+                    cartItemsContainer: $('#cart-items'),
+                    couponInput: $('#coupon_code'),
+                    couponForm: $('#apply-coupon-form'),
+                    checkoutButton: $('#checkout-button'),
+                    clearCouponBtn: $('#clear-coupon')
+                };
 
                 // Utility Functions
-                const showAlert = (title, message, type) => Swal.fire(title, message, type);
-
-                const handleErrors = (error) => {
-                    const errorMessage = error?.message || 'Something went wrong.';
-                    showAlert('Error!', errorMessage, 'error');
+                const utils = {
+                    showAlert: (title, message, type) => Swal.fire(title, message, type),
+                    handleErrors: (error) => utils.showAlert('Error!', error.responseJSON?.message ||
+                        'Something Went Wrong', 'error')
                 };
 
+                // Cart Item Template
                 const renderCartItems = (cartItems) => {
-                    let cartHTML = '';
-
-                    cartItems.forEach(cartItem => {
-                        cartHTML += `
-                <tr class="product-box-contain" data-product-id="${cartItem.id}">
-                    <td class="product-detail">
-                        <div class="product border-0">
-                            <a href="/product/${cartItem.product.slug}" class="product-image">
-                               
-                            <img src="${cartItem.product.product_attribute?.image_path ? `storage/${cartItem.product.product_attribute.image_path}` : 'default_images/product_image.png'}"
-                                class="img-fluid blur-up lazyload" 
-                                alt="${cartItem.product.name}"> 
-                            </a>
-                            <div class="product-detail">
-                                <ul>
-                                    <li class="name">
-                                        <a href="/product/${cartItem.product.slug}">${cartItem.product.name ?? 'Product Name'}</a>
-                                    </li>
-                                    <li class="text-content">
-                                        <span class="text-title">Price Per Item</span> - &#8377;${cartItem.product.selling_price}
-                                    </li>
-                                    <li class="text-content">
-                                        <span class="text-title">Quantity</span> - ${cartItem.qty}
-                                    </li>
-                                </ul>
+                    return cartItems.map(cartItem => `
+            <tr class="product-box-contain" data-product-id="${cartItem.id}">
+                <td class="product-detail">
+                    <div class="product border-0">
+                        <a href="/product/${cartItem.product.slug}" class="product-image">
+                            <img src="${cartItem.product.product_attribute.image_path ? `storage/${cartItem.product.product_attribute.image_path}` : 'default_images/product_image.png'}"
+                                class="img-fluid blur-up lazyload" alt="${cartItem.product.name}">
+                        </a>
+                        <div class="product-detail">
+                            <ul>
+                                <li class="name">
+                                    <a href="/product/${cartItem.product.slug}">${cartItem.product.name}</a>
+                                </li>
+                                <li class="text-content">
+                                    <span class="text-title">Price Per Item</span> - &#8377;${cartItem.product.selling_price}
+                                </li>
+                                <li class="text-content">
+                                    <span class="text-title">Quantity (MAX)</span> - ${cartItem.product.product_attribute.qty}
+                                </li>
+                                <li class="color-swatch mt-1"
+                                    style="background-color: ${cartItem.product.product_attribute.hex_code};
+                                           width: 25px;
+                                           height: 25px;
+                                           display: inline-block;
+                                           border-radius: 50%;"
+                                    title="Color: ${cartItem.product.product_attribute.hex_code}"
+                                    data-product-attribute-id="${cartItem.product_attribute_id}">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+                <td class="price">
+                    <h4 class="table-title text-content">Price</h4>
+                    <h5>&#8377;${cartItem.product.selling_price}
+                        <del class="text-content">&#8377;${cartItem.product.price}</del>
+                    </h5>
+                    <h6 class="theme-color">You Save: &#8377;${cartItem.product.saving_amount} (${cartItem.product.saving_percentage}%)</h6>
+                </td>
+                <td class="quantity">
+                    <div class="quantity-price">
+                        <div class="cart_qty">
+                            <div class="input-group">
+                                <button type="button" class="btn qty-left-minus" data-type="minus" data-product-id="${cartItem.id}">
+                                    <i class="fa fa-minus ms-0"></i>
+                                </button>
+                                <input class="form-control input-number qty-input" type="text" name="quantity"
+                                    min="0" max="${cartItem.product.product_attribute.qty}" value="${cartItem.qty}">
+                                <button type="button" class="btn qty-right-plus" data-type="plus" data-product-id="${cartItem.id}">
+                                    <i class="fa fa-plus ms-0"></i>
+                                </button>
                             </div>
                         </div>
-                    </td>
-                    <td class="price">
-                        <h4 class="table-title text-content">Price</h4>
-                        <h5>&#8377;${cartItem.product.selling_price}
-                            <del class="text-content">&#8377;${cartItem.product.price}</del>
-                        </h5>
-                        <h6 class="theme-color">You Save: &#8377;${cartItem.product.saving_amount} (${cartItem.product.saving_percentage}%)</h6>
-                    </td>
-                    <td class="quantity">
-                        <h4 class="table-title text-content"></h4>
-                        <div class="quantity-price">
-                            <div class="cart_qty">
-                                <div class="input-group">
-                                    <button type="button" class="btn qty-left-minus" data-type="minus" data-product-id="${cartItem.id}">
-                                        <i class="fa fa-minus ms-0"></i>
-                                    </button>
-                                    <input class="form-control input-number qty-input" type="text" name="quantity" value="${cartItem.qty}">
-                                    <button type="button" class="btn qty-right-plus" data-type="plus" data-product-id="${cartItem.id}">
-                                        <i class="fa fa-plus ms-0"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="subtotal">
-                        <h4 class="table-title text-content">Total</h4>
-                        <h5>&#8377;${cartItem.product.grand_total.toFixed(2)}</h5>
-                    </td>
-                    <td class="save-remove">
-                        <h4 class="table-title text-content">Action</h4>
-                        <a class="save save-for-later notifi-wishlist" style="cursor: pointer" data-cart-id="${cartItem.id}">Save for later</a>
-                        <a class="remove close_button" data-id="${cartItem.id}">Remove</a>
-                    </td>
-                </tr>`;
-                    });
-
-                    return cartHTML;
+                    </div>
+                </td>
+                <td class="subtotal">
+                    <h4 class="table-title text-content">Total</h4>
+                    <h5>&#8377;${cartItem.product.grand_total.toFixed(2)}</h5>
+                </td>
+                <td class="save-remove">
+                    <h4 class="table-title text-content">Action</h4>
+                    <a class="save save-for-later notifi-wishlist" style="cursor: pointer"
+                        data-product-id=${cartItem.product_id}
+                        data-cart-id="${cartItem.id}">Save for later
+                    </a>
+                    <a class="remove close_button" data-id="${cartItem.id}">Remove</a>
+                </td>
+            </tr>
+        `).join('');
                 };
 
-                // AJAX Request Functions
-                const getCartItems = () => {
-                    $.ajax({
-                        url: "{{ route('cart.view-cart') }}",
-                        type: "GET",
-                        success: (response) => {
-                            cartItemsContainer.html(renderCartItems(response.data));
-                            checkOutPrice.text(`${response.check_out_price}`);
-                            price.text(`${response.check_out_price}`);
-                            couponDiscount.text('0.00');
-                        },
-                        error: handleErrors
-                    });
-                };
+                // Cart Actions
+                const cartActions = {
+                    getCartItems: () => {
+                        $.ajax({
+                            url: "{{ route('cart.view-cart') }}",
+                            type: "GET",
+                            success: (response) => {
+                                elements.cartItemsContainer.html(renderCartItems(response.data));
+                                elements.checkOutPrice.text(`${response.check_out_price}`);
+                                elements.price.text(`${response.check_out_price}`);
+                                elements.couponDiscount.text('0.00');
+                            },
+                            error: utils.handleErrors
+                        });
+                    },
 
-                const updateCartQuantity = (productId, qty) => {
-                    $.ajax({
-                        url: `/cart/update-quantity/${productId}`,
-                        method: "PATCH",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: {
-                            qty: Number(qty)
-                        },
-                        success: (response) => {
-                            if (response.status) {
-                                getCartItems();
-                            } else {
-                                handleErrors(response);
+                    updateQuantity: (productId, qty, product_attribute_id, input) => {
+                        $.ajax({
+                            url: `/cart/update-quantity/${productId}`,
+                            method: "PATCH",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {
+                                qty,
+                                product_attribute_id
+                            },
+                            success: (response) => {
+                                if (response.status) cartActions.getCartItems();
+                            },
+                            error: (error) => {
+                                utils.handleErrors(error);
+                                input.val(qty - 1);
                             }
-                        },
-                        error: handleErrors
-                    });
+                        });
+                    },
+
+                    deleteItem: (cartItemId) => {
+                        $.ajax({
+                            url: `/cart/delete/${cartItemId}`,
+                            type: "DELETE",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: () => cartActions.getCartItems(),
+                            error: utils.handleErrors
+                        });
+                    },
+
+                    saveForLater: (cartId, product_attribute_id, product_id) => {
+                        $.ajax({
+                            url: `/return-to-wishlist/${cartId}`,
+                            type: 'PUT',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {
+                                product_attribute_id,
+                                product_id
+                            },
+                            success: (response) => {
+                                if (response.status) {
+                                    utils.showAlert('Success!', response.message, 'success');
+                                    cartActions.getCartItems();
+                                }
+                            },
+                            error: utils.handleErrors
+                        });
+                    },
+
+                    applyCoupon: (couponCode) => {
+                        $.ajax({
+                            url: "{{ route('apply-coupon') }}",
+                            type: "PUT",
+                            data: {
+                                coupon_code: couponCode
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: (response) => {
+                                elements.cartItemsContainer.html(renderCartItems(response.data));
+                                elements.checkOutPrice.text(
+                                    `₹${response.check_out_price.toFixed(2)}`);
+                                elements.couponDiscount.text(
+                                    `₹${response.discount?.toFixed(2) ?? '0.00'}`);
+                                utils.showAlert('Success!', 'Coupon applied successfully',
+                                    'success');
+                            },
+                            error: utils.handleErrors
+                        });
+                    },
+
+                    clearCoupon: () => {
+                        $.ajax({
+                            url: "{{ route('apply-coupon') }}",
+                            type: "PUT",
+                            data: {
+                                coupon_code: null
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: (response) => {
+                                elements.cartItemsContainer.html(renderCartItems(response.data));
+                                elements.checkOutPrice.text(
+                                    `₹${response.check_out_price.toFixed(2)}`);
+                                elements.couponDiscount.text('₹0.00');
+                                elements.couponInput.val('');
+                                utils.showAlert('Success!', 'Coupon removed successfully',
+                                    'success');
+                            },
+                            error: utils.handleErrors
+                        });
+                    },
+
+                    proceedToCheckout: () => {
+                        const cartItems = [];
+
+                        $('#cart-items .product-box-contain').each(function() {
+                            cartItems.push({
+                                cart_id: $(this).data('product-id'),
+                                product_attribute_id: $(this).find('.color-swatch').data(
+                                    'product-attribute-id')
+                            });
+                        });
+
+                        const queryParams = new URLSearchParams({
+                            cart_data: JSON.stringify(cartItems),
+                            checkout_price: elements.checkOutPrice.text().replace(/[^\d.-]/g, '')
+                        });
+
+                        window.location.href = `{{ route('checkout.index') }}?${queryParams.toString()}`;
+                    }
+
                 };
 
-                const applyCoupon = (couponCode) => {
-
-                    $.ajax({
-                        url: "{{ route('apply-coupon') }}",
-                        type: "PUT",
-                        data: {
-                            coupon_code: couponCode
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: (response) => {
-                            cartItemsContainer.html(renderCartItems(response.data));
-                            checkOutPrice.text(`&#8377;${response.check_out_price.toFixed(2)}`);
-                            couponDiscount.text(`&#8377;${response.discount?.toFixed(2) ?? '0.00'}`);
-                        },
-                        error: (xhr) => {
-                            console.log(xhr);
-
-                            showAlert('Error!', xhr.responseJSON?.message ||
-                                'Failed to apply your coupon.', 'error');
-                        }
-                    });
-                };
-
-                const clearCoupon = () => {
-                    $.ajax({
-                        url: "{{ route('apply-coupon') }}",
-                        type: "PUT",
-                        data: {
-                            coupon_code: null
-                        }, // Clear coupon by sending null
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: (response) => {
-                            cartItemsContainer.html(renderCartItems(response.data));
-                            checkOutPrice.text(`$${response.check_out_price.toFixed(2)}`);
-                            couponDiscount.text('$0.00'); // Reset the coupon discount
-                        },
-                        error: () => showAlert('Error!', 'Failed to clear the coupon.', 'error')
-                    });
-                };
-
-                const deleteCartItem = (cartItemId) => {
-                    $.ajax({
-                        url: `/cart/delete/${cartItemId}`,
-                        type: "DELETE",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: () => getCartItems(),
-                        error: handleErrors
-                    });
-                };
-
-                // Event Listeners
-                getCartItems(); // Load cart items on page ready
-
-                cartItemsContainer.on('click', '.remove', function(e) {
+                // Event Handlers
+                elements.couponForm.on('submit', function(e) {
                     e.preventDefault();
-                    const cartItemId = $(this).data('id');
-                    deleteCartItem(cartItemId);
+                    const couponCode = elements.couponInput.val();
+                    if (!couponCode) {
+                        utils.showAlert('Error', 'Please enter a valid coupon code', 'error');
+                        return;
+                    }
+                    cartActions.applyCoupon(couponCode);
                 });
+
+                elements.clearCouponBtn.on('click', function(e) {
+                    e.preventDefault();
+                    cartActions.clearCoupon();
+                });
+
+                elements.checkoutButton.on('click', cartActions.proceedToCheckout);
 
                 $(document).on('click', '.qty-left-minus, .qty-right-plus', function() {
                     const button = $(this);
                     const input = button.closest('.input-group').find('.qty-input');
+                    const product_attribute_id = button.closest('tr').find('.color-swatch').data(
+                        'product-attribute-id');
                     let qty = parseInt(input.val());
                     const type = button.data('type');
-                    const productId = button.data('product-id');
 
                     qty = type === 'plus' ? qty + 1 : qty > 1 ? qty - 1 : qty;
                     input.val(qty);
-                    updateCartQuantity(productId, qty);
-                });
 
-                $(document).on('click', '#clear-coupon', function(e) {
-                    e.preventDefault();
-                    couponInput.val('');
-
-                    clearCoupon();
-                });
-
-                $('#apply-coupon-form').on('submit', function(e) {
-
-                    e.preventDefault();
-                    const couponCode = $('#coupon_code').val();
-                    if (!couponCode) {
-                        showAlert('Error', 'Please enter a valid coupon code', 'error');
-                        return;
-                    }
-
-                    applyCoupon(couponCode);
-                });
-
-                $('#checkout-button').on('click', function() {
-
-                    const checkOutPrice = $('#check_out_price').text().replace(/[^\d.-]/g, '');
-
-                    const cartDetails = [];
-                    $('#cart-items .product-box-contain').each(function() {
-                        const cartId = $(this).data('product-id');
-                        if (cartId) cartDetails.push(cartId);
-                    });
-
-                    window.location.href =
-                        `{{ route('checkout.index') }}?cart_ids=${cartDetails.join(',')}&checkout_price=${checkOutPrice}`;
+                    cartActions.updateQuantity(button.data('product-id'), qty, product_attribute_id, input);
                 });
 
                 $(document).on('click', '.save-for-later', function(e) {
                     e.preventDefault();
-
-                    const cartId = $(this).data('cart-id'); // Get cart item ID from `data-cart-id`
-                    const route = `/return-to-wishlist/${cartId}`;
-
-                    $.ajax({
-                        url: route,
-                        type: 'PUT',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                        },
-                        success: function(response) {
-                            if (response.status) {
-                                showAlert('Success!', response.message, 'success');
-                                getCartItems();
-                            } else {
-                                showAlert('Error!', response.message || 'Something went wrong.',
-                                    'error');
-                            }
-                        },
-                        error: function(error) {
-
-                            console.log('Error', error.responseJSON);
-
-                            if (error.status == 404) {
-                                showAlert('Error!', error.responseJSON.message, 'error');
-                            } else {
-                                showAlert('Error!',
-                                    'Unable to process your request. Please try again later.',
-                                    'error');
-                            }
-
-                        }
-                    });
+                    cartActions.saveForLater(
+                        $(this).data('cart-id'),
+                        $(this).closest('tr').find('.color-swatch').data('product-attribute-id'),
+                        $(this).data('product-id')
+                    );
                 });
 
+                $(document).on('click', '.remove', function(e) {
+                    e.preventDefault();
+                    cartActions.deleteItem($(this).data('id'));
+                });
 
+                // Initialize
+                cartActions.getCartItems();
             });
         </script>
     @endpush

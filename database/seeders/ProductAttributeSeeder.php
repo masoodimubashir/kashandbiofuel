@@ -11,7 +11,7 @@ class ProductAttributeSeeder extends Seeder
 {
     public function run(): void
     {
-        ProductAttributeFactory::times(30)->create();
+        ProductAttributeFactory::times(2)->create();
 
     }
 }

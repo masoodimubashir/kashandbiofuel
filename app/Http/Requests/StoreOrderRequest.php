@@ -22,10 +22,13 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cart_ids' => 'required|string',
-            'total_price' => 'required|numeric',
+            'cart_data' => 'required|array',
+            'cart_data.*.cart_id' => 'required|exists:carts,id',
+            'cart_data.*.product_attribute_id' => 'required|exists:product_attributes,id',
+            'total_price' => 'required|numeric|min:0',
             'payment_method' => 'required|string|in:cod,online',
-            'address' => 'required|exists:addresses,id',
+            'address_id' => 'required|exists:addresses,id'
         ];
+        
     }
 }

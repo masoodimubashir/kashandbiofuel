@@ -8,10 +8,8 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\SubCategory;
-use App\Notifications\OrderNotification;
 use Exception;
 use Illuminate\Http\Request;
-use Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -139,7 +137,7 @@ class OrderController extends Controller
         $order = Order::with([
             'orderedItems' => function ($query) {
                 $query->with('product', function ($query) {
-                    $query->with('productAttribute');
+                    $query->with('productAttributes');
                 });
             },
             'address' => function ($query) {
@@ -204,7 +202,6 @@ class OrderController extends Controller
             if (in_array($validatedData['field'], ['is_confirmed']) && $order->save()) {
 
                 event(new OrderPlacedEvent($order));
-
 
                 return response()->json([
                     'status' => true,

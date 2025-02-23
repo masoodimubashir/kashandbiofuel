@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->string('image_path')->nullable();
+            $table->unsignedBigInteger('qty');
             $table->string('hex_code');
             $table->timestamps();
         });

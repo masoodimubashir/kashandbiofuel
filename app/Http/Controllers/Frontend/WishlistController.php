@@ -14,9 +14,7 @@ class WishlistController extends Controller
 {
 
 
-    public function __construct(protected ItemService $itemService)
-    {
-    }
+    public function __construct(protected ItemService $itemService) {}
 
     public function viewWishlist(Request $request)
     {
@@ -26,12 +24,11 @@ class WishlistController extends Controller
 
             [$items, $check_out_price] = $this->itemService->getItems($request, 'wishlist');
 
-       
+
             return response()->json([
                 'data' => $items,
                 'check_out_price' => $check_out_price
             ]);
-
         }
 
         return view('frontend.Wishlist.wishlist');
@@ -44,15 +41,19 @@ class WishlistController extends Controller
         try {
 
 
-            $product = Wishlist::where('product_id', $request->product_id)->get();
+            $product = Wishlist::query()
+                ->where([
+                    'product_id' => $request->product_id,
+                    'product_attribute_id' => $request->product_attribute_id
+                ])->get();
 
-            if($product->count() > 0){
+            if ($product->count() > 0) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Item already Exists',
                 ], 404);
             }
-        
+
             $this->itemService->addOrUpdateItem($request->validated(), 'wishlist');
 
             return response()->json([
@@ -60,8 +61,6 @@ class WishlistController extends Controller
                 'redirect_url' => route('wishlist.view-wishlist'),
                 'message' => 'Item added to cart successfully'
             ]);
-
-
         } catch (Exception $e) {
 
             return response()->json([
@@ -70,8 +69,6 @@ class WishlistController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-
-
     }
 
 
@@ -82,9 +79,12 @@ class WishlistController extends Controller
 
             $item = $this->itemService->findItem($id, 'wishlist');
 
-            $cart_item = Cart::where('product_id', $item->product_id)->first();
+            $cart = Cart::where([
+                'product_id' => $request->product_id,
+                'product_attribute_id' => $request->product_attribute_id,
+            ])->first();
 
-            if ($cart_item) {
+            if ($cart) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Item already Exists',
@@ -97,7 +97,6 @@ class WishlistController extends Controller
                 'status' => true,
                 'message' => 'Item added to cart successfully'
             ]);
-
         } catch (\Exception $e) {
 
             return response()->json([
@@ -105,9 +104,7 @@ class WishlistController extends Controller
                 'message' => 'Something went wrong.',
                 'error' => $e->getMessage(),
             ], 500);
-
         }
-
     }
 
 
@@ -130,7 +127,6 @@ class WishlistController extends Controller
             return response()->json([
                 'message' => 'Item removed from cart successfully'
             ]);
-
         } catch (Exception $e) {
 
             return response()->json([
@@ -141,8 +137,5 @@ class WishlistController extends Controller
 
             ]);
         }
-
     }
-
-
 }

@@ -695,6 +695,7 @@
             }
 
             async function ajaxRequest(formData, url) {
+                
                 return $.ajax({
                     url: url,
                     type: "POST",
