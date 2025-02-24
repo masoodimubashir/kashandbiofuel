@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChangeFlagsController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomersController;
+use App\Http\Controllers\Admin\ExcelController;
 use App\Http\Controllers\Admin\ExcelProductImportsController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductAttributeController;
@@ -41,11 +42,10 @@ use Illuminate\Support\Facades\Route;
 // Checking Session User For Testing
 Route::get('/s', function () {
     dd(request()->cookie('guest_id'));
-
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-    
+
 
 // Route For Searching The Product
 Route::get('/live-search', SearchController::class)->name('live.search');
@@ -89,9 +89,11 @@ Route::middleware('checkUserGuest')->group(function () {
     Route::put('/return-to-cart/{id}', [WishlistController::class, 'returnToCart'])->name('return-to-cart');
 
     Route::put('apply-coupon', [ApplyCouponController::class, 'viewCart'])->name('apply-coupon');
-
-
 });
+
+
+Route::post('products/import', [ExcelController::class, 'import'])->name('products.import');
+Route::get('products/export', [ExcelController::class, 'export'])->name('products.export');
 
 
 // Authenticated Routes For User And Admin
@@ -134,7 +136,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('update-status/{id}', [StatusUpdateController::class, 'updateStatus'])->name('status.update');
         Route::put('/update-show-on-navbar/{id}', [StatusUpdateController::class, 'updateShowOnNavabr'])->name('status.showOnNavbar');
 
-        Route::post('products/import', ExcelProductImportsController::class)->name('products.import');
+
 
         Route::put('Product/seo', [ProductSeoController::class, 'index'])->name('Product.seo');
         Route::put('Product/flags/{id}', [ChangeFlagsController::class, 'index'])->name('Product.flags');
@@ -142,7 +144,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications');
 
         Route::post('/notifications/mark-as-read/{id}', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.markAsRead');
-
     });
 
 
@@ -166,7 +167,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
         Route::get('/phonepe/redirect', [CheckoutController::class, 'redirect'])->name('payment.redirect');
-
     });
 });
 

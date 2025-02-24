@@ -33,7 +33,7 @@ class FrontendProductController extends Controller
 
 
         // Calculate percentages
-        $totalReviews = $product->reviews_count;
+        $totalReviews = $product->reviews_count ?? 0;
         $product->star_percentages = [
             5 => $totalReviews ? round(($product->five_star_count / $totalReviews) * 100) : 0,
             4 => $totalReviews ? round(($product->four_star_count / $totalReviews) * 100) : 0,

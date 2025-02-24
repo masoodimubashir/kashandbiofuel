@@ -31,7 +31,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-4 col-md-2 mb-3">
                         <div class="card-body">
-                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order->id }}">
+                            <button class="btn btn-primary w-100" id="pushToShiprocket" data-id="{{ $order['id'] }}">
                                 Push To Shiprocket
                             </button>
 
@@ -44,13 +44,13 @@
                     <div class="col-12 col-sm-4 col-md-2 mb-3">
                         <div class="card-body">
                             <select class="form-select form-select-md changeStatus " style="cursor:pointer"
-                                data-id="{{ $order->id }}">
+                                data-id="{{ $order['id'] }}">
                                 <option selected disabled>Choose Action</option>
-                                <option value="is_confirmed" {{ $order->is_confirmed ? 'selected' : '' }}>Confirmed
+                                <option value="is_confirmed" {{ $order['is_confirmed'] ? 'selected' : '' }}>Confirmed
                                 </option>
-                                <option value="is_delivered" {{ $order->is_delivered ? 'selected' : '' }}>Delivered
+                                <option value="is_delivered" {{ $order['is_delivered'] ? 'selected' : '' }}>Delivered
                                 </option>
-                                <option value="is_cancelled" {{ $order->is_cancelled ? 'selected' : '' }}>Cancelled
+                                <option value="is_cancelled" {{ $order['is_cancelled'] ? 'selected' : '' }}>Cancelled
                                 </option>
                             </select>
                         </div>
@@ -73,9 +73,9 @@
 
                             <div class="d-flex flex-wrap align-items-center justify-content-between gap-4">
                                 <span class="border border-warning text-warning fs-13 px-2 py-1 rounded">
-                                    {{ $order->status }}
+                                    {{ $order['status'] }}
                                 </span>
-                                <p class="mb-0">Order / Order Details / - {{ $order->custom_order_id }} <td> </td>
+                                <p class="mb-0">Order / Order Details / - {{ $order['custom_order_id'] }} <td> </td>
                                 </p>
                             </div>
 
@@ -138,7 +138,7 @@
                         </div>
 
                     </div>
-                    <input type="hidden" value="{{ $order->id }}">
+                    <input type="hidden" value="{{ $order['id'] }}">
                     <div class="col-sm-12">
 
                         <div class="card">
@@ -154,69 +154,93 @@
                                                 <tr>
                                                     <th>Product</th>
                                                     <th>Product Name</th>
-                                                    {{-- <th>Color</th> --}}
+                                                    <th>Variants</th>
                                                     <th>Price</th>
                                                     <th>Quantity</th>
-                                                    <th>Total</th>
                                                 </tr>
                                             </thead>
-
                                             <tbody>
-                                                @foreach ($order->orderedItems as $item)
+                                                @php
+                                                    // Group items by product ID to handle unique products
+                                                    $groupedItems = collect($order['orderedItems'])->groupBy('id');
+                                                @endphp
+                                                
+                                                @foreach ($groupedItems as $productId => $items)
+                                                    @php
+                                                        $firstItem = $items->first();
+                                                        $variantCount = count($firstItem['attributes']);
+                                                    @endphp
+                                                    
+                                                    <!-- First variant row with product details -->
                                                     <tr>
-
-                                                        <td class="text-center">
-                                                            @isset($item->product->productAttribute->image_path)
-                                                                <img class="img-fluid img-40"
-                                                                    src="{{ asset('storage/' . $item->product->productAttribute->image_path) }}"
+                                                        <td rowspan="{{ $variantCount }}" class="align-middle">
+                                                            @isset($firstItem['attributes'][0]['image_path'])
+                                                                <img class="img-fluid img-40" 
+                                                                    src="{{ asset('storage/' . $firstItem['attributes'][0]['image_path']) }}" 
                                                                     alt="#">
                                                             @else
-                                                                <img src="{{ asset('default_images/product_image.png') }}"
-                                                                    class="img-fluid img-50"
-                                                                    alt="{{ $item->product->name }}">
+                                                                <img src="{{ asset('default_images/product_image.png') }}" 
+                                                                    class="img-fluid img-50" alt="Default">
                                                             @endisset
                                                         </td>
-
-                                                        <td>
-                                                            <div class="product-name"><a
-                                                                    href="#">{{ $item->product->name }}</a>
+                                                        <td rowspan="{{ $variantCount }}" class="align-middle">
+                                                            <div class="product-name">
+                                                                <a href="#">{{ $firstItem['product_name'] }}</a>
                                                             </div>
                                                         </td>
-
-                                                        {{-- <td>
-                                                            <div class="color-swatch mt-1"
-                                                                style="background-color: {{$item->product->productAttribute->hex_code}};
-                                                                   width: 25px;
-                                                                   height: 25px;
-                                                                   display: inline-block;
-                                                                   border-radius: 50%;"
-                                                                title="Color: {{$item->product->productAttribute->hex_code}}"
-                                                                data-product-attribute-id="{{$item->product->productAttribute->id}}">
-                                                            </div>
-                                                        </td> --}}
-
-                                                        <td>{{ Number::currency($item->product->selling_price) }}</td>
-
+                                                        
+                                                        <!-- First variant -->
                                                         <td>
-                                                            <fieldset class="qty-box">
-                                                                <div class="input-group">
-                                                                    <input class="touchspin text-center"
-                                                                        type="text" value="{{ $item->quantity }}">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="color-swatch"
+                                                                    style="background-color: {{ $firstItem['attributes'][0]['hex_code'] }};
+                                                                            width: 25px;
+                                                                            height: 25px;
+                                                                            display: inline-block;
+                                                                            border-radius: 50%;
+                                                                            margin-right: 8px;"
+                                                                    title="Color: {{ $firstItem['attributes'][0]['hex_code'] }}">
                                                                 </div>
-                                                            </fieldset>
+                                                                <img class="img-fluid" style="width: 30px;" 
+                                                                    src="{{ asset('storage/' . $firstItem['attributes'][0]['image_path']) }}" 
+                                                                    alt="Variant">
+                                                            </div>
                                                         </td>
-
-
+                                                        <td>{{ Number::currency($firstItem['selling_price']) }}</td>
                                                         <td>
-                                                            {{ Number::currency($item->price, 'INR') }}
+                                                            <input class="touchspin text-center" type="text" 
+                                                                value="{{ $firstItem['attributes'][0]['qty'] }}">
                                                         </td>
                                                     </tr>
+                                                    
+                                                    <!-- Additional variant rows -->
+                                                    @for ($i = 1; $i < $variantCount; $i++)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <div class="color-swatch"
+                                                                        style="background-color: {{ $firstItem['attributes'][$i]['hex_code'] }};
+                                                                                width: 25px;
+                                                                                height: 25px;
+                                                                                display: inline-block;
+                                                                                border-radius: 50%;
+                                                                                margin-right: 8px;"
+                                                                        title="Color: {{ $firstItem['attributes'][$i]['hex_code'] }}">
+                                                                    </div>
+                                                                    <img class="img-fluid" style="width: 30px;" 
+                                                                        src="{{ asset('storage/' . $firstItem['attributes'][$i]['image_path']) }}" 
+                                                                        alt="Variant">
+                                                                </div>
+                                                            </td>
+                                                            <td>{{ Number::currency($firstItem['selling_price']) }}</td>
+                                                            <td>
+                                                                <input class="touchspin text-center" type="text" 
+                                                                    value="{{ $firstItem['attributes'][$i]['qty'] }}">
+                                                            </td>
+                                                        </tr>
+                                                    @endfor
                                                 @endforeach
-
-
-
                                             </tbody>
-
                                         </table>
                                     </div>
                                 </div>
@@ -233,7 +257,7 @@
                                         <div>
                                             <p class="text-dark fw-medium fs-16 mb-1">Date Of Purchase</p>
                                             <p class="mb-0">
-                                                {{ $order->date_of_purchase }}
+                                                {{ $order['date_of_purchase'] }}
                                             </p>
                                         </div>
                                         <div
@@ -248,7 +272,7 @@
                                         <div>
                                             <p class="text-dark fw-medium fs-16 mb-1">Customer Id</p>
                                             <p class="mb-0">
-                                                {{ $order->custom_order_id }}
+                                                {{ $order['custom_order_id'] }}
                                             </p>
                                         </div>
                                         <div
@@ -263,7 +287,7 @@
                                         <div>
                                             <p class="text-dark fw-medium fs-16 mb-1">Transaction Id</p>
                                             <p class="mb-0">
-                                                {{ $order->transaction->transaction_id }}
+                                                {{ $order['transaction_id'] }}
 
                                             </p>
                                         </div>
@@ -292,7 +316,7 @@
                         </div>
                         <div>
                             <p class="fw-medium text-dark mb-0">
-                                {{ Number::currency($order->total_amount) }}
+                                {{ Number::currency($order['total_amount']) }}
                             </p>
                         </div>
 
@@ -306,7 +330,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-2">
 
-                            @if ($order->address->user->image_path === null)
+                            @if ($order['image'] === null)
                                 <img src="{{ asset('storage/' . $order->address->user->image_path) }}" alt=""
                                     class="avatar rounded-3 border border-light border-3 img-fluid w-25 h-25 rounded-pill">
                             @else
@@ -317,9 +341,9 @@
 
 
                             <div>
-                                <p class="mb-1">{{ $order->address->user->name }}</p>
+                                <p class="mb-1">{{ $order['name'] }}</p>
                                 <a href="#!" class="link-primary fw-medium">
-                                    {{ $order->address->user->email }}
+                                    {{ $order['email'] }}
                                 </a>
                             </div>
                         </div>
@@ -327,7 +351,7 @@
                             <h5 class="">Contact Number</h5>
                         </div>
                         <p class="mb-1">
-                            {{ $order->address->phone }}
+                            {{ $order['phone'] }}
                         </p>
 
                         <div class="d-flex justify-content-between mt-3">
@@ -336,12 +360,11 @@
 
                         <div style="font-family: Arial, sans-serif; color: #333;">
                             <p class="mb-1" style="margin-bottom: 8px; font-size: 14px; color: #555;">
-                                {{ $order->address->address }} - {{ $order->address->city }} -
-                                {{ $order->address->state }} - {{ $order->address->country }}
+                                {{ $order['full_address'] }}
                             </p>
                             <p class="mb-1" style="margin-bottom: 8px; font-size: 14px; color: #555;">
 
-                                {{ $order->address->pincode }}
+                                {{ $order['pincode'] }}
 
                             </p>
                             <p class="mb-1" style="margin-bottom: 8px; font-size: 14px; color: #555;">
@@ -405,9 +428,9 @@
                     });
                 });
 
-               
+
                 $('.changeStatus').on('change', function() {
-                  
+
 
                     let updateField = $(this).val();
                     let orderId = $(this).data('id');

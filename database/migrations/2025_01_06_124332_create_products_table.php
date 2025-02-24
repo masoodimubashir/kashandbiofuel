@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('sub_category_id')->constrained('sub_categories')->onDelete('restrict');;
             $table->string('name');
             $table->string('sku')->unique();
-            $table->json('search_tags');
+            // $table->json('search_tags');
             $table->string('slug');
             $table->decimal('price', 10, 2);
-            $table->string('qty');
+            $table->string('qty')->nullable();
             $table->decimal('selling_price', 10, 2);
             $table->boolean('status');
             $table->date('crafted_date');

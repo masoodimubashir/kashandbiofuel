@@ -2,9 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
 use App\Models\Product;
-use App\Models\SubCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
@@ -25,7 +23,7 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'sku' => $this->faker->unique()->text(5),
-            'search_tags' => $jsonTags,
+            // 'search_tags' => $jsonTags,
             'slug' => $this->faker->slug(),
             'price' => $price,
             'qty' => $this->faker->numberBetween(1, 15),

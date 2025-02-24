@@ -181,4 +181,61 @@ trait HelperClass
             'product_attribute_id' => $item->product_attribute_id,
         ];
     }
+
+
+    // Tranforming order to array
+    public function transformOrder($order)
+    {
+
+        // If the order doesn't exist, return null
+        if (!$order) {
+            return null;
+        }
+
+        // Transform the order data
+        return [
+            'id' => $order->id,
+            'is_confirmed' => $order->is_confirmed,
+            'is_delivered' => $order->is_delivered,
+            'is_cancelled' => $order->is_cancelled,
+            'status' => $order->status,
+            'custom_order_id' => $order->custom_order_id,
+            'date_of_purchase' => $order->created_at->format('Y-m-d H:i:s'),
+            'customer_id' => $order->address->user->id ?? null,
+            'transaction_id' => $order->transaction->transaction_id ?? null,
+            'total_amount' => $order->total_amount,
+            'name' => $order->address->user->name ?? null,
+            'email' => $order->address->user->email ?? null,
+            'image' => $order->address->user->image_path ?? null,
+            'phone' => $order->address->phone ?? null,
+            'full_address' => $order->address->address . '-' . $order->address->city . '-' . $order->address->state . '-' . $order->address->country,
+            'contact_number' => $order->address->user->contact_number ?? null,
+            'pincode' => $order->address->pin_code ?? null,
+
+            'orderedItems' => collect($order->orderedItems)->map(function ($item) {
+                // Get all product attributes for the product
+                $attributes = collect($item->product->productAttributes)
+                    ->map(function ($attribute) use ($item) {
+                        return [
+                            'image_path' => $attribute->image_path,
+                            'qty' => $item->quantity,
+                            'hex_code' => $attribute->hex_code,
+                        ];
+                    })->toArray();
+
+                return [
+                    'id' => $item->product->id,  // Important for grouping
+                    'product_name' => $item->product->name,
+                    'selling_price' => $item->product->selling_price,
+                    'attributes' => $attributes,
+                ];
+            })->toArray(),
+
+            'shipping_address' => [
+                'address' => $order->address->address ?? null,
+                'city' => $order->address->city ?? null,
+                'state' => $order->address->state ?? null,
+            ]
+        ];
+    }
 }

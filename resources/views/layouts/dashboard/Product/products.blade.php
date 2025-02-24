@@ -42,7 +42,7 @@
 
 
     <!-- Product Form Modal -->
-    {{-- <div class="modal fade bd-example-modal-lg" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="productModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -52,7 +52,7 @@
 
 
                     <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div> --}}
+                </div> 
                 <form id="productForm" class="row g-3 p-4" enctype='multipart/form-data'>
                     @csrf
                     <input type="hidden" id="productId" name="product_id">
@@ -90,7 +90,7 @@
                         <div class="box-col-12">
                             <div class="input-group flatpicker-calender">
                                 <input class="form-control" id="datetime-local" id="crafted_date" type="date"
-                                       name="crafted_date">
+                                    name="crafted_date">
                                 <div class="invalid-feedback">Please enter Crafted Date</div>
 
                             </div>
@@ -144,8 +144,7 @@
 
                     <div class="col-12 col-lg-6">
                         <label class="form-label" for="additional_description">Additional Description</label>
-                        <textarea class="form-control" id="additional_description"
-                                  name="additional_description"></textarea>
+                        <textarea class="form-control" id="additional_description" name="additional_description"></textarea>
                         <div class="invalid-feedback">Please enter an additional description</div>
                     </div>
 
@@ -192,9 +191,9 @@
                         <button type="submit" class="btn btn-success">Save Product</button>
                     </div>
                 </form>
-            {{-- </div>
+            </div>
         </div>
-    </div> --}}
+    </div>
 
 
     {{-- Seo Manager Model --}}
@@ -204,7 +203,7 @@
                 <div class="modal-header">
 
                     <button class="btn-close py-0" type="button" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                        aria-label="Close"></button>
                 </div>
                 <form id="seoForm" class="row g-3 p-4">
 
@@ -248,8 +247,8 @@
             </div>
             <div class="col-12 col-sm-6">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i
-                                data-feather="home"></i></a>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">
+                            <i class="fa fa-home"></i></a>
                     </li>
                     <li class="breadcrumb-item {{ Request::routeIs('products.index') ? 'active' : '' }}">Products</li>
                 </ol>
@@ -262,14 +261,9 @@
 
         <!-- Table Section -->
         <div class="row">
-
             <div class="col-sm-12">
-
-
                 <div class="card">
-
                     <div class="card-body">
-
 
                         <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -277,7 +271,12 @@
                         </form>
 
                     </div>
+
+
+                  
                 </div>
+
+
 
 
                 <div class="card">
@@ -291,10 +290,12 @@
 
 
                                 <button class="btn btn-success " type="button" data-bs-toggle="modal"
-                                        id="productBtn" data-bs-target=".bd-example-modal-lg">
+                                    id="productBtn" data-bs-target=".bd-example-modal-lg">
                                     Add Product
                                 </button>
-
+                                <a href="{{ route('products.export') }}" class="btn btn-success" type="button">
+                                    <i class="fa fa-download"></i> Download Excel Template
+                                </a>
 
                             </div>
 
@@ -303,13 +304,13 @@
                             <div class="table-responsive">
                                 <table class="table table-md table-striped" id="productsTable">
                                     <thead>
-                                    <tr>
-                                        <th scope="col" style="width: 15%;">Product Name</th>
-                                        <th scope="col" style="width: 10%;">Price</th>
-                                        <th scope="col" style="width: 15%;">Selling Price</th>
-                                        <th scope="col" style="width: 10%;">Status</th>
-                                        <th scope="col" style="width: 20%;">Action</th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col" style="width: 15%;">Product Name</th>
+                                            <th scope="col" style="width: 10%;">Price</th>
+                                            <th scope="col" style="width: 15%;">Selling Price</th>
+                                            <th scope="col" style="width: 10%;">Status</th>
+                                            <th scope="col" style="width: 20%;">Action</th>
+                                        </tr>
                                     </thead>
 
                                     <tbody class="text-center   "></tbody>
@@ -326,7 +327,7 @@
 
     @push('dashboard.script')
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
 
                 const productTable = $('#productsTable').DataTable({
                     processing: true,
@@ -336,11 +337,11 @@
                         type: 'GET',
                     },
                     columns: [{
-                        data: 'product_name',
-                        name: 'product_name',
-                        orderable: false,
-                        searchable: false
-                    },
+                            data: 'product_name',
+                            name: 'product_name',
+                            orderable: false,
+                            searchable: false
+                        },
 
                         {
                             data: 'price',
@@ -364,7 +365,7 @@
                             searchable: false
                         },
                     ],
-                    drawCallback: function (settings) {
+                    drawCallback: function(settings) {
                         // Initialize select2 for the dynamically added select elements
                         $('.select_flag').select2({
                             placeholder: "Select Flag",
@@ -390,13 +391,11 @@
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
                             onload: (response) => {
-                                const data = JSON.parse(response);
                                 productTable.ajax.reload(null, false);
-                                Swal.fire('Success', data.message, 'success');
+                                Swal.fire('Success', response.message, 'success');
                             },
                             onerror: (response) => {
-                                const data = JSON.parse(response);
-                                Swal.fire('Error', data.message, 'error');
+                                Swal.fire('Error', response.message, 'error');
                             }
                         }
                     }
@@ -438,7 +437,7 @@
                 });
 
 
-                $(document).on('click', '.remove-row', function () {
+                $(document).on('click', '.remove-row', function() {
                     $(this).closest('.variation-row').remove();
                 });
 
@@ -461,12 +460,12 @@
                     previewItem.append(previewWrapper);
 
                     const reader = new FileReader();
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         img.attr('src', e.target.result);
                     };
                     reader.readAsDataURL(file);
 
-                    removeBtn.click(function () {
+                    removeBtn.click(function() {
                         const index = files.findIndex(f => f.file === file);
                         if (index > -1) {
                             files.splice(index, 1);
@@ -477,26 +476,24 @@
                     previewContainer.append(previewItem);
                 }
 
-                $('#productForm').on('submit', function (e) {
+                $('#productForm').on('submit', function(e) {
                     e.preventDefault();
                     const formData = new FormData(this);
 
                     // Get all variation rows and organize images by color
-                    $('.variation-row').each(function (index) {
-
-
+                    $('.variation-row').each(function(index) {
                         const hexCode = $(this).find('input[type="color"]').val();
                         const quantity = $(this).find('input[type="number"]').val();
-                        const images = $(this).find('input[type="file"]')[0].files;
+                        const imageInput = $(this).find('input[type="file"]')[0];
+                        const imageFile = imageInput.files[0]; // Get the first file from the FileList
 
                         // Add hex code
                         formData.append(`product_attributes[${index}][hex_code]`, hexCode);
                         formData.append(`product_attributes[${index}][qty]`, quantity);
 
-
-                        // Add all images for this color
-                        for (let i = 0; i < images.length; i++) {
-                            formData.append(`product_attributes[${index}][images][]`, images[i]);
+                        // Add image file
+                        if (imageFile) {
+                            formData.append(`product_attributes[${index}][image]`, imageFile);
                         }
                     });
 
@@ -513,7 +510,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             if (response.status === 'success') {
                                 productTable.ajax.reload();
                                 $('#productModal').modal('hide');
@@ -521,7 +518,7 @@
                                 Swal.fire('Success', 'Product created successfully', 'success');
                             }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             handleFormErrors(xhr.responseJSON.errors);
                         }
                     });
@@ -547,8 +544,6 @@
                         'colors.required': 'At least one color is required',
                         'images.required': 'At least one image is required',
                         'crafted_date.required': 'Crafted date is required',
-                        'qty.required': 'Quantity is required',
-                        'search_tags.required': 'Search tags are required'
                     };
 
                     // Display errors in respective invalid-feedback divs
@@ -592,13 +587,13 @@
                 }
 
 
-                $('#category_id').on('change', function () {
+                $('#category_id').on('change', function() {
                     const categoryId = $(this).val();
                     if (categoryId) {
                         $.ajax({
                             url: `/admin/categories/${categoryId}`,
                             method: "GET",
-                            success: function (response) {
+                            success: function(response) {
                                 const category = response.category;
                                 let options = '<option value="">Select Subcategory</option>';
                                 category.sub_categories.forEach(subcategory => {
@@ -615,7 +610,7 @@
 
                 let rowIndex = 0;
 
-                $('#addRowBtn').click(function () {
+                $('#addRowBtn').click(function() {
                     const newRow = `
                         <div class="variation-row border rounded p-3 mt-3">
                             <div class="row">
@@ -638,8 +633,8 @@
                                 <div class="col-md-7">
                                     <div class="image-upload">
                                         <label class="form-label">Images for this color</label>
-                                        <input type="file" class="form-control" name="images"  accept="image/jpeg,png,jpg,webp">
-                                        <small class="text-muted">Select multiple images for this color</small>
+                                        <input type="file" class="form-control" name="image"  accept="image/jpeg,png,jpg,webp">
+                                        <small class="text-muted">Select image for this color</small>
                                         <div class="file-preview row mt-2"></div>
                                     </div>
                                 </div>
@@ -655,16 +650,16 @@
                     rowIndex++;
                 });
 
-                $(document).on('click', '.remove-row', function () {
+                $(document).on('click', '.remove-row', function() {
                     $(this).closest('.variation-row').remove();
                 });
 
 
-                $(document).on('click', '.remove-color', function () {
+                $(document).on('click', '.remove-color', function() {
                     $(this).closest('.color-group').remove();
                 });
 
-                $(document).on('click', '.deleteBtn', function () {
+                $(document).on('click', '.deleteBtn', function() {
                     const productId = $(this).data('id');
                     Swal.fire({
                         title: 'Are you sure?',
@@ -682,12 +677,12 @@
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content')
                                 },
-                                success: function (response) {
+                                success: function(response) {
                                     Swal.fire('Deleted!', 'The Product has been deleted.',
                                         'success');
                                     productTable.ajax.reload(null, false);
                                 },
-                                error: function () {
+                                error: function() {
                                     Swal.fire('Error!', 'Failed to delete the Product.',
                                         'error');
                                 }
@@ -696,7 +691,7 @@
                     });
                 });
 
-                $(document).on('change', '.changeStatus', function () {
+                $(document).on('change', '.changeStatus', function() {
 
                     const categoryId = $(this).attr('id').replace('cb_', '');
                     const newStatus = $(this).prop('checked') ? 1 : 0;
@@ -709,14 +704,14 @@
                             model: 'Product',
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             if (response.status === 'success') {
                                 productTable.ajax.reload(null, false);
                             } else {
                                 Swal.fire('Error!', 'Failed to update status.', 'error');
                             }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             Swal.fire('Error!', 'Something went wrong while updating status.',
                                 'error');
                         }
@@ -724,14 +719,14 @@
                 });
 
 
-                $('#seoModal').on('show.bs.modal', function (event) {
+                $('#seoModal').on('show.bs.modal', function(event) {
                     const button = $(event.relatedTarget); // Button that triggered the modal
                     const productId = button.data('id'); // Extract info from data-* attributes
 
                     $('#seoModal #product_id').val(productId); // Set the Product ID in the modal's hidden input
                 });
 
-                $('#seoForm').on('submit', function (e) {
+                $('#seoForm').on('submit', function(e) {
                     e.preventDefault();
 
                     const formData = new FormData(this);
@@ -749,7 +744,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             if (response.status === 'success') {
                                 productTable.ajax.reload();
                                 $('#seoModal').modal('hide');
@@ -757,7 +752,7 @@
                                 Swal.fire('Success', 'SEO data updated successfully', 'success');
                             }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             if (xhr.responseJSON && xhr.responseJSON.errors) {
                                 handleFormErrors(xhr.responseJSON.errors);
 
@@ -769,6 +764,7 @@
                         }
                     });
                 });
+
 
 
             });

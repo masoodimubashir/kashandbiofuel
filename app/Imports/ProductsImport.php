@@ -7,12 +7,11 @@ use App\Models\Product;
 use App\Models\SubCategory;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Str;
 
-class ProductsImport implements ToModel, WithHeadingRow
+class ProductsImport implements
 {
     /**
      * @param Collection $collection
@@ -21,47 +20,46 @@ class ProductsImport implements ToModel, WithHeadingRow
     {
 
 
-
-        $tags = json_encode( $row['searchtags']);
-
-
         $category = Category::firstOrCreate(
-            ['name' => $row['category']],
+            [
+                'name' => $row['category']
+            ],
             [
                 'slug' => Str::slug($row['category']),
                 'status' => 1,
                 'show_on_navbar' => 0,
-                'description' => '..'
             ]
         );
 
-        $subCategory = SubCategory::firstOrCreate(
-            [
-                'name' => $row['subcategory'],
-                'category_id' => $category->id
-            ],
-            [
-                'slug' => Str::slug($row['subcategory']),
-                'status' => 1,
-                'show_on_navbar' => 0,
-                'description' => '.'
-            ]
-        );
+        $subCategory = SubCategory::where('name', $row['sub_category'])->first();
+
+        dd($subCategory);
+
+        // $subCategory = SubCategory::firstOrCreate(
+        //     [
+        //         'name' => $row['sub_category'], 
+        //         'category_id' => $category->id 
+        //     ],
+        //     [
+        //         'slug' => Str::slug($row['sub_category']), 
+        //         'status' => 1,
+        //         'show_on_navbar' => 0,
+        //     ]
+        // );
 
         return new Product([
-            'category_id' => $category->id,  // Use the category id instead of row[0]
-            'sub_category_id' => $subCategory->id,  // Use the subcategory id instead of row[1]
+            'category_id' => $category->id,
+            'sub_category_id' => $subCategory->id,
             'name' => $row['name'],
             'sku' => $row['sku'],
-            'search_tags' =>  $tags,
             'slug' => Str::slug($row['name']),
             'price' => $row['price'],
-            'qty' => $row['quantity'],
-            'selling_price' => $row['sellingprice'],
+            'qty' => 1,
+            'selling_price' => $row['selling_price'],
             'status' => 1,
-            'crafted_date' => Carbon::parse($row['crafteddate'])->format('Y-m-d'),
-            'short_description' => $row['shortdescription'],
-            'additional_description' => $row['additionaldescription'],
+            'crafted_date' => Carbon::parse($row['crafted_date'])->format('Y-m-d'),
+            'short_description' => $row['short_description'],
+            'additional_description' => $row['additional_description'],
             'description' => $row['description']
         ]);
     }

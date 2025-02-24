@@ -135,10 +135,10 @@ class CheckoutController extends Controller
   {
 
 
+
     try {
 
       if ($request->ajax()) {
-
 
         $response = $this->phonepeService->checkout($request->validated());
 

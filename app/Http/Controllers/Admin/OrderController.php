@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Class\HelperClass;
 use App\Events\OrderPlacedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -14,6 +15,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
+
+
+    use HelperClass;
+
     /**
      * Display a listing of the resource.
      */
@@ -30,8 +35,6 @@ class OrderController extends Controller
                     list($status, $value) = explode('-', $request->status);
 
                     $value = filter_var($value, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
-
-                    \Log::info('Status: ' . $status . ', Value: ' . $value);
 
                     return match ($status) {
                         'cancelled' => $q->where('is_cancelled', $value),
@@ -134,6 +137,7 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
+
         $order = Order::with([
             'orderedItems' => function ($query) {
                 $query->with('product', function ($query) {
@@ -146,8 +150,12 @@ class OrderController extends Controller
             'transaction'
         ])->find($id);
 
+        $order = $this->transformOrder($order);
+
         return view('layouts.dashboard.Order.view-order', compact('order'));
     }
+
+    
 
     /**
      * Show the form for editing the specified resource.

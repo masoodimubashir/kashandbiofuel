@@ -99,22 +99,24 @@
                                 </div>
 
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="qty">Quantity<span
-                                            class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="qty" name="qty">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-
-                            <!-- Additional Details -->
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
                                     <label class="form-label" for="crafted_date">Crafted Date<span
                                             class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="crafted_date" name="crafted_date">
                                     <div class="invalid-feedback"></div>
                                 </div>
 
+                                {{-- <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="qty">Quantity<span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="qty" name="qty">
+                                    <div class="invalid-feedback"></div>
+                                </div> --}}
+                            </div>
+
+                            <!-- Additional Details -->
+                            <div class="row">
+
+                                {{-- 
                                 <div class="col-md-6 mb-3">
 
                                     <label class="form-label" for="tags">Search Tags</label>
@@ -131,7 +133,7 @@
                                         @endif
                                     </select>
                                     <div class="invalid-feedback">Tags Are Required</div>
-                                </div>
+                                </div> --}}
                             </div>
 
 
@@ -233,11 +235,7 @@
                 let removedAttributes = [];
                 let removedImages = [];
 
-                $('.tags').select2({
-                    tags: true,
-                    tokenSeparators: [',', ' '],
-                    placeholder: 'Enter tags...'
-                });
+             
 
                 function initializeProductForm(productId) {
                     $.ajax({
@@ -276,7 +274,6 @@
                     });
                 }
 
-                // Initial load of subcategories for existing Product
                 function loadSubCategories(categoryId, selectedSubCategoryId = null) {
                     if (categoryId) {
                         $.ajax({
@@ -297,71 +294,80 @@
                     }
                 }
 
-
-                // Handle category change
                 $('#category_id').on('change', function() {
                     const categoryId = $(this).val();
                     loadSubCategories(categoryId);
                 });
 
                 function addVariationRow(data = null) {
+                    // Generate a unique index for the new row
+                    const rowIndex = $('.variation-row').length;
+
                     const rowHtml = `
-        <div class="variation-row border rounded p-3 mt-3">
-            <input type="hidden" name="attribute_id[]" value="${data ? data.id : ''}">
-            <div class="row">
-                <div class="col-md-2">
-                    <label class="form-label">Color</label>
-                    <input type="color" class="form-control" name="hex_code[]" value="${data ? data.hex_code : '#000000'}">
-                </div>
-                <div class="col-md-9">
-                    <label class="form-label">Images</label>
-                    <input type="file" class="form-control" name="images[]" multiple accept="image/*">
-                    <div class="existing-images row mt-2">
+                        <div class="variation-row border rounded p-3 mt-3">
+                            <input type="hidden" name="product_attributes[${rowIndex}][id]" value="${data ? data.id : ''}">
+                            <div class="row">
+                                <!-- Color Input -->
+                                <div class="col-md-1">
+                                    <label class="form-label">Color</label>
+                                    <input type="color" class="form-control" name="product_attributes[${rowIndex}][hex_code]" value="${data ? data.hex_code : '#000000'}" required>
+                                </div>
 
-                        ${data ? ` <div class="col-md-3 mb-2 image-container">
-                                              <div class="position-relative">
-                                                  <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
-                                              </div>
-                                           </div>` : ''}
+                                <!-- Quantity Input -->
+                                <div class="col-md-4">
+                                    <div class="color-input">
+                                        <label class="form-label">Quantity</label>
+                                        <div class="d-flex align-items-center">
+                                            <input type="number" class="form-control me-2" name="product_attributes[${rowIndex}][qty]" value="${data ? data.qty : ''}" required>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <!-- Image Upload -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Images</label>
+                                    <input type="file" class="form-control" name="product_attributes[${rowIndex}][image]" accept="image/*">
+                                    <div class="existing-images row mt-2">
+                                        ${data ? `
+                                                            <div class="col-md-3 mb-2 image-container">
+                                                                <div class="position-relative">
+                                                                    <img src="/storage/${data.image_path}" class="img-thumbnail" style="height: 100px; width: 100px;">
+                                                                </div>
+                                                            </div>
+                                                        ` : ''}
+                                    </div>
+                                </div>
 
-                    </div>
-                </div>
-                <div class="col-md-1">
-                    <button type="button" class="btn btn-danger remove-row mt-4 delete-image" data-image-id="${data ? data.id : ''}" >
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
+                                <!-- Remove Button -->
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-danger remove-row mt-4 delete-image" data-image-id="${data ? data.id : ''}">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
 
                     $('#variationRows').append(rowHtml);
                 }
-
-                // Remove the duplicate append
-                // const $row = $(rowHtml);
-                // $('#variationRows').append($row);
 
                 $('#addRowBtn').click(function() {
                     addVariationRow();
                 });
 
+                // $(document).on('click', '.delete-image', function() {
+                //     const imageId = $(this).data('image-id');
+                //     const container = $(this).closest('.image-container');
 
-                // Handle existing image deletion
-                $(document).on('click', '.delete-image', function() {
-                    const imageId = $(this).data('image-id');
-                    const container = $(this).closest('.image-container');
 
-                   
-                            removedImages.push(imageId);
-                            container.remove();
-                });
+                //     removedImages.push(imageId);
+                //     container.remove();
+                // });
 
-                // Handle row removal
                 $(document).on('click', '.remove-row', function() {
                     const row = $(this).closest('.variation-row');
-                    const attributeId = row.find('input[name="attribute_id[]"]').val();
+
+                    const attributeId = row.find('input[name^="product_attributes"][name$="[id]"]').val();
 
                     if (attributeId) {
                         removedAttributes.push(attributeId);
@@ -369,37 +375,32 @@
                     row.remove();
                 });
 
-                // Form submission
                 $('#productForm').on('submit', function(e) {
                     e.preventDefault();
                     const formData = new FormData(this);
 
-                    // Add basic Product data
                     formData.append('id', $('#productId').val());
                     formData.append('name', $('#name').val());
-                    formData.append('search_tags', ($('#tags').val()));
 
-                    // Handle Product attributes and images
                     $('.variation-row').each(function(index) {
-                        const hexCode = $(this).find('input[type="color"]').val();
-                        const images = $(this).find('input[type="file"]')[0].files;
                         const attributeId = $(this).find('input[name="attribute_id[]"]').val();
+                        const hexCode = $(this).find('input[type="color"]').val();
+                        const quantity = $(this).find('input[type="number"]').val();
+                        const imageInput = $(this).find('input[type="file"]')[0];
+                        const imageFile = imageInput.files[0];
 
-                        // Add attribute ID if exists
                         if (attributeId) {
                             formData.append(`product_attributes[${index}][id]`, attributeId);
                         }
 
-                        // Add hex code
                         formData.append(`product_attributes[${index}][hex_code]`, hexCode);
+                        formData.append(`product_attributes[${index}][qty]`, quantity);
 
-                        // Add images for this color
-                        for (let i = 0; i < images.length; i++) {
-                            formData.append(`product_attributes[${index}][images][]`, images[i]);
+                        if (imageFile) {
+                            formData.append(`product_attributes[${index}][image]`, imageFile);
                         }
                     });
 
-                    // Add removed items
                     if (removedAttributes.length) {
                         formData.append('removed_attributes', removedAttributes.join(','));
                     }
@@ -422,8 +423,14 @@
                             Swal.fire('Success', 'Product updated successfully', 'success')
                                 .then(() => window.location.href = '/admin/products');
                         },
-                        error: function(xhr) {
-                            handleFormErrors(xhr.responseJSON?.errors);
+                        error: function(error) {
+
+                            if (error.status === 422) {
+                                handleFormErrors(error.responseJSON?.errors);
+
+                            }
+
+                            Swal.fire('Error', 'Something Went Wrong Try Again..', 'error');
                         }
                     });
                 });
@@ -445,8 +452,6 @@
                         'category_id.required': 'Category is required',
                         'sub_category_id.required': 'Sub category is required',
                         'crafted_date.required': 'Crafted date is required',
-                        'qty.required': 'Quantity is required',
-                        'search_tags.required': 'Search tags are required',
                         'product_attributes.required': 'At least one color attribute is required',
                         'images.required': 'Images are required for each color'
                     };
@@ -459,6 +464,8 @@
 
                         const errorMessage = errorMessages[`${field}.required`] || messages[0];
                         input.siblings('.invalid-feedback').text(errorMessage);
+
+                        Swal.fire('Error', errorMessage, 'error');
 
                         // Handle special fields
                         if (field === 'description') {
@@ -478,8 +485,6 @@
                     }
                 }
 
-
-                // Initialize form with Product data
                 const productId = window.location.pathname.split('/')[3];
                 initializeProductForm(productId);
 

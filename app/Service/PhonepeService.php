@@ -217,10 +217,13 @@ class PhonepeService
             // Get the cart item details
             $cartItem = Cart::findOrFail($item['cart_id']);
             $product = Product::findOrFail($cartItem->product_id);
+
+
             
             Wishlist::where('product_id', $product->id)
                     ->where('user_id', $transaction->user_id)
                     ->delete();
+
     
             // Create order item
             $this->createOrderItem([
@@ -228,6 +231,8 @@ class PhonepeService
                 'product_attribute_id' => $item['product_attribute_id'],
                 'qty' => $cartItem->qty
             ], $order, $product);
+
+
     
             if ($item['product_attribute_id']) {
                 $productAttribute = ProductAttribute::where('id', $item['product_attribute_id'])
@@ -260,7 +265,7 @@ class PhonepeService
     {
         return $order->orderedItems()->create([
             'product_id' => $item['product_id'],
-            // 'product_attribute_id' => $item['product_attribute_id'],
+            'product_attribute_id' => $item['product_attribute_id'],
             'order_id' => $order->id,
             'quantity' => $item['qty'],
             'price' => $product->selling_price * $item['qty'],
