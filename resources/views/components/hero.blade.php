@@ -5,7 +5,7 @@
 
             @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::HEADER->value)->first())
                 <img src="{{ asset('storage/' . $banner->image_path ?? null) }}"
-                     class="bg-img blur-up lazyload"
+                     class="bg-img blur-up lazyload" style="height:200px" 
                      alt="">
             @endif
 

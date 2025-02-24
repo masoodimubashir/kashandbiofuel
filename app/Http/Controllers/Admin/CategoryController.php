@@ -13,6 +13,8 @@ use Yajra\DataTables\Facades\DataTables;
 use Exception;
 use Storage;
 
+use function PHPUnit\Framework\isNull;
+
 class CategoryController extends Controller
 {
     /**
@@ -217,11 +219,11 @@ class CategoryController extends Controller
 
             if ($request->hasFile('image')) {
 
-
-                if (Storage::disk('public')->exists($category->image_path)) {
+                if (!is_null($category->image_path) && Storage::disk('public')->exists($category->image_path)) {
                     
                     Storage::disk('public')->delete($category->image_path);
                 }
+
 
                 $extension = $request->file('image')->getClientOriginalExtension();
                 $filename = uniqid('img_') . '.' . $extension;
