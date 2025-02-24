@@ -10,7 +10,7 @@
             @endif
 
 
-            <div class="home-detail p-center-left w-75 position-relative mend-auto">
+            {{-- <div class="home-detail p-center-left w-75 position-relative mend-auto">
                 <div>
                     <h6>Exclusive offer <span>30% Off</span></h6>
                     <h1 class="w-75 text-uppercase poster-1">Stay home & delivered your <span
@@ -21,7 +21,7 @@
                             class="btn btn-animation mt-xxl-4 mt-2 home-button mend-auto">Shop Now <i
                             class="fa-solid fa-right-long ms-2 icon"></i></button>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -32,7 +32,7 @@
             @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::SLIDER->value)->first())
                 <img src="{{ asset('storage/' . $banner->image_path) }}"/>
             @endif
-            <div class="home-detail p-top-left home-p-sm w-75">
+            {{-- <div class="home-detail p-top-left home-p-sm w-75">
                 <div>
                     <h2 class="mt-0 text-danger">45% <span class="discount text-title">OFF</span>
                     </h2>
@@ -41,7 +41,7 @@
                     <a href="shop-left-sidebar.html" class="shop-button">Shop Now <i
                             class="fa-solid fa-right-long ms-2"></i></a>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

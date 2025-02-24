@@ -8,7 +8,7 @@
                      class="bg-img blur-up lazyload"
                      alt="">
             @endif
-            <div class="banner-details">
+            {{-- <div class="banner-details">
                 <div class="banner-box">
                     <h6 class="text-danger">5% OFF</h6>
                     <h5>Hot Deals on New Items</h5>
@@ -16,7 +16,7 @@
                 </div>
                 <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
                         class="fa-solid fa-right-long ms-2"></i></a>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -27,7 +27,7 @@
                      class="bg-img blur-up lazyload"
                      alt="">
             @endif
-            <div class="banner-details">
+            {{-- <div class="banner-details">
                 <div class="banner-box">
                     <h6 class="text-danger">5% OFF</h6>
                     <h5>Buy More & Save More</h5>
@@ -35,7 +35,7 @@
                 </div>
                 <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
                         class="fa-solid fa-right-long ms-2"></i></a>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -46,7 +46,7 @@
                      class="bg-img blur-up lazyload"
                      alt="">
             @endif
-            <div class="banner-details">
+            {{-- <div class="banner-details">
                 <div class="banner-box">
                     <h6 class="text-danger">5% OFF</h6>
                     <h5>Organic Meat Prepared</h5>
@@ -54,7 +54,7 @@
                 </div>
                 <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
                         class="fa-solid fa-right-long ms-2"></i></a>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -65,7 +65,7 @@
                      class="bg-img blur-up lazyload"
                      alt="">
             @endif
-            <div class="banner-details">
+            {{-- <div class="banner-details">
                 <div class="banner-box">
                     <h6 class="text-danger">5% OFF</h6>
                     <h5>Buy More & Save More</h5>
@@ -73,7 +73,7 @@
                 </div>
                 <a href="shop-left-sidebar.html" class="banner-button text-white">Shop Now <i
                         class="fa-solid fa-right-long ms-2"></i></a>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
