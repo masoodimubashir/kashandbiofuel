@@ -207,7 +207,7 @@ class OrderController extends Controller
             $order->{$validatedData['field']} = $validatedData['value'];
             $order->save();
 
-            if (in_array($validatedData['field'], ['is_confirmed']) && $order->save()) {
+            if ($validatedData['field'] === 'is_confirmed' && $order->save()) {
 
                 event(new OrderPlacedEvent($order));
 
@@ -216,6 +216,10 @@ class OrderController extends Controller
                     'message' => 'Order confirmed successfully'
                 ]);
             }
+
+            // if (($validatedData['field'] === 'is_cancelled') && $order->save()) {
+            //     dd('test2');
+            // }
 
 
             return response()->json([

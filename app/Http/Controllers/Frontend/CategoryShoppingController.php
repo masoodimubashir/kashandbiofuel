@@ -21,6 +21,7 @@ class CategoryShoppingController extends Controller
 
             // Build the query
             $query = Product::query()
+                ->InStock()
                 ->has('productAttribute')
                 ->has('category')
                 ->has('subCategory')

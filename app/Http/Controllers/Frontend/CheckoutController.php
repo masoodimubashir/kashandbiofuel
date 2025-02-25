@@ -26,6 +26,7 @@ class CheckoutController extends Controller
 
   public function index(Request $request)
   {
+
     $address = Address::where('user_id', auth()->user()->id)->first();
 
     if ($request->ajax()) {
@@ -33,7 +34,7 @@ class CheckoutController extends Controller
       $cart_ids = collect($cart_data)->pluck('cart_id')->toArray();
       $checkout_price = $request->checkout_price;
 
-      $cart_items = Cart::with(['product' => fn($query) => $query->with('productAttribute')])
+      $cart_items = Cart::with(['product' => fn($query) => $query->with('productAttributes')])
         ->whereIn('id', $cart_ids)
         ->get();
 
@@ -45,8 +46,6 @@ class CheckoutController extends Controller
         'status' => true
       ]);
     }
-
-
 
     return view('frontend.Checkout.checkout', compact('address'));
   }

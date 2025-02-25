@@ -15,6 +15,8 @@ class FrontendProductController extends Controller
     {
 
         $product = Product::query()
+            ->InStock()
+
             ->with([
                 'productAttributes',
                 'reviews.user',
@@ -30,6 +32,8 @@ class FrontendProductController extends Controller
             ])
             ->where('slug', $slug)
             ->first();
+
+
 
 
         // Calculate percentages
@@ -49,43 +53,41 @@ class FrontendProductController extends Controller
 
     public function checkProductQuantity(Request $request, string $slug)
     {
-            try {
-                $product = Product::where('slug', $slug)->firstOrFail();
+        try {
+            $product = Product::where('slug', $slug)->firstOrFail();
 
-                dd($request->input('qty'));
-                
-                $requestedQty = $request->input('qty');
-                
-                if ($requestedQty > $product->qty) {
+            dd($request->input('qty'));
 
-                    return response()->json([
-                        'status' => false,
-                        'message' => "Only {$product->qty} items available in stock"
-                    ], 422);
-                }
-                
-                if ($requestedQty <= 0) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Quantity must be greater than zero'
-                    ], 422);
-                }
-        
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Product quantity is available',
-                    'data' => [
-                        'requested_qty' => $requestedQty,
-                        'available_qty' => $product->qty
-                    ]
-                ]);
+            $requestedQty = $request->input('qty');
 
-            } catch (\Exception $e) {
+            if ($requestedQty > $product->qty) {
+
                 return response()->json([
                     'status' => false,
-                    'message' => 'Failed to check product quantity'
-                ], 500);
+                    'message' => "Only {$product->qty} items available in stock"
+                ], 422);
             }
-        
+
+            if ($requestedQty <= 0) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Quantity must be greater than zero'
+                ], 422);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Product quantity is available',
+                'data' => [
+                    'requested_qty' => $requestedQty,
+                    'available_qty' => $product->qty
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to check product quantity'
+            ], 500);
+        }
     }
 }

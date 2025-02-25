@@ -136,8 +136,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('update-status/{id}', [StatusUpdateController::class, 'updateStatus'])->name('status.update');
         Route::put('/update-show-on-navbar/{id}', [StatusUpdateController::class, 'updateShowOnNavabr'])->name('status.showOnNavbar');
 
-
-
         Route::put('Product/seo', [ProductSeoController::class, 'index'])->name('Product.seo');
         Route::put('Product/flags/{id}', [ChangeFlagsController::class, 'index'])->name('Product.flags');
 

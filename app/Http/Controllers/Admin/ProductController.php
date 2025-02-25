@@ -210,37 +210,32 @@ class ProductController extends Controller
                 'new_arrival' => $request->filled('new_arrival') ? 1 : 0,
             ]);
     
-            // Use the existing product folder
             $productFolder = 'products/' . $product->slug;
     
-            // Handle product attributes
             if ($request->filled('product_attributes')) {
                 foreach ($request->product_attributes as $attributeData) {
-                    // Update existing attribute
+
                     if (isset($attributeData['id'])) {
                         $attribute = ProductAttribute::find($attributeData['id']);
     
                         if ($attribute) {
-                            // Update hex code and quantity
+
                             $attribute->update([
                                 'hex_code' => $attributeData['hex_code'],
                                 'qty' => $attributeData['qty'],
                             ]);
     
-                            // Update image if a new one is uploaded
                             if (isset($attributeData['image'])) {
-                                // Delete the old image
+
                                 Storage::disk('public')->delete($attribute->image_path);
     
-                                // Store the new image
                                 $imagePath = $attributeData['image']->store($productFolder, 'public');
     
-                                // Update the image path
                                 $attribute->update(['image_path' => $imagePath]);
                             }
                         }
                     }
-                    // Add new attribute
+
                     else {
                         if (isset($attributeData['image'])) {
                             $imagePath = $attributeData['image']->store($productFolder, 'public');
@@ -381,14 +376,12 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        DB::beginTransaction(); // Start the transaction
-
+        DB::beginTransaction();
         try {
-            // 1. Delete associated Product attribute images from the storage
+
             $productAttributes = ProductAttribute::where('product_id', $product->id)
                 ->get();
 
-            // Delete the image files from storage, if they exist
             foreach ($productAttributes as $attribute) {
 
                 $imagePath = 'public/' . $attribute->image_path;
@@ -396,33 +389,29 @@ class ProductController extends Controller
 
                 if (Storage::disk('public')->exists($attribute->image_path)) {
 
-                    Storage::disk('public')->delete($attribute->image_path); // Delete each image file
+                    Storage::disk('public')->delete($attribute->image_path);
                 }
             }
 
-
-            // 2. Delete the associated Product attributes from the database
             ProductAttribute::where('product_id', $product->id)
                 ->delete();
 
-            // 3. Delete the Product folder from storage (including subdirectories)
-            $productFolder = 'products/' . $product->slug; // Get the folder path using the Product's slug
+            $productFolder = 'products/' . $product->slug; 
             if (Storage::exists('public/' . $productFolder)) {
-                Storage::deleteDirectory('public/' . $productFolder); // Delete the entire Product folder
+                Storage::deleteDirectory('public/' . $productFolder);
             }
 
-            // 4. Delete the Product itself from the database (forceDelete for permanent removal if using soft deletes)
-            $product->forceDelete(); // or $Product->delete(); if soft delete is used
+            $product->forceDelete();
 
-            DB::commit(); // Commit the transaction
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product deleted successfully',
             ]);
         } catch (Exception $e) {
-            DB::rollBack(); // Rollback the transaction on failure
-            Log::error('Failed to delete Product: ' . $e->getMessage()); // Log the error for debugging
+
+            Log::error('Failed to delete Product: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to delete Product: ' . $e->getMessage(),

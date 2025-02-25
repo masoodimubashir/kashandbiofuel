@@ -13,6 +13,7 @@ class SubCategoryShoppingController extends Controller
     {
 
         $products = Product::query()
+            ->InStock()
             ->whereHas('subCategory', fn($query) => $query->where('slug', $slug))
             ->has('productAttribute')
             ->has('category')
@@ -23,6 +24,5 @@ class SubCategoryShoppingController extends Controller
             ->paginate(20);
 
         return view('frontend.Sub-category.sub-category-shopping', compact('products'));
-
     }
 }

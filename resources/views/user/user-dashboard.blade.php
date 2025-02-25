@@ -136,6 +136,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
 
         @push('frontend.scripts')

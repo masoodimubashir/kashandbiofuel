@@ -18,6 +18,15 @@ class CartStoreRequest extends FormRequest
         ];
     }
 
+
+    public function messages(): array{
+
+        return [
+            'product_attribute_id.exists' => 'Oops! Seems Like You didnt select the color',
+        ];
+
+    }
+
     public function authorize(): bool
     {
         return true;

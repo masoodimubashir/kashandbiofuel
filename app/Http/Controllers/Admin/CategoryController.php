@@ -259,7 +259,8 @@ class CategoryController extends Controller
 
             $category = Category::findOrFail($category->id);
 
-            if (Storage::disk('public')->exists($category->image_path)) {
+
+            if (!is_null($category->image_path) && Storage::disk('public')->exists($category->image_path)) {
                 Storage::disk('public')->delete($category->image_path);
             }
 
@@ -270,6 +271,7 @@ class CategoryController extends Controller
                 'message' => 'category deleted successfully'
             ]);
         } catch (Exception $e) {
+            dd($e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to delete category',

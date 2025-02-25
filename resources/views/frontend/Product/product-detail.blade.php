@@ -71,16 +71,21 @@
                                 <div class="row g-sm-4 g-2">
                                     <div class="col-12">
                                         <div class="product-main no-arrow">
+                                          
 
                                             @foreach ($product->productAttributes as $product_attribute)
                                                 <div>
                                                     <div class="slider-image">
                                                         @isset($product_attribute->image_path)
-                                                            <img src="{{ asset('storage/' . $product_attribute->image_path) }}"
-                                                                id="img-1"
-                                                                data-zoom-image="{{ asset('storage/' . $product_attribute->image_path) }}"
-                                                                class="img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                                alt="">
+                                                            <div class="slider-image">
+                                                                <img src="{{ asset('storage/' . $product->productAttributes[0]->image_path) }}"
+                                                                    id="img-1"
+                                                            
+                                                                    data-zoom-image="{{ asset('storage/' . $product->productAttributes[0]->image_path) }}"
+                                                                    class="img-fluid image_zoom_cls-0 blur-up lazyload"
+                                                                    style="height: 500px;"
+                                                                    alt="">
+                                                            </div>
                                                         @else
                                                             <img src="{{ asset('default_images/product_image.png') }}"
                                                                 id="img-1"
@@ -96,29 +101,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-12">
-                                        <div class="left-slider-image left-slider no-arrow slick-top">
 
-                                            @foreach ($product->productAttributes as $product_attribute)
-                                                <div>
-                                                    @isset($product_attribute->image_path)
-                                                        <div class="sidebar-image">
-                                                            <img src="{{ asset('storage/' . $product_attribute->image_path) }}"
-                                                                class="img-fluid blur-up lazyload" alt="">
-                                                        </div>
-                                                    @else
-                                                        <div class="sidebar-image">
-                                                            <img src="{{ asset('default_images/product_image.png') }}"
-                                                                class="img-fluid blur-up lazyload" alt="">
-                                                        </div>
-                                                    @endisset
-
-                                                </div>
-                                            @endforeach
-
-
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +166,7 @@
 
                                 <div class="note-box product-package">
 
-                                    <div class="cart_qty qty-box product-qty">
+                                    {{-- <div class="cart_qty qty-box product-qty">
                                         <div class="input-group">
                                             <!-- - Button -->
                                             <button type="button" data-slug="{{ $product->slug }}"
@@ -201,7 +184,7 @@
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <button id="cart-btn" class="btn btn-md bg-dark cart-button text-white w-100">Add To
                                         Cart
@@ -214,13 +197,7 @@
                                         <i data-feather="heart"></i>
                                         <span>Add To Wishlist</span>
                                     </a>
-
-
                                 </div>
-
-
-
-
                             </div>
                         </div>
     </section>
@@ -464,9 +441,6 @@
 
     <!-- Tap to top and theme setting button start -->
     <div class="theme-option theme-option-2">
-
-
-
         <div class="back-to-top">
             <a id="back-to-top" href="#">
                 <i class="fas fa-chevron-up"></i>
@@ -600,11 +574,12 @@
 @push('frontend.scripts')
     <script>
         $(document).ready(function() {
-            // Constants
+
             const product_attribute_id = $('input[name="color"]');
             const qtyInput = $('input[name="qty"]');
             const productSlug = window.location.pathname.split('/')[2];
             const product_id = $('input[name="product_id"]').val();
+            const productAttributes = @json($product->productAttributes);
 
             // Event Listeners
             setupEventListeners();
@@ -613,7 +588,6 @@
             function setupEventListeners() {
                 // Handle color selection
                 product_attribute_id.on('change', handleColorChange);
-
 
                 // Add to Cart
                 $('#cart-btn').on('click', async function(event) {
@@ -625,7 +599,6 @@
                 $('#wishlist-btn').on('click', async function(event) {
                     event.preventDefault();
                     await handleCartAction('{{ route('wishlist.add-to-wishlist') }}', addToWishlist);
-
                 });
 
                 $('#product-review-form').on('submit', handleReviewFormSubmit);
@@ -633,12 +606,32 @@
 
             function handleColorChange(event) {
                 event.preventDefault();
-                const product_attribute_id = $(this).attr('id');
-            }
+                const productAttributeId = $(this).val(); // Get the selected color's product attribute ID
 
+                // Find the corresponding product attribute
+                const productAttribute = productAttributes.find(attr => attr.id == productAttributeId);
+
+                if (productAttribute) {
+                    // Update the main product image
+                    const mainImage = $('#img-1');
+                    mainImage.attr('src', productAttribute.image_path ?
+                        `{{ asset('storage/') }}/${productAttribute.image_path}` :
+                        `{{ asset('default_images/product_image.png') }}`);
+                    mainImage.attr('data-zoom-image', productAttribute.image_path ?
+                        `{{ asset('storage/') }}/${productAttribute.image_path}` :
+                        `{{ asset('default_images/product_image.png') }}`);
+
+                    // Update the thumbnail images
+                    const thumbnailContainer = $(`.sidebar-image[data-attribute-id="${productAttributeId}"]`);
+                    const thumbnailImage = thumbnailContainer.find('img');
+                    thumbnailImage.attr('src', productAttribute.image_path ?
+                        `{{ asset('storage/') }}/${productAttribute.image_path}` :
+                        `{{ asset('default_images/product_image.png') }}`);
+                }
+            }
             async function handleCartAction(url, action) {
                 const product_attribute_id = $('input[name="color"]:checked').val();
-                const qty = qtyInput.val();
+                const qty = 1;
                 const data = createFormData({
                     product_attribute_id,
                     qty,
@@ -646,7 +639,6 @@
                 });
                 await action(data, url);
             }
-
 
             async function addToCart(formData, url) {
                 return ajaxRequest(formData, url);
@@ -657,7 +649,6 @@
             }
 
             async function handleReviewFormSubmit(event) {
-
                 event.preventDefault();
 
                 if (!validateReviewForm()) return;
@@ -671,22 +662,18 @@
                     const response = await submitReview(formData, url);
 
                     if (response.status === 'success') {
-
                         refreshReviewList(reviewList, response.data);
                         resetForm('#product-review-form');
                         $('#writereview').modal('hide');
-
                     }
                 } catch (error) {
                     if (error.status === 422) {
                         handleError(error);
-
                     } else if (error.status === 401) {
                         window.location.href = '{{ route('login') }}';
                     } else {
                         handleError(error);
                     }
-
                 }
             }
 
@@ -695,7 +682,6 @@
             }
 
             async function ajaxRequest(formData, url) {
-                
                 return $.ajax({
                     url: url,
                     type: "POST",
@@ -706,7 +692,7 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        
+
                         if (response.status === true) {
                             window.location.href = response.redirect_url;
                         } else {
@@ -714,9 +700,6 @@
                         }
                     },
                     error: function(error) {
-
-                
-
                         if (error.status === 401) {
                             window.location.href = '{{ route('login') }}';
                         }
@@ -727,7 +710,6 @@
                             showAlert('Error!', error.responseJSON.message, 'error');
                         }
                     }
-
                 });
             }
 
@@ -763,7 +745,6 @@
                 const userName = review.user.name || 'Anonymous';
                 const reviewDate = formatDate(review.created_at) || 'Just now';
                 const stars = generateRatingStars(review.rating || 0);
-
 
                 const reviewHtml = `
             <li>
@@ -818,13 +799,11 @@
                 $(formSelector)[0].reset();
             }
 
-
             function showAlert(title, message, type) {
                 Swal.fire(title, message, type);
             }
 
             function handleError(error) {
-                
                 const errorMessage = error.responseJSON?.message || 'Something went wrong.';
                 showAlert('Error!', errorMessage, 'error');
             }
@@ -853,8 +832,6 @@
                     showAlert('Error', 'You cannot add more than ' + maxQty + ' items.', 'error');
                 }
             });
-
-
         });
     </script>
 @endpush

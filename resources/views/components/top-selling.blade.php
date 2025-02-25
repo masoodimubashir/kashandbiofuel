@@ -13,19 +13,19 @@
                     <div class="top-selling-contain wow fadeInUp">
 
                         @isset($product->productAttribute->image_path)
-                            <a href="product-left-thumbnail.html" class="top-selling-image">
+                            <a href="{{ route('product.show', $product->slug) }}" class="top-selling-image">
                                 <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" class="img-fluid blur-up lazyload"
                                     alt="">
                             </a>
                         @else
-                            <a href="product-left-thumbnail.html" class="top-selling-image">
+                            <a href="{{ route('product.show', $product->slug) }}" class="top-selling-image">
                                 <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload"
                                     alt="">
                             </a>
                         @endisset
 
                         <div class="top-selling-detail">
-                            <a href="product-left-thumbnail.html">
+                            <a href="{{ route('product.show', $product->slug) }}">
                                 <h5>{{ $product->name }}</h5>
 
                             </a>

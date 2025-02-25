@@ -176,15 +176,99 @@
                             </ul>
                         </div>
                         <a href="{{ route('payment.redirect') }}" id="placeOrderButton"
-                            class="btn theme-bg-color text-white btn-md w-100 mt-4 fw-bold">Place Order</a>
+                            class="btn theme-bg-color text-white btn-md w-100 mt-4 mb-4 fw-bold">Place Order
+                        </a>
+
+                        <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0  w-100" data-bs-toggle="modal"
+                            data-bs-target="#editProfile"><i data-feather="plus" class="me-2"></i> Add New Address
+
+                        </button>
 
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+
+
     <!-- Checkout section End -->
 
+    <div class="modal fade theme-modal" id="editProfile" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="addressForm">
+
+                        <input type="hidden" id="address_id" name="address_id">
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="address" name="address"
+                                        placeholder="Enter your address">
+                                    <label for="address">Address</label>
+                                    <div class="invalid-feedback" id="addressError"></div>
+                                </div>
+                            </div>
+
+                            {{-- City Field --}}
+                            <div class="col-md-6">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="city" name="city"
+                                        placeholder="Enter your city">
+                                    <label for="city">City</label>
+                                    <div class="invalid-feedback" id="cityError"></div>
+                                </div>
+                            </div>
+
+                            {{-- State Field --}}
+                            <div class="col-md-6">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="state" name="state"
+                                        placeholder="Enter your state">
+                                    <label for="state">State</label>
+                                    <div class="invalid-feedback" id="stateError"></div>
+                                </div>
+                            </div>
+
+                            {{-- Pin Code Field --}}
+                            <div class="col-md-6">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="pin_code" name="pin_code"
+                                        placeholder="Enter your pin code">
+                                    <label for="pin_code">Pin Code</label>
+                                    <div class="invalid-feedback" id="pinCodeError"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating theme-form-floating">
+                                    <input type="text" class="form-control" id="phone" name="phone"
+                                        placeholder="Enter phone number">
+                                    <label for="phone">Phone Number</label>
+                                    <div class="invalid-feedback" id="phoneError"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button type="button" class="btn theme-bg-color btn-md fw-bold text-light mt-2"
+                            id="submitAddress">Save Address
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @push('frontend.scripts')
         <script>
@@ -214,14 +298,39 @@
                 };
 
                 const templates = {
-                    cartItem: (item) => `
-            <li>
-                <img src="${item.product.product_attribute.image_path ? `/storage/${item.product.product_attribute.image_path}` : '/default_images/product_image.png'}"
-                    class="img-fluid blur-up lazyloaded checkout-image"
-                    alt="${item.product.name}">
-                <h4>${item.product.name} <span>X ${item.qty}</span></h4>
-                <h4 class="price">₹${(item.product.selling_price * item.qty).toFixed(2)}</h4>
-            </li>`
+                    cartItem: (item) => {
+
+                        let html = '';
+
+
+                        // Find the selected attribute for this cart item
+                        const selectedAttribute = item.product.product_attributes.find(attribute => attribute
+                            .id === item.product_attribute_id);
+
+                        // Get the image path from the selected attribute or use default
+                        const imagePath = selectedAttribute && selectedAttribute.image_path ?
+                            `/storage/${selectedAttribute.image_path}` :
+                            '/default_images/product_image.png';
+
+                        // Get color information if available
+                        const colorInfo = selectedAttribute && selectedAttribute.hex_code ?
+                            `<span class="color-indicator" style="background-color: ${selectedAttribute.hex_code}"></span>` :
+                            '';
+
+                        html += `
+                                <li>
+                                    <img src="${imagePath}" class="img-fluid blur-up lazyloaded checkout-image" alt="${item.product.name}">
+                                    <h4>
+                                    ${item.product.name} 
+                                    ${colorInfo}
+                                    <span>X ${item.qty}</span>
+                                    </h4>
+                                    <h4 class="price">₹${(parseFloat(item.product.selling_price) * item.qty).toFixed(2)}</h4>
+                            </li>`;
+
+
+                        return html;
+                    }
                 };
 
                 const cartActions = {
@@ -243,6 +352,7 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             success: (response) => {
+
                                 if (response.status) {
                                     cartActions.renderSummary(response.cart_items, response
                                         .checkout_price);
@@ -328,6 +438,69 @@
                 });
 
                 cartActions.fetchSummary();
+
+                function resetFormAndErrors() {
+                    $('.invalid-feedback').text('');
+                    $('.form-control').removeClass('is-invalid');
+                    $('#addressForm')[0].reset();
+                    $('#address_id').val(''); // Clear the hidden address ID field
+                }
+
+                $('#submitAddress').on('click', function(e) {
+                    e.preventDefault();
+
+                    const addressId = $('#address_id').val();
+
+                    let formData = {
+                        address: $('#address').val(),
+                        city: $('#city').val(),
+                        state: $('#state').val(),
+                        pin_code: $('#pin_code').val(),
+                        phone: $('#phone').val(),
+                    };
+
+                    const isEdit = !!addressId;
+                    const url = isEdit ? `/user/address/${addressId}` : '{{ route('address.store') }}';
+                    const method = isEdit ? 'PUT' : 'POST';
+
+                    $.ajax({
+                        type: method,
+                        url: url,
+                        data: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+
+                                $('#editProfile').modal('hide');
+                                resetFormAndErrors();
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                $.each(errors, function(key, value) {
+                                    $(`#${key}Error`).text(value[0]);
+                                    $(`#${key}`).addClass('is-invalid');
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Something went wrong. Please try again later.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        }
+                    });
+                });
             });
         </script>
     @endpush
