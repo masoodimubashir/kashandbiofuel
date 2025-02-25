@@ -164,22 +164,22 @@
                                                     // Group items by product ID to handle unique products
                                                     $groupedItems = collect($order['orderedItems'])->groupBy('id');
                                                 @endphp
-                                                
+
                                                 @foreach ($groupedItems as $productId => $items)
                                                     @php
                                                         $firstItem = $items->first();
                                                         $variantCount = count($firstItem['attributes']);
                                                     @endphp
-                                                    
+
                                                     <!-- First variant row with product details -->
                                                     <tr>
                                                         <td rowspan="{{ $variantCount }}" class="align-middle">
                                                             @isset($firstItem['attributes'][0]['image_path'])
-                                                                <img class="img-fluid img-40" 
-                                                                    src="{{ asset('storage/' . $firstItem['attributes'][0]['image_path']) }}" 
+                                                                <img class="img-fluid img-40"
+                                                                    src="{{ asset('storage/' . $firstItem['attributes'][0]['image_path']) }}"
                                                                     alt="#">
                                                             @else
-                                                                <img src="{{ asset('default_images/product_image.png') }}" 
+                                                                <img src="{{ asset('default_images/product_image.png') }}"
                                                                     class="img-fluid img-50" alt="Default">
                                                             @endisset
                                                         </td>
@@ -188,7 +188,7 @@
                                                                 <a href="#">{{ $firstItem['product_name'] }}</a>
                                                             </div>
                                                         </td>
-                                                        
+
                                                         <!-- First variant -->
                                                         <td>
                                                             <div class="d-flex align-items-center gap-2">
@@ -201,18 +201,18 @@
                                                                             margin-right: 8px;"
                                                                     title="Color: {{ $firstItem['attributes'][0]['hex_code'] }}">
                                                                 </div>
-                                                                <img class="img-fluid" style="width: 30px;" 
-                                                                    src="{{ asset('storage/' . $firstItem['attributes'][0]['image_path']) }}" 
+                                                                <img class="img-fluid" style="width: 30px;"
+                                                                    src="{{ asset('storage/' . $firstItem['attributes'][0]['image_path']) }}"
                                                                     alt="Variant">
                                                             </div>
                                                         </td>
                                                         <td>{{ Number::currency($firstItem['selling_price']) }}</td>
                                                         <td>
-                                                            <input class="touchspin text-center" type="text" 
+                                                            <input class="touchspin text-center" type="text"
                                                                 value="{{ $firstItem['attributes'][0]['qty'] }}">
                                                         </td>
                                                     </tr>
-                                                    
+
                                                     <!-- Additional variant rows -->
                                                     @for ($i = 1; $i < $variantCount; $i++)
                                                         <tr>
@@ -227,14 +227,15 @@
                                                                                 margin-right: 8px;"
                                                                         title="Color: {{ $firstItem['attributes'][$i]['hex_code'] }}">
                                                                     </div>
-                                                                    <img class="img-fluid" style="width: 30px;" 
-                                                                        src="{{ asset('storage/' . $firstItem['attributes'][$i]['image_path']) }}" 
+                                                                    <img class="img-fluid" style="width: 30px;"
+                                                                        src="{{ asset('storage/' . $firstItem['attributes'][$i]['image_path']) }}"
                                                                         alt="Variant">
                                                                 </div>
                                                             </td>
-                                                            <td>{{ Number::currency($firstItem['selling_price']) }}</td>
+                                                            <td>{{ Number::currency($firstItem['selling_price']) }}
+                                                            </td>
                                                             <td>
-                                                                <input class="touchspin text-center" type="text" 
+                                                                <input class="touchspin text-center" type="text"
                                                                     value="{{ $firstItem['attributes'][$i]['qty'] }}">
                                                             </td>
                                                         </tr>
@@ -444,6 +445,9 @@
                             value: 1
                         },
                         success: function(response) {
+                            if (response.redirect_url) {
+                                window.location.href = response.redirect_url;
+                            }
                             if (response.status) {
                                 Swal.fire("Success!", response.message, "success");
                             } else {

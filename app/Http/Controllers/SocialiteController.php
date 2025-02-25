@@ -26,7 +26,9 @@ class SocialiteController extends Controller
     public function callback()
     {
 
+
         $googleUser = Socialite::driver('google')->user();
+
 
         $user = User::updateOrCreate([
             'email' => $googleUser->email,

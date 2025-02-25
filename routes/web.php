@@ -76,6 +76,7 @@ Route::resource('/frontend-address', FrontendAddressController::class);
 Route::middleware('checkUserGuest')->group(function () {
 
     //Routes For Cart
+
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view-cart');
     Route::post('/cart/store', [CartController::class, 'addToCart'])->name('cart.add-to-cart');
     Route::patch('/cart/update-quantity/{id}', [CartController::class, 'updateQty'])->name('cart.update-qty');

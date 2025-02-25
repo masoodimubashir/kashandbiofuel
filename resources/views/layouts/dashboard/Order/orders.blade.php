@@ -186,7 +186,12 @@
                         success: function(response) {
                             if (response.status) {
                                 ordersTable.ajax.reload(null, false);
-                                Swal.fire("Success!", response.message, "success");
+                                if (response.redirect_url) {
+                                    window.location.href = response.redirect_url;
+                                } else {
+                                    Swal.fire("Success!", response.message, "success");
+
+                                }
                             } else {
                                 Swal.fire("Error!", response.message || 'Failed To Update Status',
                                     "error");

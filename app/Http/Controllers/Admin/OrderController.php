@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\SubCategory;
+use App\Service\OrderService;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -18,6 +19,8 @@ class OrderController extends Controller
 
 
     use HelperClass;
+
+    public function __construct(public OrderService $orderService) {}
 
     /**
      * Display a listing of the resource.
@@ -155,7 +158,6 @@ class OrderController extends Controller
         return view('layouts.dashboard.Order.view-order', compact('order'));
     }
 
-    
 
     /**
      * Show the form for editing the specified resource.
@@ -184,42 +186,49 @@ class OrderController extends Controller
                     'orderedItems.product.productAttribute'
                 ])
                 ->find($id);
+            //
+            //            if (!$order) {
+            //                return response()->json([
+            //                    'success' => false,
+            //                    'message' => 'Order not found.',
+            //                ]);
+            //            }
+            //
+            //            if ($validatedData['value'] == 1) {
+            //                $fieldsToReset = ['is_cancelled', 'is_delivered', 'is_confirmed'];
+            //
+            //                $fieldsToReset = array_filter($fieldsToReset, function ($field) use ($validatedData) {
+            //                    return $field !== $validatedData['field'];
+            //                });
+            //
+            //                foreach ($fieldsToReset as $field) {
+            //                    $order->{$field} = 0;
+            //                }
+            //            }
+            //
+            //            $order->{$validatedData['field']} = $validatedData['value'];
+            //            $order->save();
 
-            if (!$order) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Order not found.',
-                ]);
-            }
+            // if ($validatedData['field'] === 'is_confirmed' && $order->save()) {
 
-            if ($validatedData['value'] == 1) {
-                $fieldsToReset = ['is_cancelled', 'is_delivered', 'is_confirmed'];
+            //     event(new OrderPlacedEvent($order));
 
-                $fieldsToReset = array_filter($fieldsToReset, function ($field) use ($validatedData) {
-                    return $field !== $validatedData['field'];
-                });
+            //     return response()->json([
+            //         'status' => true,
+            //         'message' => 'Order confirmed successfully'
+            //     ]);
+            // }
 
-                foreach ($fieldsToReset as $field) {
-                    $order->{$field} = 0;
-                }
-            }
+            if (($validatedData['field'] === 'is_cancelled') && $order->save()) {
 
-            $order->{$validatedData['field']} = $validatedData['value'];
-            $order->save();
-
-            if ($validatedData['field'] === 'is_confirmed' && $order->save()) {
-
-                event(new OrderPlacedEvent($order));
+                $this->orderService->cancelOrder($order);
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'Order confirmed successfully'
+                    'message' => 'Order cancelled successfully',
+                    'redirect_url' => route('order.index')
                 ]);
             }
-
-            // if (($validatedData['field'] === 'is_cancelled') && $order->save()) {
-            //     dd('test2');
-            // }
 
 
             return response()->json([
@@ -231,6 +240,7 @@ class OrderController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update status. ',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
