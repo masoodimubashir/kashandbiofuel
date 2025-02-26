@@ -10,12 +10,17 @@
                 </div>
 
                 @foreach ($topSellingProducts as $product)
+               
+
                     <div class="top-selling-contain wow fadeInUp">
+
+
 
                         @isset($product->productAttribute->image_path)
                             <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
                                 <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
                                     class="img-fluid blur-up lazyload" alt="{{ $product->image_alt }}">
+                                    <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" alt="">
                             </a>
                         @else
                             <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
@@ -42,6 +47,7 @@
                             </div>
                             <h6>{{ Number::currency($product->selling_price, 'INR') }}</h6>
                         </div>
+
                     </div>
                 @endforeach
 

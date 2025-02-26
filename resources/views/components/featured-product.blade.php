@@ -11,7 +11,7 @@
                     <div class="top-selling-contain wow fadeInUp" data-wow-delay="0.4s">
                         @isset($product->productAttribute->image_path)
                             <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
-                                <img src="{{ asset('storage/' . $product->image_path) }}" class="img-fluid blur-up lazyload"
+                                <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" 
                                     alt="{{ $product->image_alt }}">
                             </a>
                         @else
