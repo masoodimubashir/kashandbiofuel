@@ -12,7 +12,7 @@ class AdminNotificationController extends Controller
     {
 
 
-        $query = auth()->user()->notifications();
+        $query = auth()->user()->unreadNotifications();
 
         if ($request->filter === 'read') {
             $query->whereNotNull('read_at');

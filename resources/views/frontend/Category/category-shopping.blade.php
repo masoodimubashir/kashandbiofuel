@@ -336,7 +336,7 @@
                                 <a href="/product/${product.slug}">
                                     <h5 class="name">${product.name}</h5>
                                 </a>
-                                <p class="text-content mt-1 mb-2 product-content">${product.description}</p>
+                                <p class="text-content mt-1 mb-2 product-content">${product.short_description}</p>
                                 <div class="product-rating mt-2">
                                     <ul class="rating">
                                         ${generateRatingHTML(Math.round(product.review_avg_rating))}

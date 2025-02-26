@@ -15,31 +15,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
 
-    <!-- Google font-->
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/font-awesome.css') }}"> --}}
-    <!-- ico-font-->
-
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/vendors/icofont.css') }}"> --}}
-
-    <!-- Themify icon-->
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/vendors/themify.css') }}"> --}}
-
-    <!-- Flag icon-->
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/vendors/flag-icon.css') }}"> --}}
-
-    <!-- Feather icon-->
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/vendors/feather-icon.css') }}"> --}}
-
-    <!-- Plugins css start-->
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/vendors/scrollbar.css') }}">
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/vendors/datatables.css') }}"> --}}
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/vendors/vector-map.css') }}"> --}}
-
-    <!-- Plugins css Ends-->
-
-
-
-
 
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/vendors/bootstrap.css') }}">

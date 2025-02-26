@@ -14,7 +14,7 @@
                                 </form>
 
                                 @if (session('status') === 'profile-updated')
-                                    <div class="text-success">Password Updated....</div>
+                                    <div class="text-success">Prodile Updated....</div>
                                 @endif
 
                                 <form class="row g-3" method="post" action="{{ route('profile.update') }}">
