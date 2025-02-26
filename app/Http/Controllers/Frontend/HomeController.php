@@ -22,4 +22,9 @@ class HomeController extends Controller
     public function shipingPolicy(){
         return view('frontend.Miscellaneous.shipping-policy');
     }
+
+
+    public function termsAndConditions(){
+        return view('frontend.Miscellaneous.terms-and-condition');
+    }
 }

@@ -55,22 +55,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-12">
-        <div class="category-slider arrow-slider">
-
-
-            <div>
-                <div class="shop-category-box border-0 wow fadeIn">
-
-                </div>
-            </div>
-
-
-
-        </div>
-    </div>
-</div>
 
 
 </div>

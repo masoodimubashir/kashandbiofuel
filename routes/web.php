@@ -46,6 +46,7 @@ Route::get('/s', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/ship-policy', [HomeController::class, 'shipingPolicy'])->name('ship.policy');
+Route::get('/terms-and-conditions', [HomeController::class, 'termsAndConditions'])->name('terms.and.conditions');
 
 
 // Route For Searching The Product

@@ -1,7 +1,7 @@
 @extends('welcome')
 
 @section('main')
-    <div class="container border shadow border-rounded mt-5 mb-5 p-5">
+    <div class="container border shadow border-rounded mt-5 mb-5 p-5" style="max-width: 1000px;">
         <h2 class="text-center mb-4">Shipping Policy</h2>
         <p class=" text-center">Thank you for shopping with Kassh & Biofuel We are dedicated to ensuring
             a smooth and timely delivery process. Please read our Shipping Policy for more details.</p>

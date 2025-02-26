@@ -77,8 +77,10 @@
                             <li>
                                 <a href="{{route('ship.policy')}}" class="text-content">Shipping Policy</a>
                             </li>
-
-                           
+                            <li>
+                                <a href="{{route('terms.and.conditions')}}" class="text-content">Shopping FAQs</a>
+                            </li>
+                            
                         </ul>
                     </div>
                 </div>
