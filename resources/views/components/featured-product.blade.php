@@ -9,17 +9,19 @@
 
                 @foreach ($featuredProduct as $product)
                     <div class="top-selling-contain wow fadeInUp" data-wow-delay="0.4s">
+                      
                         @isset($product->productAttribute->image_path)
-                            <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
-                                <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" 
-                                    alt="{{ $product->image_alt }}">
-                            </a>
-                        @else
-                            <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
-                                <img src="{{ asset('default_images/product_image.png') }}"
-                                    class="img-fluid blur-up lazyload" alt="{{ $product->image_alt }}">
-                            </a>
-                        @endisset
+                        <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
+                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                                class="img-fluid blur-up lazyload" alt="{{ $product->image_alt }}">
+                                <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" alt="">
+                        </a>
+                    @else
+                        <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
+                            <img src="{{ asset('default_images/product_image.png') }}"
+                                class="img-fluid blur-up lazyload" alt="{{ $product->image_alt }}">
+                        </a>
+                    @endisset
 
                         <div class="top-selling-detail">
                             <a href={{ route('product.show', $product->slug) }}>
