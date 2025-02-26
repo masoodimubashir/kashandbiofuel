@@ -45,6 +45,7 @@ Route::get('/s', function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/ship-policy', [HomeController::class, 'shipingPolicy'])->name('ship.policy');
 
 
 // Route For Searching The Product

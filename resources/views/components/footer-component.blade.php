@@ -1,4 +1,4 @@
-<footer class="section-t-space">
+    <footer class="section-t-space">
 
     <div class="container-fluid-lg">
         <div class="main-footer section-b-space section-t-space">
@@ -74,6 +74,10 @@
                             <li>
                                 <a href="{{route('user.dashboard')}}" class="text-content">Track Order</a>
                             </li>
+                            <li>
+                                <a href="{{route('ship.policy')}}" class="text-content">Shipping Policy</a>
+                            </li>
+
                            
                         </ul>
                     </div>

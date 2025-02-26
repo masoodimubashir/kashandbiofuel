@@ -17,6 +17,7 @@ class DashboardSalesService
         $this->orders = Order::query()
             ->latest()
             ->get();
+            
     }
 
     public function getConfirmedOrders()

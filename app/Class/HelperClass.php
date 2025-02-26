@@ -211,6 +211,7 @@ trait HelperClass
             'full_address' => $order->address->address . '-' . $order->address->city . '-' . $order->address->state . '-' . $order->address->country,
             'contact_number' => $order->address->user->contact_number ?? null,
             'pincode' => $order->address->pin_code ?? null,
+            'payment_method' => $order->payment_method ?? null,
 
             'orderedItems' => collect($order->orderedItems)->map(function ($item) {
                 // Get all product attributes for the product

@@ -180,44 +180,51 @@ class OrderController extends Controller
 
         try {
 
-            $order = Order::query()
-                ->with([
-                    'user.address',
-                    'orderedItems.product.productAttribute'
-                ])
-                ->find($id);
-            //
-            //            if (!$order) {
-            //                return response()->json([
-            //                    'success' => false,
-            //                    'message' => 'Order not found.',
-            //                ]);
-            //            }
-            //
-            //            if ($validatedData['value'] == 1) {
-            //                $fieldsToReset = ['is_cancelled', 'is_delivered', 'is_confirmed'];
-            //
-            //                $fieldsToReset = array_filter($fieldsToReset, function ($field) use ($validatedData) {
-            //                    return $field !== $validatedData['field'];
-            //                });
-            //
-            //                foreach ($fieldsToReset as $field) {
-            //                    $order->{$field} = 0;
-            //                }
-            //            }
-            //
-            //            $order->{$validatedData['field']} = $validatedData['value'];
-            //            $order->save();
 
-            // if ($validatedData['field'] === 'is_confirmed' && $order->save()) {
+            $order = Order::with([
+                'orderedItems' => function ($query) {
+                    $query->with('product', function ($query) {
+                        $query->with('productAttributes');
+                    });
+                },
+                'address' => function ($query) {
+                    $query->with('user');
+                },
+                'transaction'
+            ])->find($id);
 
-            //     event(new OrderPlacedEvent($order));
 
-            //     return response()->json([
-            //         'status' => true,
-            //         'message' => 'Order confirmed successfully'
-            //     ]);
-            // }
+            if (!$order) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order not found.',
+                ]);
+            }
+
+            if ($validatedData['value'] == 1) {
+                $fieldsToReset = ['is_cancelled', 'is_delivered', 'is_confirmed'];
+
+                $fieldsToReset = array_filter($fieldsToReset, function ($field) use ($validatedData) {
+                    return $field !== $validatedData['field'];
+                });
+
+                foreach ($fieldsToReset as $field) {
+                    $order->{$field} = 0;
+                }
+            }
+
+            $order->{$validatedData['field']} = $validatedData['value'];
+            $order->save();
+
+            if ($validatedData['field'] === 'is_confirmed' && $order->save()) {
+
+                event(new OrderPlacedEvent($order));
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Order confirmed successfully'
+                ]);
+            }
 
             if (($validatedData['field'] === 'is_cancelled') && $order->save()) {
 

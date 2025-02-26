@@ -30,6 +30,8 @@ class TopRated extends Component
             ->orderByDesc('reviews_avg_rating')
             ->take(3)
             ->get();
+
+        
     }
 
     /**

@@ -34,7 +34,7 @@ padding: 20px;
 background-color: #f7fafc;
 }
 .invoice-container {
-width: 100vw;
+width: 700px;
 margin: 0 auto;
 background: white;
 padding: 40px;

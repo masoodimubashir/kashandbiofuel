@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Class\HelperClass;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,12 +15,17 @@ class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
 
+    use HelperClass;
+
+    public $data;
+
     /**
      * Create a new message instance.
      */
     public function __construct(public Order $order)
     {
-        //
+        $this->data = $this->transformOrder($order);
+
     }
 
     /**

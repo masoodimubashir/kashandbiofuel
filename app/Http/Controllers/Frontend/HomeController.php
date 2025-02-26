@@ -18,4 +18,8 @@ class HomeController extends Controller
 
         return view('frontend.home', compact('headerBanner'));
     }
+
+    public function shipingPolicy(){
+        return view('frontend.Miscellaneous.shipping-policy');
+    }
 }

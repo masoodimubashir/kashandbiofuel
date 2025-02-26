@@ -32,6 +32,8 @@ class TopSelling extends Component
             ->take(3)
             ->latest()
             ->get();
+
+            
     }
 
     /**
