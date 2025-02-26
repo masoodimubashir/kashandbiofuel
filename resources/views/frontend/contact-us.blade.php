@@ -55,7 +55,7 @@
                                                 </div>
 
                                                 <div class="contact-detail-contain">
-                                                    <p>(+1) 618 190 496</p>
+                                                    <p>(+91) 8881042340 </p>
                                                 </div>
                                             </div>
                                         </div>
