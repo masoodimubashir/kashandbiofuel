@@ -14,18 +14,14 @@
 
     <div class="col-xl-3 col-lg-4 d-lg-inline-block d-none ratio_156">
         <div class="home-contain h-100">
-          @php
-            $banner = App\Models\Banner::where('position', App\Enum\BannerPosition::SLIDER->value)->first();
-          @endphp
-          
-          @if ($banner && $banner->image_path)
-            <img 
-              src="{{ asset('storage/' . $banner->image_path) }}"
-              class="img-fluid blur-up lazyload w-100"
-              style="height: 450px; object-fit: contain;"
-              alt="{{ $banner->title ?? 'Slider Banner' }}"
-            >
-          @endif
+            @php
+                $banner = App\Models\Banner::where('position', App\Enum\BannerPosition::SLIDER->value)->first();
+            @endphp
+
+            @if ($banner && $banner->image_path)
+                <img src="{{ asset('storage/' . $banner->image_path) }}" class="img-fluid blur-up lazyload w-100"
+                    style="height: 450px; object-fit: contain;" alt="{{ $banner->title ?? 'Slider Banner' }}">
+            @endif
         </div>
-      </div>
+    </div>
 </div>
