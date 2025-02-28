@@ -36,6 +36,7 @@ class AllKindsOfProducts extends Component
             ->latest()
             ->take(10)
             ->get();
+
     }
 
     public function render(): View
