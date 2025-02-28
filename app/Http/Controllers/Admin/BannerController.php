@@ -47,7 +47,7 @@ class BannerController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'link' => 'nullable|url',
         ]);
 
@@ -80,10 +80,9 @@ class BannerController extends Controller
     public function update(Request $request, $id)
     {
 
-        dd($request->all());
 
         $validator = Validator::make($request->all(), [
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'link' => 'nullable|url',
         ]);
 
