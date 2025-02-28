@@ -50,5 +50,47 @@
                 </div>
             @endfor
         </div>
+
+        <div>
+            @for ($i = 1; $i < 2; $i++)
+                <div class="product-box-2 wow fadeIn" data-wow-delay="{{ $loop->index * 0.1 . 's' }}">
+                    <!-- Product Image -->
+
+
+                    <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
+                        @isset($product->productAttribute->image_path)
+                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                                class="img-fluid blur-up lazyload " style="height: 80px; width: 100px;" alt="{{ $product->name }}">
+                        @else
+                            <img src="{{ asset('default_images/product_image.png') }}"
+                                class="img-fluid blur-up lazyload " style="height: 80px; width: 100px;" alt="{{ $product->name }}">
+                        @endisset
+                    </a>
+
+                    <!-- Product Details -->
+                    <div class="product-detail">
+                        <a href="{{ route('product.show', [$product->slug]) }}">
+                            <h6>{{ $product->name }}</h6>
+                        </a>
+
+                        <!-- Ratings -->
+                        <ul class="rating">
+                            @for ($j = 1; $j <= 5; $j++)
+                                <li>
+                                    <i data-feather="star" class="{{ $j <= $product->rating ? 'fill' : '' }}"></i>
+                                </li>
+                            @endfor
+                        </ul>
+
+                        <!-- Price with Discount -->
+                        <h5>{{ Number::currency($product->selling_price, 'INR') }}
+                            @if ($product->price)
+                                <del>{{ Number::currency( $product->price, 'INR') }}</del>
+                            @endif
+                        </h5>
+                    </div>
+                </div>
+            @endfor
+        </div>
     @endforeach
 </div>
