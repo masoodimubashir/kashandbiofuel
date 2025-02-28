@@ -149,11 +149,11 @@
                 </a>
             </li>
 
-            <li class="mobile-category {{ request()->routeIs('category.index') ? 'active' : '' }}">
+            {{-- <li class="mobile-category {{ request()->routeIs('category.index') ? 'active' : '' }}">
                 <a href="{{ route('category.index') }}" class="js-link">
                     <span>Category</span>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="{{ request()->routeIs('wishlist.view-wishlist') ? 'active' : '' }}">
                 <a href="{{ route('wishlist.view-wishlist') }}" class="notifi-wishlist">

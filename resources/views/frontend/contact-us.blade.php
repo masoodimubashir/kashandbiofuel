@@ -35,7 +35,7 @@
                             <div class="col-xl-12">
                                 <div class="contact-image">
                                     <img src="../assets/images/inner-page/contact-us.png"
-                                         class="img-fluid blur-up lazyloaded" alt="">
+                                        class="img-fluid blur-up lazyloaded" alt="">
                                 </div>
                             </div>
                             <div class="col-xl-12">
@@ -70,7 +70,11 @@
                                                 </div>
 
                                                 <div class="contact-detail-contain">
-                                                    <p>geweto9420@chokxus.com</p>
+                                                    <p>
+                                                        <a href="mailto:kasshandbiofuels@gmail.com">
+                                                            kasshandbiofuels@gmail.com
+                                                        </a>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,11 +85,14 @@
                                                     <i class="fa-solid fa-location-dot"></i>
                                                 </div>
                                                 <div class="contact-detail-title">
-                                                    <h4>London Office</h4>
+                                                    <h4>HQ</h4>
                                                 </div>
 
                                                 <div class="contact-detail-contain">
-                                                    <p>Cruce Casa de Postas 29</p>
+                                                    <p>
+                                                        HQ - Banderdewa, Itanagar Capital Region (ICR), Papum Pare,
+                                                        Arunachal Pradesh, India - 791113
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -123,7 +130,7 @@
                                     <label for="firstname" class="form-label">First Name</label>
                                     <div class="custom-input">
                                         <input type="text" class="form-control" id="firstname" name="firstname"
-                                               placeholder="Enter First Name" value="{{ old('firstname') }}">
+                                            placeholder="Enter First Name" value="{{ old('firstname') }}">
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div id="error-firstname" class="text-danger mt-3 text-red fw-bold"></div>
@@ -136,7 +143,7 @@
                                     <label for="lastname" class="form-label">Last Name</label>
                                     <div class="custom-input">
                                         <input type="text" class="form-control" id="lastname" name="lastname"
-                                               placeholder="Enter Last Name" value="{{ old('lastname') }}">
+                                            placeholder="Enter Last Name" value="{{ old('lastname') }}">
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div id="error-lastname" class="text-danger mt-3 text-red fw-bold"></div>
@@ -149,8 +156,8 @@
                                     <label for="email" class="form-label">Email Address</label>
                                     <div class="custom-input">
                                         <input type="email" class="form-control" id="email" name="email"
-                                               placeholder="Enter Email Address"
-                                               value="{{ old('email', auth()->user()->email ?? null) }}">
+                                            placeholder="Enter Email Address"
+                                            value="{{ old('email', auth()->user()->email ?? null) }}">
                                         <i class="fa-solid fa-envelope"></i>
                                     </div>
                                     <div id="error-email" class="text-danger mt-3 text-red fw-bold"></div>
@@ -162,10 +169,10 @@
                                 <div class="mb-md-4 mb-3 custom-form">
                                     <label for="phone" class="form-label">Phone Number</label>
                                     <div class="custom-input">
-                                        <input type="tel" class="form-control" id="phone" name="phone" maxlength="10"
-                                               placeholder="Enter Your Phone Number"
-                                               oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                               value="{{ old('phone') }}">
+                                        <input type="tel" class="form-control" id="phone" name="phone"
+                                            maxlength="10" placeholder="Enter Your Phone Number"
+                                            oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            value="{{ old('phone') }}">
                                         <i class="fa-solid fa-mobile-screen-button"></i>
                                     </div>
                                     <div id="error-phone" class="text-danger mt-3 text-red fw-bold"></div>
@@ -177,8 +184,7 @@
                                 <div class="mb-md-4 mb-3 custom-form">
                                     <label for="message" class="form-label">Message</label>
                                     <div class="custom-textarea">
-                        <textarea class="form-control" id="message" name="message" rows="6"
-                                  placeholder="Enter Your Message"></textarea>
+                                        <textarea class="form-control" id="message" name="message" rows="6" placeholder="Enter Your Message"></textarea>
                                         <i class="fa-solid fa-message"></i>
                                     </div>
                                     <div id="error-message" class="text-danger mt-3 text-red fw-bold"></div>
@@ -309,9 +315,9 @@
 
     @push('frontend.scripts')
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 // Handle Contact Form submission
-                $('#contactForm').on('submit', function (e) {
+                $('#contactForm').on('submit', function(e) {
                     e.preventDefault(); // Prevent default form submission
 
                     const $form = $(this);
@@ -326,11 +332,12 @@
                         data: formData,
                         processData: false,
                         contentType: false,
-                        success: function (response) {
+                        success: function(response) {
                             // Show success message
                             Swal.fire({
                                 title: 'Success!',
-                                text: response.message || 'Your message has been sent successfully!',
+                                text: response.message ||
+                                    'Your message has been sent successfully!',
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             });
@@ -338,7 +345,7 @@
                             // Reset the form fields
                             $form.trigger('reset');
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             if (xhr.status === 422) {
                                 // Validation errors
                                 showValidationErrors(xhr.responseJSON.errors);
@@ -362,12 +369,12 @@
 
                 // Display validation errors
                 function showValidationErrors(errors) {
-                    $.each(errors, function (field, messages) {
-                        $(`#error-${field}`).text(messages[0]); // Show the first validation error for each field
+                    $.each(errors, function(field, messages) {
+                        $(`#error-${field}`).text(messages[
+                        0]); // Show the first validation error for each field
                     });
                 }
             });
         </script>
     @endpush
-
 @endsection

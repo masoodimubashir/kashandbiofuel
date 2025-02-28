@@ -3,6 +3,57 @@
         <div class="col-12">
             <div class="header-nav">
 
+                <div class="header-nav-left">
+
+                    <button class="dropdown-category btn-sm">
+                        <i data-feather="align-left"></i>
+                        <span>Main Menu</span>
+                    </button>
+
+                    <div class="category-dropdown">
+                        <div class="category-title">
+                            <h5>Categories</h5>
+                            <button type="button" class="btn p-0 close-button text-content">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        <ul class="category-list">
+                            <li class="onhover-category-list">
+                                <a href="{{ route('home') }}" class="category-name">
+                                   
+                                    <h6>Home</h6>
+                                </a>
+
+                            </li>
+                            <li class="onhover-category-list">
+                                <a href="{{ route('contact-us.index') }}" class="category-name">
+                                   
+                                    <h6>Contact Us</h6>
+                                </a>
+
+                            </li>
+
+                            <li class="onhover-category-list">
+                                <a href="{{ route('ship.policy') }}" class="category-name">
+                                   
+                                    <h6>Shipping Policy</h6>
+                                </a>
+
+                            </li>
+
+                            <li class="onhover-category-list">
+                                <a href="{{ route('terms.and.conditions') }}" class="category-name">
+                                   
+                                    <h6>Shopping FAQs</h6>
+                                </a>
+
+                            </li>
+                             
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="header-nav-middle">
                     <div class="main-nav navbar navbar-expand-xl navbar-light navbar-sticky">
                         <div class="offcanvas offcanvas-collapse order-xl-2" id="primaryMenu">
@@ -14,26 +65,13 @@
 
                                 <ul class="navbar-nav">
 
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="javascript:void(0)"
-                                           data-bs-toggle="dropdown">Pages</a>
-
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" href="{{ route('home') }}">Home</a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="{{ route('contact-us.index') }}">Contact
-                                                    Us</a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                  
 
                                     @foreach ($navigation as $category)
                                         <li
                                             class="nav-item {{ $category->subCategories->count() > 0 ? 'dropdown' : '' }}">
                                             <a class="nav-link {{ $category->subCategories->count() > 0 ? 'dropdown-toggle' : '' }}"
-                                               href="{{ $category->subCategories->count() > 0 ? 'javascript:void(0)' : '' }}"
+                                                href="javascript:void(0)"
                                                 {{ $category->subCategories->count() > 0 ? 'data-bs-toggle=dropdown' : '' }}>
                                                 {{ $category->name }}
                                             </a>
@@ -44,7 +82,7 @@
                                                         @foreach ($category->subCategories as $subCategory)
                                                             <li>
                                                                 <a class="dropdown-item"
-                                                                   href="{{route('sub-category-shopping.index', $subCategory->slug)}}">
+                                                                    href="{{ route('sub-category-shopping.index', $subCategory->slug) }}">
                                                                     {{ $subCategory->name }}
                                                                 </a>
                                                             </li>
@@ -57,7 +95,7 @@
                                                                 <div class="dropdown-column col-xl-3">
                                                                     @foreach ($chunk as $subCategory)
                                                                         <a class="dropdown-item"
-                                                                           href="{{route('sub-category-shopping.index', $subCategory->slug)}}">
+                                                                            href="{{ route('sub-category-shopping.index', $subCategory->slug) }}">
                                                                             {{ $subCategory->name }}
                                                                         </a>
                                                                     @endforeach

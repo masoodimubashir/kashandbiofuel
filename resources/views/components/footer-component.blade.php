@@ -23,12 +23,12 @@
                         <ul>
 
                             @if(isset($navigations))
-                                @foreach ($navigations as $navigation)
+                                {{-- @foreach ($navigations as $navigation)
                                     <li>
                                         <a href="{{route('category.index', $navigation)}}"
                                            class="text-content">{{ $navigation->name}}</a>
                                     </li>
-                                @endforeach
+                                @endforeach --}}
                             @else
 
                             @endif

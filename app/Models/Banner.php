@@ -9,7 +9,7 @@ class Banner extends Model
 {
 
 
-    protected $fillable = ['image_path', 'position'];
+    protected $fillable = ['image_path', 'position', 'link'];
 
     protected $casts = [
         'position' => BannerPosition::class

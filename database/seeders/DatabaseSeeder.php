@@ -14,14 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(30)->create();
+        User::factory(30)->create();
         $this->call(LaratrustSeeder::class);
-        // $this->call(CategorySeeder::class);
-        // $this->call(SubCategorySeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(SubCategorySeeder::class);
         $this->call([
-            // ProductSeeder::class,
-            // ProductAttributeSeeder::class,
-            // ReviewSeeder::class
+            ProductSeeder::class,
+            ProductAttributeSeeder::class,
+            ReviewSeeder::class
         ]);
 
         $user = User::factory()->create([

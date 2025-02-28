@@ -18,7 +18,6 @@
         </div>
     </x-slot>
 
-    <!-- Table Section -->
     <div class="row">
         <div class="col-sm-12">
             <!-- First Row -->
@@ -44,55 +43,65 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Second Row -->
+            <!-- Slider Banners Row -->
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-header pb-0">
                             <h4>Banner Slider 1</h4>
                         </div>
                         <div class="card-body">
+                            <input type="text" class="form-control mb-3 banner-link" data-pond="slider-1"
+                                placeholder="Paste Banner Link URL">
                             <input class="show-preview my-pond3" type="file" name="file">
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-header pb-0">
                             <h4>Banner Slider 2</h4>
                         </div>
                         <div class="card-body">
+                            <input type="text" class="form-control mb-3 banner-link" data-pond="slider-2"
+                                placeholder="Paste Banner Link URL">
                             <input class="show-preview my-pond4" type="file" name="file">
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-header pb-0">
                             <h4>Banner Slider 3</h4>
                         </div>
                         <div class="card-body">
+                            <input type="text" class="form-control mb-3 banner-link" data-pond="slider-3"
+                                placeholder="Paste Banner Link URL">
                             <input class="show-preview my-pond5" type="file" name="file">
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-header pb-0">
                             <h4>Banner Slider 4</h4>
                         </div>
                         <div class="card-body">
+                            <input type="text" class="form-control mb-3 banner-link" data-pond="slider-4"
+                                placeholder="Paste Banner Link URL">
                             <input class="show-preview my-pond6" type="file" name="file">
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <!-- Featured Banners Row -->
+            <div class="row">
                 <div class="col-md-3">
                     <div class="card">
                         <div class="card-header pb-0">
@@ -120,12 +129,24 @@
 
     @push('dashboard.script')
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
+                // Hide slider FilePonds initially
+                $('.my-pond3, .my-pond4, .my-pond5, .my-pond6').hide();
+
+                // Show/hide FilePond based on URL input value for sliders
+                $('.banner-link').on('input', function() {
+                    const correspondingPond = $(this).siblings('.show-preview');
+                    if ($(this).val().trim()) {
+                        correspondingPond.show();
+                    } else {
+                        correspondingPond.hide();
+                    }
+                });
+
                 FilePond.registerPlugin(
                     FilePondPluginImagePreview,
                     FilePondPluginFileValidateType
                 );
-
 
                 const positions = {
                     'my-pond': 'hero-1',
@@ -135,9 +156,7 @@
                     'my-pond5': 'slider-3',
                     'my-pond6': 'slider-4',
                     'my-pond7': 'featured',
-                    'my-pond8': 'limited-offer',
-
-
+                    'my-pond8': 'limited-offer'
                 };
 
                 function createServerConfig(data) {
@@ -155,7 +174,7 @@
                             });
                         },
                         process: {
-                            url: data.files ? `/admin/banners/update/${data.files.id}` : '/admin/banners',
+                            url: data.files ? '/admin/banners/update/' + data.files.id : '/admin/banners',
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -182,6 +201,9 @@
                                 },
                                 ondata: (formData) => {
                                     formData.append('position', position);
+                                    const linkInput = document.querySelector(
+                                        `.banner-link[data-pond="${position}"]`);
+                                    formData.append('link', linkInput ? linkInput.value : '');
                                     return formData;
                                 }
                             }
@@ -192,26 +214,33 @@
                     };
                 }
 
+                // Modified initializeFilePonds to handle link values for sliders
                 function initializeFilePonds(data) {
                     const serverConfig = createServerConfig(data);
 
                     Object.entries(positions).forEach(([pondClass, position]) => {
-
                         const pondConfig = createPondConfig(position, serverConfig);
 
-
                         if (data.files && data.files.length > 0) {
-
-
                             const matchingFile = data.files.find(file => file.id === position);
-
-
                             if (matchingFile) {
                                 pondConfig.files = [{
                                     source: matchingFile.id,
-                                    options: {type: 'local'},
+                                    options: {
+                                        type: 'local'
+                                    },
                                     source: matchingFile.url
                                 }];
+
+                                // Show FilePond for sliders if link exists
+                                if (position.includes('slider-')) {
+                                    const linkInput = document.querySelector(
+                                        `.banner-link[data-pond="${position}"]`);
+                                    if (linkInput && matchingFile.link) {
+                                        linkInput.value = matchingFile.link;
+                                        $(`.${pondClass}`).show();
+                                    }
+                                }
                             }
                         }
 
@@ -224,8 +253,41 @@
                     method: 'GET',
                     success: initializeFilePonds
                 });
+
+                $('.banner-link').on('change', function() {
+                    const position = $(this).data('pond');
+                    const link = $(this).val();
+
+                    $.ajax({
+                        url: '/admin/banners/links/update/' + position,
+                        method: 'PUT',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {
+                            link
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: response.message,
+                                    icon: 'success'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: xhr.responseJSON.message || 'Something went wrong',
+                                icon: 'error'
+                            });
+                        }
+                    });
+                });
             });
         </script>
     @endpush
+
 
 </x-app-layout>

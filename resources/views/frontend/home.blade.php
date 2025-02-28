@@ -1,11 +1,10 @@
 @extends('welcome')
 
 @section('main')
-
     <!-- Home Section Start -->
     <section class="home-section pt-2">
         <div class="container-fluid-lg">
-            <x-hero/>
+            <x-hero />
         </div>
     </section>
     <!-- Home Section End -->
@@ -14,14 +13,14 @@
 
     <!-- Category Section Start -->
     <section class="category-section-2">
-        <x-shop-by-category/>
+        <x-shop-by-category />
     </section>
     <!-- Category Section End -->
 
     <!-- Banner Section Start -->
     <section class="banner-section ratio_60 wow fadeInUp">
         <div class="container-fluid-lg">
-            <x-hot-deals/>
+            <x-hot-deals />
         </div>
     </section>
     <!-- Banner Section End -->
@@ -29,9 +28,9 @@
     <!-- Product Section Start -->
     <section>
         <div class="container-fluid-lg">
-            {{--   All Kinds Of Products Start--}}
-            <x-all-kinds-of-products/>
-            {{--  All Kinds Of Products End--}}
+            {{--   All Kinds Of Products Start --}}
+            <x-all-kinds-of-products />
+            {{--  All Kinds Of Products End --}}
         </div>
     </section>
     <!-- Product Section End -->
@@ -40,7 +39,7 @@
     <!-- Banner Section Start -->
     <section>
         <div class="container-fluid-lg">
-            <x-limit-time-offer/>
+            {{-- <x-limit-time-offer /> --}}
         </div>
     </section>
     <!-- Banner Section End -->
@@ -51,13 +50,13 @@
         <div class="container-fluid-lg">
             <div class="slider-4-1">
 
-                <x-top-selling/>
+                <x-top-selling />
 
-                <x-top-rated/>
+                <x-top-rated />
 
-                <x-newly-arrived/>
+                <x-newly-arrived />
 
-                <x-featured-product/>
+                <x-featured-product />
 
             </div>
         </div>
@@ -65,15 +64,14 @@
 
 
     <!-- coupon Section Start -->
-    <section>
+    {{-- <section>
         <div class="container-fluid-lg" style="margin-bottom: 10px;">
             <div class="row">
                 <div class="col-12">
                     <div class="banner-contain hover-effect">
                         @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::FEATURED->value)->first())
-                            <img src="{{ asset('storage/' . $banner->image_path ?? null) }}"
-                                 class="bg-img blur-up lazyload"
-                                 alt="">
+                            <img src="{{ asset('storage/' . $banner->image_path ?? null) }}" class="bg-img blur-up lazyload"
+                                alt="">
                         @endif
                         <div class="banner-details p-center p-sm-4 p-3 text-white text-center">
                             <div>
@@ -87,6 +85,8 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Discount Section End -->
+
+   
 @endsection

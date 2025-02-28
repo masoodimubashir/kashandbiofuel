@@ -58,7 +58,7 @@ Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-
 Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact-us.store');
 
 // Route For Category Shopping
-Route::get('/shop-by-category', [CategoryShoppingController::class, 'index'])->name('category.index');
+Route::get('/shop-by-category/{category_id}', [CategoryShoppingController::class, 'index'])->name('category.index');
 
 // Route For SubCategory Shopping
 Route::get('/shop-by-subcategory/{slug}', [SubCategoryShoppingController::class, 'index'])->name('sub-category-shopping.index');
@@ -128,9 +128,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/order/push-to-shiprocket/{order}', ShipRocketController::class)->name('order.push-to-shiprocket');
 
         Route::get('/contact-us', [DashboardContactUsController::class, 'index'])->name('dashboard.contact-us.index');
+      
         Route::get('banners', [BannerController::class, 'index']);
         Route::post('banners', [BannerController::class, 'store']);
         Route::post('banners/update/{id}', [BannerController::class, 'update']);
+        Route::put('banners/links/update/{id}', [BannerController::class, 'updateLinks']);
 
         Route::get('/products/{Product}/attributes', [ProductAttributeController::class, 'index']);
         Route::post('/products/{Product}/attributes', [ProductAttributeController::class, 'store']);
