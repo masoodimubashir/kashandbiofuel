@@ -46,7 +46,7 @@
 
     <!-- Top Selling Section Start -->
 
-    <section class="top-selling-section">
+    <section class="top-selling-section mb-4">
         <div class="container-fluid-lg">
             <div class="slider-4-1">
 
