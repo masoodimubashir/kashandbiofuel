@@ -17,10 +17,10 @@
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
-                                class="img-fluid blur-up lazyload " style="height: 80px; width: 100px;" alt="{{ $product->name }}">
+                                class="img-fluid blur-up lazyload " style="height: 150px; width: 150px;" alt="{{ $product->name }}">
                         @else
                             <img src="{{ asset('default_images/product_image.png') }}"
-                                class="img-fluid blur-up lazyload " style="height: 80px; width: 100px;" alt="{{ $product->name }}">
+                                class="img-fluid blur-up lazyload " style="height: 150px; width: 150px;" alt="{{ $product->name }}">
                         @endisset
                     </a>
 
@@ -53,7 +53,7 @@
     @endforeach
 </div>
 
-<div class="slider-3_2 product-wrapper">
+<div class="slider-3_2 product-wrapper mt-3">
     @foreach ($allProducts->skip(3)->take(3) as $product)
         <div>
                 <div class="product-box-2 wow fadeIn" data-wow-delay="{{ $loop->index * 0.1 . 's' }}">
@@ -63,10 +63,10 @@
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
-                                class="img-fluid blur-up lazyload " style="height: 80px; width: 100px;" alt="{{ $product->name }}">
+                                class="img-fluid blur-up lazyload " style="height: 150px; width: 150px;" alt="{{ $product->name }}">
                         @else
                             <img src="{{ asset('default_images/product_image.png') }}"
-                                class="img-fluid blur-up lazyload " style="height: 80px; width: 100px;" alt="{{ $product->name }}">
+                                class="img-fluid blur-up lazyload " style="height: 150px; width: 150px;" alt="{{ $product->name }}">
                         @endisset
                     </a>
 
