@@ -4,20 +4,24 @@
 
         <div class="banner-contain hover-effect">
             @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::SLIDER_BANNER_1->value)->first())
-                <img src="{{ asset('storage/' . $banner->image_path ?? null) }}"
-                     class="bg-img blur-up lazyload"
-                     alt="">
+                <a href="{{ $banner->link }}">
+
+                    <img src="{{ asset('storage/' . $banner->image_path ?? null) }}" class="bg-img blur-up lazyload"
+                        alt="">
+                </a>
             @endif
-           
+
         </div>
+
     </div>
 
     <div>
         <div class="banner-contain hover-effect">
             @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::SLIDER_BANNER_2->value)->first())
-                <img src="{{ asset('storage/' . $banner->image_path ?? null) }}"
-                     class="bg-img blur-up lazyload"
-                     alt="">
+                <a href="{{ $banner->link }}">
+                    <img src="{{ asset('storage/' . $banner->image_path ?? null) }}" class="bg-img blur-up lazyload"
+                        alt="">
+                </a>
             @endif
             {{-- <div class="banner-details">
                 <div class="banner-box">
@@ -34,9 +38,10 @@
     <div>
         <div class="banner-contain hover-effect">
             @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::SLIDER_BANNER_3->value)->first())
-                <img src="{{ asset('storage/' . $banner->image_path ?? null) }}"
-                     class="bg-img blur-up lazyload"
-                     alt="">
+                <a href="{{ $banner->link }}">
+                    <img src="{{ asset('storage/' . $banner->image_path ?? null) }}" class="bg-img blur-up lazyload"
+                        alt="">
+                </a>
             @endif
             {{-- <div class="banner-details">
                 <div class="banner-box">
@@ -53,9 +58,10 @@
     <div>
         <div class="banner-contain hover-effect">
             @if ($banner = App\Models\Banner::where('position', App\Enum\BannerPosition::SLIDER_BANNER_4->value)->first())
-                <img src="{{ asset('storage/' . $banner->image_path ?? null) }}"
-                     class="bg-img blur-up lazyload"
-                     alt="">
+                <a href="{{ $banner->link }}">
+                    <img src="{{ asset('storage/' . $banner->image_path ?? null) }}" class="bg-img blur-up lazyload"
+                        alt="">
+                    <a />
             @endif
             {{-- <div class="banner-details">
                 <div class="banner-box">

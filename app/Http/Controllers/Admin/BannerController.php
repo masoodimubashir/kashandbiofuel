@@ -80,6 +80,8 @@ class BannerController extends Controller
     public function update(Request $request, $id)
     {
 
+        dd($request->all());
+
         $validator = Validator::make($request->all(), [
             'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'link' => 'nullable|url',
@@ -120,48 +122,48 @@ class BannerController extends Controller
     }
 
 
-    // public function updateLinks(Request $request, $id)
-    // {
+    public function updateLinks(Request $request, $id)
+    {
 
 
-    //     if ($request->ajax()) {
+        if ($request->ajax()) {
 
-    //         try {
-    //             $validate =  Validator::make($request->all(), [
-    //                 'link' => 'required|url',
-    //             ]);
+            try {
+                $validate =  Validator::make($request->all(), [
+                    'link' => 'required|url',
+                ]);
 
-    //             if ($validate->fails()) {
+                if ($validate->fails()) {
 
-    //                 return response()->json([
-    //                     'success' => false,
-    //                     'message' => $validate->errors()->first()
-    //                 ]);
-    //             }
+                    return response()->json([
+                        'success' => false,
+                        'message' => $validate->errors()->first()
+                    ]);
+                }
 
-    //             $banner = Banner::findOrFail($id);
+                $banner = Banner::findOrFail($id);
 
-    //             if (!$banner) {
-    //                 return response()->json([
-    //                     'success' => false,
-    //                     'message' => 'Please Upload The Banner First'
-    //                 ], Response::HTTP_NOT_FOUND);
-    //             }
+                if (!$banner) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Please Upload The Banner First'
+                    ], Response::HTTP_NOT_FOUND);
+                }
 
-    //             $banner->link = $request->link;
-    //             $banner->save();
+                $banner->link = $request->link;
+                $banner->save();
 
-    //             return response()->json([
-    //                 'success' => true,
-    //                 'message' => 'Link Updated Successfully'
-    //             ]);
-    //         } catch (Exception $e) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Link Updated Successfully'
+                ]);
+            } catch (Exception $e) {
 
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'Something Went Wrong'
-    //             ]);
-    //         }
-    //     }
-    // }
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Something Went Wrong'
+                ]);
+            }
+        }
+    }
 }
