@@ -18,10 +18,10 @@
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
-                                class="img-fluid blur-up lazyload h-25 w-25" alt="{{ $product->name }}">
+                                class="img-fluid blur-up lazyload " alt="{{ $product->name }}">
                         @else
                             <img src="{{ asset('default_images/product_image.png') }}"
-                                class="img-fluid blur-up lazyload h-25 w-25" alt="{{ $product->name }}">
+                                class="img-fluid blur-up lazyload " alt="{{ $product->name }}">
                         @endisset
                     </a>
 
