@@ -118,6 +118,7 @@ $items = \App\Models\Cart::checkCartItems()->count();
                                 <a href="{{ route('wishlist.view-wishlist') }}"
                                     class="btn p-0 position-relative header-wishlist">
                                     <i data-feather="heart"></i>
+                                    
                                 </a>
                             </li>
                             <li class="right-side">

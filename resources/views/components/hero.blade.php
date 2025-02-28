@@ -7,7 +7,7 @@
 
             @if ($banner && $banner->image_path)
                 <img src="{{ asset('storage/' . $banner->image_path) }}" class="img-fluid blur-up lazyload w-100"
-                    style="height: 500px; object-fit: conatin;" alt="{{ $banner->title ?? 'Header Banner' }}">
+                    style="" alt="{{ $banner->title ?? 'Header Banner' }}">
             @endif
         </div>
     </div>
@@ -22,7 +22,7 @@
             <img 
               src="{{ asset('storage/' . $banner->image_path) }}"
               class="img-fluid blur-up lazyload w-100"
-              style="height: 500px; object-fit: contain;"
+              style="height: 450px; object-fit: contain;"
               alt="{{ $banner->title ?? 'Slider Banner' }}"
             >
           @endif

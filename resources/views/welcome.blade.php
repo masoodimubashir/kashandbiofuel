@@ -29,8 +29,8 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         /* Fullscreen Skeleton Loader */
@@ -40,7 +40,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #f5f5f5; /* Light grey background for loading state */
+            background-color: #f5f5f5;
+            /* Light grey background for loading state */
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -60,6 +61,7 @@
             from {
                 background-position: 200% 0;
             }
+
             to {
                 background-position: -200% 0;
             }
@@ -102,7 +104,6 @@
         body.loaded .content {
             display: block;
         }
-
     </style>
 
 </head>
@@ -111,149 +112,156 @@
 
 <body class="bg-effect">
 
-<!-- Skeleton Loader -->
-<div id="skeletonLoader">
-    <!-- Example skeletons for an image, title, and text -->
-    <div class="skeleton skeleton-image"></div>
-    <div class="skeleton skeleton-title"></div>
-    <div class="skeleton skeleton-text"></div>
-    <div class="skeleton skeleton-text"></div>
-    <div class="skeleton skeleton-text"></div>
-</div>
-
-
-<div class="content">
-
-
-    <!-- Header Start -->
-
-    <header class="pb-md-4 pb-0">
-
-        {{--    <x-header-top/> --}}
-
-        <x-navbar/>
-
-        <x-navigation/>
-
-
-    </header>
-
-    <!-- Header End -->
-
-    <!-- mobile fix menu start -->
-    <div class="mobile-menu d-md-none d-block mobile-cart pb-4">
-        <ul>
-            <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
-                <a href="{{ route('home') }}">
-                    <span>Home</span>
-                </a>
-            </li>
-
-            {{-- <li class="mobile-category {{ request()->routeIs('category.index') ? 'active' : '' }}">
-                <a href="{{ route('category.index') }}" class="js-link">
-                    <span>Category</span>
-                </a>
-            </li> --}}
-
-            <li class="{{ request()->routeIs('wishlist.view-wishlist') ? 'active' : '' }}">
-                <a href="{{ route('wishlist.view-wishlist') }}" class="notifi-wishlist">
-                    <span>My Wish</span>
-                </a>
-            </li>
-
-            <li class="{{ request()->routeIs('cart.view-cart') ? 'active' : '' }}">
-                <a href="{{ route('cart.view-cart') }}" class="fly-cate">
-                    <span>Cart</span>
-                </a>
-            </li>
-        </ul>
+    <!-- Skeleton Loader -->
+    <div id="skeletonLoader">
+        <!-- Example skeletons for an image, title, and text -->
+        <div class="skeleton skeleton-image"></div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text"></div>
     </div>
-    <!-- mobile fix menu end -->
 
 
-    {{--  Main Section Start  --}}
-    @yield('main')
-    {{-- Main Section End  --}}
-
-    <!-- Footer Section Start -->
-    <x-footer-component/>
-    <!-- Footer Section End -->
+    <div class="content">
 
 
-</div>
+        <!-- Header Start -->
 
-<script>
-    // Simulate the loading time (e.g., 2 seconds delay)
-    setTimeout(function () {
-        // When done, add the 'loaded' class to body
-        document.body.classList.add('loaded');
-    }); // Adjust this duration (e.g., 2000ms = 2 seconds)
-</script>
+        <header class="pb-md-4 pb-0">
 
+            {{--    <x-header-top/> --}}
 
-<!-- latest jquery-->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+            <x-navbar />
+
+            <x-navigation />
 
 
-{{-- Sweet Alert --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        </header>
+
+        <!-- Header End -->
+
+        <!-- mobile fix menu start -->
+        <div class="mobile-menu d-md-none d-block mobile-cart pb-4">
+            <ul>
+                <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                    <a href="{{ route('home') }}">
+                        <span>
+                            <i data-feather="home"></i>
+
+                            {{-- Home --}}
+                        </span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('wishlist.view-wishlist') ? 'active' : '' }}">
+                    <a href="{{ route('wishlist.view-wishlist') }}" class="notifi-wishlist">
+
+                        <span>
+                            <i data-feather="heart"></i>
+                            {{-- My Wish --}}
+                        </span>
+                    </a>
+                </li>
+
+                <li class="{{ request()->routeIs('cart.view-cart') ? 'active' : '' }}">
+
+                    <a href="{{ route('cart.view-cart') }}" class="fly-cate">
+                        <span>
+                            <i data-feather="shopping-cart"></i>
+
+                            {{-- Cart --}}
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- mobile fix menu end -->
 
 
-<!-- jquery ui-->
-<script src="{{ asset('front/assets/js/jquery-ui.min.js') }}"></script>
+        {{--  Main Section Start  --}}
+        @yield('main')
+        {{-- Main Section End  --}}
 
-<!-- Bootstrap js-->
-<script src="{{ asset('front/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('front/assets/js/bootstrap/bootstrap-notify.min.js') }}"></script>
-<script src="{{ asset('front/assets/js/bootstrap/popper.min.js') }}"></script>
-
-<!-- feather icon js-->
-<script src="{{ asset('front/assets/js/feather/feather.min.js') }}"></script>
-<script src="{{ asset('front/assets/js/feather/feather-icon.js') }}"></script>
-
-<!-- Lazyload Js -->
-<script src="{{ asset('front/assets/js/lazysizes.min.js') }}"></script>
-
-<!-- Slick js-->
-<script src="{{ asset('front/assets/js/slick/slick.js') }}"></script>
-<script src="{{ asset('front/assets/js/slick/slick-animation.min.js') }}"></script>
-<script src="{{ asset('front/assets/js/slick/custom_slick.js') }}"></script>
-
-<!-- Auto Height Js -->
-<script src="{{ asset('front/assets/js/auto-height.js') }}"></script>
-
-<!-- Timer Js -->
-<script src="{{ asset('front/assets/js/timer1.js') }}"></script>
-
-<!-- Quantity js -->
-<script src="{{ asset('front/assets/js/quantity-2.js') }}"></script>
-
-<!-- WOW js -->
-<script src="{{ asset('front/assets/js/wow.min.js') }}"></script>
-<script src="{{ asset('front/assets/js/custom-wow.js') }}"></script>
-
-<!-- script js -->
-<script src="{{ asset('front/assets/js/script.js') }}"></script>
+        <!-- Footer Section Start -->
+        <x-footer-component />
+        <!-- Footer Section End -->
 
 
-<!-- Price Range Js -->
-<script src="{{ asset('front/assets/js/ion.rangeSlider.min.js') }}"></script>
+    </div>
 
-<!-- Quantity js -->
-<script src="{{ asset('front/assets/js/quantity-2.js') }}"></script>
-
-<!-- sidebar open js -->
-<script src="{{ asset('front/assets/js/filter-sidebar.js') }}"></script>
-
-<!-- Quantity js -->
-<script src="{{ asset('front/assets/js/quantity-2.js') }}"></script>
-
-<!-- Zoom Js -->
-<script src="{{ asset('front/assets/js/jquery.elevatezoom.js') }}"></script>
-<script src="{{ asset('front/assets/js/zoom-filter.js') }}"></script>
+    <script>
+        // Simulate the loading time (e.g., 2 seconds delay)
+        setTimeout(function() {
+            // When done, add the 'loaded' class to body
+            document.body.classList.add('loaded');
+        }); // Adjust this duration (e.g., 2000ms = 2 seconds)
+    </script>
 
 
-@stack('frontend.scripts')
+    <!-- latest jquery-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
+    {{-- Sweet Alert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <!-- jquery ui-->
+    <script src="{{ asset('front/assets/js/jquery-ui.min.js') }}"></script>
+
+    <!-- Bootstrap js-->
+    <script src="{{ asset('front/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('front/assets/js/bootstrap/bootstrap-notify.min.js') }}"></script>
+    <script src="{{ asset('front/assets/js/bootstrap/popper.min.js') }}"></script>
+
+    <!-- feather icon js-->
+    <script src="{{ asset('front/assets/js/feather/feather.min.js') }}"></script>
+    <script src="{{ asset('front/assets/js/feather/feather-icon.js') }}"></script>
+
+    <!-- Lazyload Js -->
+    <script src="{{ asset('front/assets/js/lazysizes.min.js') }}"></script>
+
+    <!-- Slick js-->
+    <script src="{{ asset('front/assets/js/slick/slick.js') }}"></script>
+    <script src="{{ asset('front/assets/js/slick/slick-animation.min.js') }}"></script>
+    <script src="{{ asset('front/assets/js/slick/custom_slick.js') }}"></script>
+
+    <!-- Auto Height Js -->
+    <script src="{{ asset('front/assets/js/auto-height.js') }}"></script>
+
+    <!-- Timer Js -->
+    <script src="{{ asset('front/assets/js/timer1.js') }}"></script>
+
+    <!-- Quantity js -->
+    <script src="{{ asset('front/assets/js/quantity-2.js') }}"></script>
+
+    <!-- WOW js -->
+    <script src="{{ asset('front/assets/js/wow.min.js') }}"></script>
+    <script src="{{ asset('front/assets/js/custom-wow.js') }}"></script>
+
+    <!-- script js -->
+    <script src="{{ asset('front/assets/js/script.js') }}"></script>
+
+
+    <!-- Price Range Js -->
+    <script src="{{ asset('front/assets/js/ion.rangeSlider.min.js') }}"></script>
+
+    <!-- Quantity js -->
+    <script src="{{ asset('front/assets/js/quantity-2.js') }}"></script>
+
+    <!-- sidebar open js -->
+    <script src="{{ asset('front/assets/js/filter-sidebar.js') }}"></script>
+
+    <!-- Quantity js -->
+    <script src="{{ asset('front/assets/js/quantity-2.js') }}"></script>
+
+    <!-- Zoom Js -->
+    <script src="{{ asset('front/assets/js/jquery.elevatezoom.js') }}"></script>
+    <script src="{{ asset('front/assets/js/zoom-filter.js') }}"></script>
+
+
+    @stack('frontend.scripts')
 </body>
 
 </html>
