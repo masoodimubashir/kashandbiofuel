@@ -8,9 +8,9 @@
 
                 @foreach ($new_arrivals as $product)
                     <div class="top-selling-contain wow fadeInUp" data-wow-delay="0.4s">
-                        @isset($product->productAttribute->image_path)
+                        @isset($product->productAttribute->image)
                             <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
-                                <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" class="img-fluid blur-up lazyload"
+                                <img src="{{ asset('storage/' . $product->productAttribute->image) }}" class="img-fluid blur-up lazyload"
                                     alt="{{ $product->image_alt }}">
                             </a>
                         @else

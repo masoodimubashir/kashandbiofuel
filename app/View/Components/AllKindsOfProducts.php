@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Action\ProductAction;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -9,33 +10,13 @@ use Illuminate\View\Component;
 class AllKindsOfProducts extends Component
 {
 
+    use ProductAction;
+
     public $allProducts;
 
     public function __construct()
     {
-        $this->allProducts = Product::query()
-            ->inStock()
-            ->has('productAttributes')
-            ->with([
-                'productAttributes' => function ($query) {
-                    $query->select('product_id', 'image_path')
-                        ->take(1);
-                },
-                'reviews'
-            ])
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating')
-            ->where('status', 1)
-            ->select([
-                'id',
-                'name',
-                'slug',
-                'selling_price',
-                'price'
-            ])
-            ->latest()
-            ->take(10)
-            ->get();
+        $this->allProducts = $this->getProducts();
 
     }
 

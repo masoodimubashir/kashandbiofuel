@@ -112,6 +112,7 @@ class Product extends Model
     }
 
 
+
     /**
      * Get the user's Price
      */

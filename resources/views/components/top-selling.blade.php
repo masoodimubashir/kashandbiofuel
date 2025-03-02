@@ -16,11 +16,11 @@
 
 
 
-                        @isset($product->productAttribute->image_path)
+                        @isset($product->productAttribute->image)
                             <a href={{ route('product.show', $product->slug) }} class="top-selling-image">
-                                <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                                <img src="{{ asset('storage/' . $product->productAttribute->image) }}"
                                     class="img-fluid blur-up lazyload" alt="{{ $product->image_alt }}">
-                                    <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" alt="">
+                                    <img src="{{ asset('storage/' . $product->productAttribute->image) }}" alt="">
                             </a>
                         @else
                             <a href={{ route('product.show', $product->slug) }} class="top-selling-image">

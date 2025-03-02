@@ -15,8 +15,8 @@
 
 
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
-                        @isset($product->productAttribute->image_path)
-                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                        @isset($product->productAttribute->image)
+                            <img src="{{ asset('storage/' . $product->productAttribute->image) }}"
                                 class="img-fluid blur-up lazyload " style="height: 150px; width: 150px;" alt="{{ $product->name }}">
                         @else
                             <img src="{{ asset('default_images/product_image.png') }}"
@@ -56,13 +56,14 @@
 <div class="slider-3_2 product-wrapper mt-3">
     @foreach ($allProducts->skip(3)->take(3) as $product)
         <div>
+
                 <div class="product-box-2 wow fadeIn" data-wow-delay="{{ $loop->index * 0.1 . 's' }}">
                     <!-- Product Image -->
 
 
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
-                        @isset($product->productAttribute->image_path)
-                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                        @isset($product->productAttribute->image)
+                            <img src="{{ asset('storage/' . $product->productAttribute->image) }}"
                                 class="img-fluid blur-up lazyload " style="height: 150px; width: 150px;" alt="{{ $product->name }}">
                         @else
                             <img src="{{ asset('default_images/product_image.png') }}"
