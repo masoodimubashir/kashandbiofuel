@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
-            $table->string('image_path')->nullable();
+            $table->json('images')->nullable();
             $table->unsignedBigInteger('qty');
             $table->string('hex_code');
             $table->timestamps();

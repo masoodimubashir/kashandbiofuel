@@ -95,33 +95,29 @@
                             <!-- Main Carousel -->
                             <div class="product-slider owl-carousel owl-theme" id="sync1">
                                 @foreach ($product->productAttributes as $attribute)
-                                    <div class="item">
-                                        @if ($attribute->image_path)
-                                            <img src="{{ asset('storage/' . $attribute->image_path) }}"
-                                                alt="Product Image" class="img-fluid fixed-image">
-                                        @else
-                                            <img src="{{ asset('default_images/product_image.png') }}"
-                                                alt="Product Image" class="img-fluid fixed-image">
-                                        @endif
-                                    </div>
+                                    @foreach (json_decode($attribute->images) as $image)
+                                        <div class="item" data-hex-code="{{ $attribute->hex_code }}">
+                                            <img src="{{ asset('storage/' . $image) }}" alt="Product Image"
+                                                class="img-fluid fixed-image">
+                                        </div>
+                                    @endforeach
                                 @endforeach
                             </div>
 
                             <!-- Thumbnail Navigation -->
                             <div class="owl-carousel owl-theme mt-3" id="sync2">
                                 @foreach ($product->productAttributes as $attribute)
-                                    <div class="item">
-                                        @if ($attribute->image_path)
-                                            <img src="{{ asset('storage/' . $attribute->image_path) }}"
-                                                alt="Product Image" class="img-fluid fixed-thumbnail">
-                                        @else
-                                            <img src="{{ asset('default_images/product_image.png') }}"
-                                                alt="Product Image" class="img-fluid fixed-thumbnail">
-                                        @endif
-                                    </div>
+                                    @foreach (json_decode($attribute->images) as $image)
+                                        <div class="item" data-hex-code="{{ $attribute->hex_code }}">
+                                            <img src="{{ asset('storage/' . $image) }}" alt="Product Image"
+                                                class="img-fluid fixed-thumbnail">
+                                        </div>
+                                    @endforeach
                                 @endforeach
                             </div>
+
                         </div>
+
                     </div>
                 </div>
                 <div class="col-xxl-5 box-col-6 order-xxl-0 order-1">
@@ -133,10 +129,14 @@
                             <div class="product-price">{{ Number::currency($product->selling_price) }}
                                 <del>{{ Number::currency($product->price) }} </del>
                             </div>
+
+                            <!-- Color Selection -->
                             <ul class="product-color">
-                                @foreach ($uniqueHexCodes as $codes)
-                                    <li class="color-swatch" style="background-color:{{ $codes }}"
-                                        title="Color: {{ $codes }}"></li>
+                                @foreach ($product->productAttributes as $attribute)
+                                    <li class="color-swatch" data-hex-code="{{ $attribute->hex_code }}"
+                                        style="background-color: {{ $attribute->hex_code }}"
+                                        onclick="filterImages('{{ $attribute->hex_code }}')">
+                                    </li>
                                 @endforeach
                             </ul>
 
@@ -387,7 +387,10 @@
                     sync1.data('owl.carousel').to(number, 300, true);
                 });
             });
+            
         </script>
     @endpush
+
+   
 
 </x-app-layout>

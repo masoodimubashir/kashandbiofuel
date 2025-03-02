@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttribute;
@@ -40,12 +41,12 @@ class ProductController extends Controller
                 return DataTables::eloquent($products)
                     ->addColumn('product_name', function ($product) {
 
-                        $imageUrl = isset($product->productAttribute->image_path) ? 'storage/' . $product->productAttribute->image_path : 'default_images/product_image.png';
+                        // $imageUrl = isset($product->productAttribute->image_path) ? 'storage/' . $product->productAttribute->image_path : 'default_images/product_image.png';
+                                // <img src="' . asset($imageUrl) . '" class="card-img-top rounded" alt="Product Image" style="height: 50px; width:50px; object-fit: cover;">
 
 
                         return '
                             <div class="d-flex align-items-center gap-2 border-0">
-                                <img src="' . asset($imageUrl) . '" class="card-img-top rounded" alt="Product Image" style="height: 50px; width:50px; object-fit: cover;">
                                 <div class=" text-center">
                                     <h6 class=" mb-0 text-truncate">' . $product->name . '</h6>
                                 </div>
@@ -158,9 +159,9 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
-    
+
         try {
-         
+
 
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
@@ -178,14 +179,14 @@ class ProductController extends Controller
                 'product_attributes.*.image' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:2048',
                 'crafted_date' => 'required|date',
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'status' => 'error',
                     'errors' => $validator->errors()
                 ], 422);
             }
-    
+
             $totalQty = collect($request->product_attributes)->sum('qty');
 
 
@@ -209,37 +210,35 @@ class ProductController extends Controller
                 'discounted' => $request->filled('discounted') ? 1 : 0,
                 'new_arrival' => $request->filled('new_arrival') ? 1 : 0,
             ]);
-    
+
             $productFolder = 'products/' . $product->slug;
-    
+
             if ($request->filled('product_attributes')) {
                 foreach ($request->product_attributes as $attributeData) {
 
                     if (isset($attributeData['id'])) {
                         $attribute = ProductAttribute::find($attributeData['id']);
-    
+
                         if ($attribute) {
 
                             $attribute->update([
                                 'hex_code' => $attributeData['hex_code'],
                                 'qty' => $attributeData['qty'],
                             ]);
-    
+
                             if (isset($attributeData['image'])) {
 
                                 Storage::disk('public')->delete($attribute->image_path);
-    
+
                                 $imagePath = $attributeData['image']->store($productFolder, 'public');
-    
+
                                 $attribute->update(['image_path' => $imagePath]);
                             }
                         }
-                    }
-
-                    else {
+                    } else {
                         if (isset($attributeData['image'])) {
                             $imagePath = $attributeData['image']->store($productFolder, 'public');
-    
+
                             ProductAttribute::create([
                                 'product_id' => $product->id,
                                 'image_path' => $imagePath,
@@ -251,23 +250,23 @@ class ProductController extends Controller
                 }
             }
 
-    
+
             // Remove deleted attributes
             if ($request->filled('removed_attributes')) {
                 $removedIds = explode(',', $request->removed_attributes);
                 $removedAttributes = ProductAttribute::whereIn('id', $removedIds)->get();
-    
+
                 foreach ($removedAttributes as $attribute) {
                     // Delete the image from storage
                     Storage::disk('public')->delete($attribute->image_path);
-    
+
                     // Delete the attribute from the database
                     $attribute->delete();
                 }
             }
-    
+
             DB::commit();
-    
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product updated successfully',
@@ -282,40 +281,14 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         DB::beginTransaction();
 
         try {
 
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
-                'sku' => 'required|string|unique:products,sku',
-                'price' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:99999999.99'],
-                'selling_price' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:99999999.99'],
-                'short_description' => 'required|string',
-                'additional_description' => 'required|string',
-                'description' => 'required|string',
-                'category_id' => 'required|exists:categories,id',
-                'sub_category_id' => 'required|exists:sub_categories,id',
-                'product_attributes' => 'required|array|min:1',
-                'product_attributes.*.hex_code' => 'required|string|max:7',
-                'product_attributes.*.image' => 'required|file|mimes:jpeg,png,jpg,webp|max:2048',
-                'product_attributes.*.qty' => 'required|integer|min:0',
-                'crafted_date' => 'required|date',
-            ]);
+            $totalQty = collect($request->validated('attributes'))->sum('qty');
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'error',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            $totalQty = collect($request->product_attributes)->sum('qty');
-
-
-            // Create the product
             $product = Product::create([
                 'name' => $request->name,
                 'sku' => $request->sku,
@@ -329,47 +302,48 @@ class ProductController extends Controller
                 'sub_category_id' => $request->sub_category_id,
                 'slug' => Str::slug($request->name),
                 'status' => 1,
-                'qty' => $totalQty, 
-                'featured' => $request->filled('featured') ? 1 : 0,
-                'discounted' => $request->filled('discounted') ? 1 : 0,
-                'new_arrival' => $request->filled('new_arrival') ? 1 : 0,
+                'qty' => $totalQty,
+                'featured' => $request->boolean('featured'),
+                'discounted' => $request->boolean('discounted'),
+                'new_arrival' => $request->boolean('new_arrival'),
             ]);
 
             $productFolder = 'products/' . $product->slug;
             Storage::makeDirectory('public/' . $productFolder);
 
-            $productAttributes = [];
+            foreach ($request->validated('attributes') as $attribute) {
 
-            foreach ($request->product_attributes as $attribute) {
+                $imagePaths = [];
 
-                $imagePath = $attribute['image']->store($productFolder, 'public');
+                foreach ($attribute['images'] as $image) {
+                    $imagePaths[] = $image->store($productFolder, 'public');
+                }
 
-                $productAttributes[] = [
+                ProductAttribute::create([
                     'product_id' => $product->id,
-                    'image_path' => $imagePath,
                     'qty' => $attribute['qty'],
                     'hex_code' => $attribute['hex_code'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+                    'images' => json_encode($imagePaths)
+                ]);
+
+                DB::commit();
             }
 
-            DB::table('product_attributes')->insert($productAttributes);
-
-            DB::commit();
 
             return response()->json([
-                'status' => 'success',
+                'success' => true,
                 'message' => 'Product created successfully'
             ]);
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'status' => 'error',
+                'success' => false,
                 'message' => 'Failed to create Product: ' . $e->getMessage()
             ], 500);
         }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -396,7 +370,7 @@ class ProductController extends Controller
             ProductAttribute::where('product_id', $product->id)
                 ->delete();
 
-            $productFolder = 'products/' . $product->slug; 
+            $productFolder = 'products/' . $product->slug;
             if (Storage::exists('public/' . $productFolder)) {
                 Storage::deleteDirectory('public/' . $productFolder);
             }

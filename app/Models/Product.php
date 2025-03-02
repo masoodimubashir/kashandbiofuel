@@ -29,7 +29,6 @@ class Product extends Model
         'sub_category_id',
         'name',
         'sku',
-        'search_tags',
         'slug',
         'price',
         'selling_price',

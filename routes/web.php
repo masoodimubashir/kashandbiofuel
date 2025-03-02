@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\OrderPlacedEvent;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -8,7 +7,6 @@ use App\Http\Controllers\Admin\ChangeFlagsController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomersController;
 use App\Http\Controllers\Admin\ExcelController;
-use App\Http\Controllers\Admin\ExcelProductImportsController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductAttributeController;
 use App\Http\Controllers\Admin\ProductController;
@@ -35,8 +33,6 @@ use App\Http\Controllers\User\ApplyCouponController;
 use App\Http\Controllers\User\FrontendAddressController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserProfileController;
-use App\Mail\OrderShipped;
-use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 // Checking Session User For Testing
