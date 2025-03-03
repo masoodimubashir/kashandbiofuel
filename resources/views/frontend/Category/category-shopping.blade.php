@@ -266,7 +266,7 @@
                                     <div class="product-header">
                                         <div class="product-image">
                                             <a href="/product/{{ $product->slug }}">
-                                                <img src="{{ $product->productAttribute->image_path ? asset('storage/' . $product->productAttribute->image_path) : asset('default_images/product_image.png') }}"
+                                                <img src="{{ $product->productAttribute->image ? asset('storage/' . $product->productAttribute->image) : asset('default_images/product_image.png') }}"
                                                     class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
                                             </a>
                                         </div>

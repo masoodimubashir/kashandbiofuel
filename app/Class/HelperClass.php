@@ -64,7 +64,6 @@ trait HelperClass
         $items = $items->map(function ($item) use (&$checkOutPrice) {
             $this->processItemCalculations($item);
             $checkOutPrice += $item->product->grand_total;
-
             return [
                 'id' => $item->id,
                 'guest_id' => $item->guest_id,
@@ -80,12 +79,17 @@ trait HelperClass
                     'grand_total' => $item->product->grand_total,
                     'saving_amount' => $item->product->saving_amount,
                     'saving_percentage' => $item->product->saving_percentage,
-                    'product_attribute' => [
-                        'id' => $item->product->productAttributes->where('id', $item->product_attribute_id)->first()->id,
-                        'hex_code' => $item->product->productAttributes->where('id', $item->product_attribute_id)->first()->hex_code,
-                        'image_path' => $item->product->productAttributes->where('id', $item->product_attribute_id)->first()->image_path,
-                        'qty' => $item->product->productAttributes->where('id', $item->product_attribute_id)->first()->qty
-                    ]
+                    'product_attribute' => $item->product->productAttributes
+                        ->where('id', $item->product_attribute_id)
+                        ->map(function ($attribute) {
+                            return [
+                                'id' => $attribute->id,
+                                'hex_code' => $attribute->hex_code,
+                                'image_path' => $attribute->image,
+                                'qty' => $attribute->qty
+                            ];
+                        })
+                        ->first()
                 ]
             ];
         });

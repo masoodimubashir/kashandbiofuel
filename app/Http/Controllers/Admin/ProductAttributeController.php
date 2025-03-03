@@ -12,7 +12,6 @@ class ProductAttributeController extends Controller
     public function index($productId)
     {
 
-
         $images = ProductAttribute::where('product_id', $productId)
             ->get()
             ->map(function ($attribute) {

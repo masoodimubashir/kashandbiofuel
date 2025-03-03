@@ -22,7 +22,6 @@ class BaseRepository implements ItemInterface
     {
 
         return $this->model->query()
-
             ->with(['product' => fn($query) => $query->with('productAttributes')])
             ->where(function ($query) use ($values) {
                 if (isset($values['guest_id'])) {

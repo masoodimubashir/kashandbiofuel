@@ -134,74 +134,74 @@
                 // Cart Item Template
                 const renderCartItems = (cartItems) => {
                     return cartItems.map(cartItem => `
-            <tr class="product-box-contain" data-product-id="${cartItem.id}">
-                <td class="product-detail">
-                    <div class="product border-0">
-                        <a href="/product/${cartItem.product.slug}" class="product-image">
-                            <img src="${cartItem.product.product_attribute.image_path ? `storage/${cartItem.product.product_attribute.image_path}` : 'default_images/product_image.png'}"
-                                class="img-fluid blur-up lazyload" alt="${cartItem.product.name}">
-                        </a>
-                        <div class="product-detail">
-                            <ul>
-                                <li class="name">
-                                    <a href="/product/${cartItem.product.slug}">${cartItem.product.name}</a>
-                                </li>
-                                <li class="text-content">
-                                    <span class="text-title">Price Per Item</span> - &#8377;${cartItem.product.selling_price}
-                                </li>
-                                <li class="text-content">
-                                    <span class="text-title">Quantity (MAX)</span> - ${cartItem.product.product_attribute.qty}
-                                </li>
-                                <li class="color-swatch mt-1"
-                                    style="background-color: ${cartItem.product.product_attribute.hex_code};
-                                           width: 25px;
-                                           height: 25px;
-                                           display: inline-block;
-                                           border-radius: 50%;"
-                                    title="Color: ${cartItem.product.product_attribute.hex_code}"
-                                    data-product-attribute-id="${cartItem.product_attribute_id}">
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </td>
-                <td class="price">
-                    <h4 class="table-title text-content">Price</h4>
-                    <h5>&#8377;${cartItem.product.selling_price}
-                        <del class="text-content">&#8377;${cartItem.product.price}</del>
-                    </h5>
-                    <h6 class="theme-color">You Save: &#8377;${cartItem.product.saving_amount} (${cartItem.product.saving_percentage}%)</h6>
-                </td>
-                <td class="quantity">
-                    <div class="quantity-price">
-                        <div class="cart_qty">
-                            <div class="input-group">
-                                <button type="button" class="btn qty-left-minus" data-type="minus" data-product-id="${cartItem.id}">
-                                    <i class="fa fa-minus ms-0"></i>
-                                </button>
-                                <input class="form-control input-number qty-input" type="text" name="quantity"
-                                    min="0" max="${cartItem.product.product_attribute.qty}" value="${cartItem.qty}">
-                                <button type="button" class="btn qty-right-plus" data-type="plus" data-product-id="${cartItem.id}">
-                                    <i class="fa fa-plus ms-0"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td class="subtotal">
-                    <h4 class="table-title text-content">Total</h4>
-                    <h5>&#8377;${cartItem.product.grand_total.toFixed(2)}</h5>
-                </td>
-                <td class="save-remove">
-                    <h4 class="table-title text-content">Action</h4>
-                    <a class="save save-for-later notifi-wishlist" style="cursor: pointer"
-                        data-product-id=${cartItem.product_id}
-                        data-cart-id="${cartItem.id}">Save for later
-                    </a>
-                    <a class="remove close_button" data-id="${cartItem.id}">Remove</a>
-                </td>
-            </tr>
-        `).join('');
+                        <tr class="product-box-contain" data-product-id="${cartItem.id}">
+                            <td class="product-detail">
+                                <div class="product border-0">
+                                    <a href="/product/${cartItem.product.slug}" class="product-image">
+                                    <img src="${cartItem.product.product_attribute.image_path ? `storage/${cartItem.product.product_attribute.image_path}` : 'default_images/product_image.png'}"
+                                        class="img-fluid blur-up lazyload" alt="${cartItem.product.name}">
+                                    </a>
+                                    <div class="product-detail">
+                                        <ul>
+                                            <li class="name">
+                                                <a href="/product/${cartItem.product.slug}">${cartItem.product.name}</a>
+                                            </li>
+                                            <li class="text-content">
+                                                <span class="text-title">Price Per Item</span> - &#8377;${cartItem.product.selling_price}
+                                            </li>
+                                            <li class="text-content">
+                                                <span class="text-title">Quantity (MAX)</span> - ${cartItem.product.product_attribute.qty}
+                                            </li>
+                                            <li class="color-swatch mt-1"
+                                                style="background-color: ${cartItem.product.product_attribute.hex_code};
+                                                    width: 25px;
+                                                    height: 25px;
+                                                    display: inline-block;
+                                                    border-radius: 50%;"
+                                                title="Color: ${cartItem.product.product_attribute.hex_code}"
+                                                data-product-attribute-id="${cartItem.product_attribute_id}">
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price">
+                                <h4 class="table-title text-content">Price</h4>
+                                <h5>&#8377;${cartItem.product.selling_price}
+                                    <del class="text-content">&#8377;${cartItem.product.price}</del>
+                                </h5>
+                                <h6 class="theme-color">You Save: &#8377;${cartItem.product.saving_amount} (${cartItem.product.saving_percentage}%)</h6>
+                            </td>
+                            <td class="quantity">
+                                <div class="quantity-price">
+                                    <div class="cart_qty">
+                                        <div class="input-group">
+                                            <button type="button" class="btn qty-left-minus" data-type="minus" data-product-id="${cartItem.id}">
+                                                <i class="fa fa-minus ms-0"></i>
+                                            </button>
+                                            <input class="form-control input-number qty-input" type="text" name="quantity"
+                                                min="0" max="${cartItem.product.product_attribute.qty}" value="${cartItem.qty}">
+                                            <button type="button" class="btn qty-right-plus" data-type="plus" data-product-id="${cartItem.id}">
+                                                <i class="fa fa-plus ms-0"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="subtotal">
+                                <h4 class="table-title text-content">Total</h4>
+                                <h5>&#8377;${cartItem.product.grand_total.toFixed(2)}</h5>
+                            </td>
+                            <td class="save-remove">
+                                <h4 class="table-title text-content">Action</h4>
+                                <a class="save save-for-later notifi-wishlist" style="cursor: pointer"
+                                    data-product-id=${cartItem.product_id}
+                                    data-cart-id="${cartItem.id}">Save for later
+                                </a>
+                                <a class="remove close_button" data-id="${cartItem.id}">Remove</a>
+                            </td>
+                        </tr>
+                    `).join('');
                 };
 
                 // Cart Actions

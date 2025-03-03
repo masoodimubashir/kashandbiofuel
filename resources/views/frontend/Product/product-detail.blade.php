@@ -76,12 +76,12 @@
                                             @foreach ($product->productAttributes as $product_attribute)
                                                 <div>
                                                     <div class="slider-image">
-                                                        @isset($product_attribute->image_path)
+                                                        @isset($product_attribute->image)
                                                             <div class="slider-image">
-                                                                <img src="{{ asset('storage/' . $product->productAttributes[0]->image_path) }}"
+                                                                <img src="{{ asset('storage/' . $product->productAttributes[0]->image) }}"
                                                                     id="img-1"
                                                             
-                                                                    data-zoom-image="{{ asset('storage/' . $product->productAttributes[0]->image_path) }}"
+                                                                    data-zoom-image="{{ asset('storage/' . $product->productAttributes[0]->image) }}"
                                                                     class="img-fluid image_zoom_cls-0 blur-up lazyload"
                                                                     style="height: 500px;"
                                                                     alt="">
@@ -89,7 +89,7 @@
                                                         @else
                                                             <img src="{{ asset('default_images/product_image.png') }}"
                                                                 id="img-1"
-                                                                data-zoom-image="{{ asset('storage/' . $product_attribute->image_path) }}"
+                                                                data-zoom-image="{{ asset('storage/' . $product_attribute->image) }}"
                                                                 class="img-fluid image_zoom_cls-0 blur-up lazyload"
                                                                 alt="">
                                                         @endisset
@@ -614,18 +614,18 @@
                 if (productAttribute) {
                     // Update the main product image
                     const mainImage = $('#img-1');
-                    mainImage.attr('src', productAttribute.image_path ?
-                        `{{ asset('storage/') }}/${productAttribute.image_path}` :
+                    mainImage.attr('src', productAttribute.image ?
+                        `{{ asset('storage/') }}/${productAttribute.image}` :
                         `{{ asset('default_images/product_image.png') }}`);
-                    mainImage.attr('data-zoom-image', productAttribute.image_path ?
-                        `{{ asset('storage/') }}/${productAttribute.image_path}` :
+                    mainImage.attr('data-zoom-image', productAttribute.image ?
+                        `{{ asset('storage/') }}/${productAttribute.image}` :
                         `{{ asset('default_images/product_image.png') }}`);
 
                     // Update the thumbnail images
                     const thumbnailContainer = $(`.sidebar-image[data-attribute-id="${productAttributeId}"]`);
                     const thumbnailImage = thumbnailContainer.find('img');
-                    thumbnailImage.attr('src', productAttribute.image_path ?
-                        `{{ asset('storage/') }}/${productAttribute.image_path}` :
+                    thumbnailImage.attr('src', productAttribute.image ?
+                        `{{ asset('storage/') }}/${productAttribute.image}` :
                         `{{ asset('default_images/product_image.png') }}`);
                 }
             }

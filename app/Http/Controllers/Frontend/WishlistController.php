@@ -44,7 +44,8 @@ class WishlistController extends Controller
             $product = Wishlist::query()
                 ->where([
                     'product_id' => $request->product_id,
-                    'product_attribute_id' => $request->product_attribute_id
+                    'product_attribute_id' => $request->product_attribute_id,
+                    'user_id' => auth()->user()->id,
                 ])->get();
 
             if ($product->count() > 0) {

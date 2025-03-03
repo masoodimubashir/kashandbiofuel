@@ -45,7 +45,8 @@ class CartController extends Controller
             $product = Cart::query()
                 ->where([
                     'product_id' => $request->product_id,
-                    'product_attribute_id' => $request->product_attribute_id
+                    'product_attribute_id' => $request->product_attribute_id,
+                    'user_id' => auth()->user()->id,
                 ])->first();
 
             if ($product) {

@@ -1,146 +1,148 @@
 <x-app-layout>
 
     <!-- Product Form Modal -->
-    {{-- <div class="modal fade" id="bd-example-modal-fullscreen" id="productModal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="bd-example-modal-fullscreen" id="productModal" tabindex="-1" role="dialog"
         aria-labelledby="myFullLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header sticky-top bg-white">
                     <h4 class="modal-title" id="modalTitle">Add New Product</h4>
                     <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div> --}}
-    <div class="modal-body p-0">
-        <form id="productForm" class="row g-3 p-3 p-md-4 overflow-auto" enctype='multipart/form-data'>
-            @csrf
-            <input type="hidden" id="productId" name="product_id">
+                </div>
+                <div class="modal-body p-0">
+                    <form id="productForm" class="row g-3 p-3 p-md-4 overflow-auto" enctype='multipart/form-data'>
+                        @csrf
+                        <input type="hidden" id="productId" name="product_id">
 
-            <!-- Product Name -->
-            <div class="col-12 col-md-4">
-                <label class="form-label" for="name">Product Name</label>
-                <input class="form-control" id="name" name="name" type="text">
-                <div class="invalid-feedback">Please enter a valid product name</div>
-            </div>
+                        <!-- Product Name -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="name">Product Name</label>
+                            <input class="form-control" id="name" name="name" type="text">
+                            <div class="invalid-feedback">Please enter a valid product name</div>
+                        </div>
 
-            <!-- Category -->
-            <div class="col-12 col-md-4">
-                <label class="form-label" for="category_id">Category</label>
-                <select class="form-select" id="category_id" name="category_id">
-                    <option value="">Select Your Category</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
-                <div class="invalid-feedback">Please select a category</div>
-            </div>
+                        <!-- Category -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="category_id">Category</label>
+                            <select class="form-select" id="category_id" name="category_id">
+                                <option value="">Select Your Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback">Please select a category</div>
+                        </div>
 
-            <!-- Subcategory -->
-            <div class="col-12 col-md-4">
-                <label class="form-label" for="sub_category_id">Subcategory</label>
-                <select class="form-select" id="sub_category_id" name="sub_category_id">
-                    <option value="">Select Subcategory</option>
-                </select>
-                <div class="invalid-feedback">Please select a subcategory</div>
-            </div>
+                        <!-- Subcategory -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="sub_category_id">Subcategory</label>
+                            <select class="form-select" id="sub_category_id" name="sub_category_id">
+                                <option value="">Select Subcategory</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a subcategory</div>
+                        </div>
 
-            <div class="col-12 col-md-4">
-                <label class="form-label">Crafted Date</label>
-                <div class="input-group flatpicker-calender">
-                    <input class="form-control" id="crafted_date" type="date" name="crafted_date">
-                    <div class="invalid-feedback">Please enter Crafted Date</div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Crafted Date</label>
+                            <div class="input-group flatpicker-calender">
+                                <input class="form-control" id="crafted_date" type="date" name="crafted_date">
+                                <div class="invalid-feedback">Please enter Crafted Date</div>
+                            </div>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="price">Price</label>
+                            <input class="form-control" id="price" name="price" type="number" step="0.01">
+                            <div class="invalid-feedback">Please enter a valid price</div>
+                        </div>
+
+                        <!-- SKU -->
+                        <div class="col-12 col-md-2">
+                            <label class="form-label" for="sku">SKU</label>
+                            <input class="form-control" id="sku" name="sku" type="text">
+                            <div class="invalid-feedback">Please enter SKU</div>
+                        </div>
+
+                        <!-- Selling Price -->
+                        <div class="col-12 col-md-2">
+                            <label class="form-label" for="selling_price">Selling Price</label>
+                            <input class="form-control" id="selling_price" name="selling_price" type="text">
+                            <div class="invalid-feedback">Please enter Selling Price</div>
+                        </div>
+
+                        <!-- Description Fields -->
+                        <div class="col-12 mt-3">
+                            <label class="form-label" for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt-3">
+                            <label class="form-label" for="short_description">Short Description</label>
+                            <textarea class="form-control" id="short_description" name="short_description" rows="3"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt-3">
+                            <label class="form-label" for="additional_description">Additional Description</label>
+                            <textarea class="form-control" id="additional_description" name="additional_description" rows="3"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+
+                        <div class="col-12 mt-3">
+                            <div class="d-flex flex-wrap gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="featured" name="featured">
+                                    <label class="form-check-label" for="featured">Featured</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="discounted"
+                                        name="discounted">
+                                    <label class="form-check-label" for="discounted">Discounted</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="new_arrival"
+                                        name="new_arrival">
+                                    <label class="form-check-label" for="new_arrival">New Arrival</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Variations -->
+                        <div class="col-12  mt-4">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <label class="form-label mb-2 mb-sm-0">Product Attributes</label>
+                                <button type="button" class="btn btn-primary btn-sm" id="addRowBtn">Add Row</button>
+                            </div>
+
+                            <div id="variationRows" class="mt-2">
+                                <!-- Variation rows will be added here -->
+                                <p>
+                                    <strong class="text-danger">
+                                        <span>
+                                            Note : At Least One Product Attribute Is Required
+                                        </span>
+                                        <span>
+                                            & Images Should Not Exceed Above 2mb
+                                        </span>
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12 mt-4 sticky-bottom bg-white py-3">
+                            <button type="submit" class="btn btn-success">Save Product</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <!-- Price -->
-            <div class="col-12 col-md-4">
-                <label class="form-label" for="price">Price</label>
-                <input class="form-control" id="price" name="price" type="number" step="0.01">
-                <div class="invalid-feedback">Please enter a valid price</div>
-            </div>
-
-            <!-- SKU -->
-            <div class="col-12 col-md-2">
-                <label class="form-label" for="sku">SKU</label>
-                <input class="form-control" id="sku" name="sku" type="text">
-                <div class="invalid-feedback">Please enter SKU</div>
-            </div>
-
-            <!-- Selling Price -->
-            <div class="col-12 col-md-2">
-                <label class="form-label" for="selling_price">Selling Price</label>
-                <input class="form-control" id="selling_price" name="selling_price" type="text">
-                <div class="invalid-feedback">Please enter Selling Price</div>
-            </div>
-
-            <!-- Description Fields -->
-            <div class="col-12 mt-3">
-                <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" id="description" name="description"></textarea>
-                <div class="invalid-feedback"></div>
-            </div>
-
-            <div class="col-12 col-lg-6 mt-3">
-                <label class="form-label" for="short_description">Short Description</label>
-                <textarea class="form-control" id="short_description" name="short_description" rows="3"></textarea>
-                <div class="invalid-feedback"></div>
-            </div>
-
-            <div class="col-12 col-lg-6 mt-3">
-                <label class="form-label" for="additional_description">Additional Description</label>
-                <textarea class="form-control" id="additional_description" name="additional_description" rows="3"></textarea>
-                <div class="invalid-feedback"></div>
-            </div>
-
-
-            <div class="col-12 mt-3">
-                <div class="d-flex flex-wrap gap-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="featured" name="featured">
-                        <label class="form-check-label" for="featured">Featured</label>
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="discounted" name="discounted">
-                        <label class="form-check-label" for="discounted">Discounted</label>
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="new_arrival" name="new_arrival">
-                        <label class="form-check-label" for="new_arrival">New Arrival</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Variations -->
-            <div class="col-12  mt-4">
-                <div class="d-flex justify-content-between align-items-center flex-wrap">
-                    <label class="form-label mb-2 mb-sm-0">Product Attributes</label>
-                    <button type="button" class="btn btn-primary btn-sm" id="addRowBtn">Add Row</button>
-                </div>
-
-                <div id="variationRows" class="mt-2">
-                    <!-- Variation rows will be added here -->
-                    <p>
-                        <strong class="text-danger">
-                            <span>
-                                Note : At Least One Product Attribute Is Required
-                                </span>
-                                 <span>
-                                 & Images Should Not Exceed Above 2mb
-                                </span>
-                            </strong>
-                        </p>
-                </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="col-12 mt-4 sticky-bottom bg-white py-3">
-                <button type="submit" class="btn btn-success">Save Product</button>
-            </div>
-        </form>
+        </div>
     </div>
-    {{-- </div> --}}
-    {{-- </div> --}}
-    {{-- </div> --}}
 
 
 
@@ -356,7 +358,7 @@
 
                 };
 
-                $('#summernote').summernote({
+                $('#description').summernote({
                     ...summernoteConfig,
                     placeholder: 'Enter Product description here'
                 });

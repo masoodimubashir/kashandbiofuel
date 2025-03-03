@@ -159,10 +159,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
-
         try {
-
-
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'sku' => 'required|string|unique:products,sku,' . $id,
@@ -176,22 +173,21 @@ class ProductController extends Controller
                 'product_attributes' => 'required|array|min:1',
                 'product_attributes.*.hex_code' => 'required|string|max:7',
                 'product_attributes.*.qty' => 'required|integer|min:0',
-                'product_attributes.*.image' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:2048',
+                'product_attributes.*.images.*' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:2048',
                 'crafted_date' => 'required|date',
             ]);
-
+    
             if ($validator->fails()) {
                 return response()->json([
                     'status' => 'error',
                     'errors' => $validator->errors()
                 ], 422);
             }
-
+    
             $totalQty = collect($request->product_attributes)->sum('qty');
-
-
             $product = Product::findOrFail($id);
-
+            $productFolder = 'products/' . Str::slug($request->name);
+    
             $product->update([
                 'category_id' => $request->category_id,
                 'sub_category_id' => $request->sub_category_id,
@@ -206,77 +202,77 @@ class ProductController extends Controller
                 'short_description' => $request->short_description,
                 'additional_description' => $request->additional_description,
                 'description' => $request->description,
-                'featured' => $request->filled('featured') ? 1 : 0,
-                'discounted' => $request->filled('discounted') ? 1 : 0,
-                'new_arrival' => $request->filled('new_arrival') ? 1 : 0,
+                'featured' => $request->boolean('featured'),
+                'discounted' => $request->boolean('discounted'),
+                'new_arrival' => $request->boolean('new_arrival'),
             ]);
-
-            $productFolder = 'products/' . $product->slug;
-
-            if ($request->filled('product_attributes')) {
-                foreach ($request->product_attributes as $attributeData) {
-
-                    if (isset($attributeData['id'])) {
-                        $attribute = ProductAttribute::find($attributeData['id']);
-
-                        if ($attribute) {
-
-                            $attribute->update([
-                                'hex_code' => $attributeData['hex_code'],
-                                'qty' => $attributeData['qty'],
-                            ]);
-
-                            if (isset($attributeData['image'])) {
-
-                                Storage::disk('public')->delete($attribute->image_path);
-
-                                $imagePath = $attributeData['image']->store($productFolder, 'public');
-
-                                $attribute->update(['image_path' => $imagePath]);
+    
+            foreach ($request->product_attributes as $attributeData) {
+                if (isset($attributeData['id'])) {
+                    // Update existing attribute
+                    $attribute = ProductAttribute::find($attributeData['id']);
+                    if ($attribute) {
+                        $imagePaths = json_decode($attribute->images) ?? [];
+                        
+                        // Handle new images
+                        if (isset($attributeData['images'])) {
+                            foreach ($attributeData['images'] as $image) {
+                                $imagePaths[] = $image->store($productFolder, 'public');
                             }
                         }
-                    } else {
-                        if (isset($attributeData['image'])) {
-                            $imagePath = $attributeData['image']->store($productFolder, 'public');
-
-                            ProductAttribute::create([
-                                'product_id' => $product->id,
-                                'image_path' => $imagePath,
-                                'qty' => $attributeData['qty'],
-                                'hex_code' => $attributeData['hex_code'],
-                            ]);
+    
+                        $attribute->update([
+                            'hex_code' => $attributeData['hex_code'],
+                            'qty' => $attributeData['qty'],
+                            'images' => json_encode($imagePaths)
+                        ]);
+                    }
+                } else {
+                    // Create new attribute
+                    $imagePaths = [];
+                    if (isset($attributeData['images'])) {
+                        foreach ($attributeData['images'] as $image) {
+                            $imagePaths[] = $image->store($productFolder, 'public');
                         }
                     }
+    
+                    ProductAttribute::create([
+                        'product_id' => $product->id,
+                        'images' => json_encode($imagePaths),
+                        'qty' => $attributeData['qty'],
+                        'hex_code' => $attributeData['hex_code'],
+                    ]);
                 }
             }
-
-
-            // Remove deleted attributes
+    
+            // Handle removed attributes
             if ($request->filled('removed_attributes')) {
                 $removedIds = explode(',', $request->removed_attributes);
                 $removedAttributes = ProductAttribute::whereIn('id', $removedIds)->get();
-
+    
                 foreach ($removedAttributes as $attribute) {
-                    // Delete the image from storage
-                    Storage::disk('public')->delete($attribute->image_path);
-
-                    // Delete the attribute from the database
+                    // Delete all images from storage
+                    $imagePaths = json_decode($attribute->images) ?? [];
+                    foreach ($imagePaths as $imagePath) {
+                        Storage::disk('public')->delete($imagePath);
+                    }
                     $attribute->delete();
                 }
             }
-
+    
             DB::commit();
-
             return response()->json([
                 'status' => 'success',
-                'message' => 'Product updated successfully',
+                'message' => 'Product updated successfully'
             ]);
+    
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -352,44 +348,41 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
-
-            $productAttributes = ProductAttribute::where('product_id', $product->id)
-                ->get();
-
-            foreach ($productAttributes as $attribute) {
-
-                $imagePath = 'public/' . $attribute->image_path;
-
-
-                if (Storage::disk('public')->exists($attribute->image_path)) {
-
-                    Storage::disk('public')->delete($attribute->image_path);
-                }
-            }
-
-            ProductAttribute::where('product_id', $product->id)
-                ->delete();
-
+            
             $productFolder = 'products/' . $product->slug;
+
+            foreach ($product->productAttributes as $attribute) {
+                $images = json_decode($attribute->images) ?? [];
+                
+                foreach ($images as $image) {
+                    Storage::disk('public')->delete($image);
+                }
+                
+                $attribute->delete();
+            }
+        
             if (Storage::exists('public/' . $productFolder)) {
+
                 Storage::deleteDirectory('public/' . $productFolder);
             }
-
+        
             $product->forceDelete();
-
+        
             DB::commit();
-
+        
             return response()->json([
                 'status' => 'success',
-                'message' => 'Product deleted successfully',
+                'message' => 'Product deleted successfully'
             ]);
+        
         } catch (Exception $e) {
-
-            Log::error('Failed to delete Product: ' . $e->getMessage());
+            DB::rollBack();
+            
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete Product: ' . $e->getMessage(),
+                'message' => 'Failed to delete product'
             ], 500);
         }
+        
     }
 }

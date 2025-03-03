@@ -63,7 +63,6 @@ Route::get('/shop-by-subcategory/{slug}', [SubCategoryShoppingController::class,
 Route::get('/product/{slug}', [FrontendProductController::class, 'show'])->name('product.show');
 Route::get('/check-product-quantity/{slug}', [FrontendProductController::class, 'checkProductQuantity'])->name('product.review.store');
 
-
 // Routes For Logging In Via Gmail
 Route::get('/auth/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/google/callback', [SocialiteController::class, 'callback'])->name('auth.callback');

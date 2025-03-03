@@ -33,9 +33,6 @@ class FrontendProductController extends Controller
             ->where('slug', $slug)
             ->first();
 
-
-
-
         // Calculate percentages
         $totalReviews = $product->reviews_count ?? 0;
         $product->star_percentages = [
