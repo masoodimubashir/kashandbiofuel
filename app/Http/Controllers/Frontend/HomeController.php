@@ -27,4 +27,8 @@ class HomeController extends Controller
     public function termsAndConditions(){
         return view('frontend.Miscellaneous.terms-and-condition');
     }
+
+    public function privacyPolicy(){
+        return view('frontend.Miscellaneous.privacy-policy');
+    }
 }
