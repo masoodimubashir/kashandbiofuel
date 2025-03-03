@@ -31,59 +31,29 @@
 
 
                 <div class="col-custom-3 wow fadeInUp">
-                    <div class="shop-left-sidebar">
-
-                        <form action="{{ route('category.index', ['category_id' => request()->category_id]) }}"
+                    <div class="left-box">
+                        <form class="shop-left-sidebar"  action="{{ route('category.index', ['category_id' => request()->category_id]) }}"
                             method="GET">
 
-                            <div class="row mb-4" >
-                                <div class="col-6">
-                                    <h2>
-                                        <button type="submit" class="btn btn-sm">Search</button>
-                                    </h2>
-                                </div>
+                            <div class="back-button">
+                                <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
+                            </div>
 
-                                <div class="col-6">
-                                    <a  class="btn btn-sm" href="{{ route('category.index', ['category_id' => $category_id]) }}"
+                            <div class="filter-category">
+                                <div class="filter-title">
+                                    <button type="submit" class="btn btn-sm">Search</button>
+
+                                    <a class="btn btn-sm"
+                                        href="{{ route('category.index', ['category_id' => $category_id]) }}"
                                         id="clear-filters">
                                         Clear All
                                     </a>
                                 </div>
-
                             </div>
 
-                            <div class="accordion custom-accordion" id="accordionExample">
 
-                                <!-- Categories -->
-                                {{-- <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingCategories">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseCategories">
-                                            <span>Categories</span>
-                                        </button>
-                                    </h2>
-                                    <div id="collapseCategories" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <ul class="category-list custom-padding custom-height">
-                                                @foreach ($categories as $category)
-                                                    <li>
-                                                        <div class="form-check ps-0 m-0 category-list-box">
-                                                            <input class="checkbox_animated filter-category-checkbox"
-                                                                type="checkbox" name="categories[]"
-                                                                id="category-{{ $category->id }}"
-                                                                value="{{ $category->id }}"
-                                                                {{ in_array($category->id, request()->get('categories', [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label"
-                                                                for="category-{{ $category->id }}">
-                                                                <span class="name">{{ $category->name }}</span>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div> --}}
+
+                            <div class="accordion custom-accordion" id="accordionExample">
 
                                 <!-- Subcategories -->
                                 <div class="accordion-item">
@@ -118,10 +88,10 @@
 
                                 <!-- Price Filter -->
                                 <div class="accordion-item">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapsePrice">
-                                            <span>Price</span>
-                                        </button>
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapsePrice">
+                                        <span>Price</span>
+                                    </button>
                                     </h2>
                                     <div id="collapsePrice" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
@@ -148,8 +118,7 @@
                                                     <li>
                                                         <div class="form-check ps-0 m-0 category-list-box">
                                                             <input class="checkbox_animated filter-rating-checkbox"
-                                                                type="checkbox" name="rating[]"
-                                                                value="{{ $rating }}"
+                                                                type="checkbox" name="rating[]" value="{{ $rating }}"
                                                                 {{ in_array($rating, request()->get('rating', [])) ? 'checked' : '' }}>
                                                             <div class="form-check-label">
                                                                 <ul class="rating">
@@ -173,12 +142,13 @@
                                 </div>
 
                             </div>
+
+
                         </form>
-
-
-
                     </div>
                 </div>
+
+
 
                 <div class="col-custom- wow fadeInUp">
                     <div class="show-button">
@@ -189,46 +159,7 @@
                         </div>
 
                         <div class="top-filter-menu">
-                            <div class="category-dropdown">
-                                <h5 class="text-content">Sort By :</h5>
-                                <div class="dropdown">
-                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                        data-bs-toggle="dropdown">
-                                        <span>Most Popular</span> <i class="fa-solid fa-angle-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" id="pop"
-                                                href="javascript:void(0)">Popularity</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="low" href="javascript:void(0)">Low - High
-                                                Price</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="high" href="javascript:void(0)">High - Low
-                                                Price</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="rating" href="javascript:void(0)">Average
-                                                Rating</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="aToz" href="javascript:void(0)">A - Z
-                                                Order</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="zToa" href="javascript:void(0)">Z - A
-                                                Order</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" id="off" href="javascript:void(0)">% Off -
-                                                Hight To
-                                                Low</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                            
 
                             <div class="grid-option d-none d-md-block">
                                 <ul>
@@ -308,19 +239,18 @@
 
                     </nav>
                 </div>
-
-
-                <div class="col-custom-3 wow fadeInUp">
-                    <div class="left-box">
-
-                    </div>
-                </div>
-
-
-
             </div>
+
+
+
+
+
+
+        </div>
         </div>
     </section>
+
+
 
 
 

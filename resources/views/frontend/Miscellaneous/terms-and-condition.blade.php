@@ -12,7 +12,7 @@
       <p class="ps-3 ps-md-5">You must be at least 18 years old or have parental consent to use our website.</p>
       <p class="ps-3 ps-md-5">You are responsible for maintaining the confidentiality of your account and password.</p>
       <p class="ps-3 ps-md-5">Unauthorized use of the website may result in legal action.</p>
-      <p class="ps-3 ps-md-5">This website is owned and managed by KASSH AND BRANDS®.</p>
+      <p class="ps-3 ps-md-5">This website is managed by KASSH AND BIOFUEL PRIVATE LIMITED</p>
     </div>
     
     <div class="mt-4">
