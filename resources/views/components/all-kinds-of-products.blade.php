@@ -57,8 +57,9 @@
 
 
 <div class="product-box-slider-2 no-arrow">
-    <div>
-        @foreach ($allProducts->take(2) as $product)
+    @foreach ($allProducts->take(2) as $product)
+        <div>
+
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
@@ -127,10 +128,10 @@
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
 
-    <div>
+    {{-- <div>
         @foreach ($allProducts->skip(2)->take(2) as $product)
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image">
@@ -420,5 +421,5 @@
                 </div>
             </div>
         @endforeach
-    </div>
+    </div> --}}
 </div>
