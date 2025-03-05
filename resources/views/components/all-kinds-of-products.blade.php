@@ -131,8 +131,9 @@
         </div>
     @endforeach
 
-    {{-- <div>
-        @foreach ($allProducts->skip(2)->take(2) as $product)
+    @foreach ($allProducts->skip(2)->take(2) as $product)
+        <div>
+
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
@@ -201,11 +202,12 @@
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
 
-    <div>
-        @foreach ($allProducts->skip(4)->take(2) as $product)
+    @foreach ($allProducts->skip(4)->take(2) as $product)
+        <div>
+
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
@@ -274,11 +276,12 @@
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
 
-    <div>
-        @foreach ($allProducts->skip(5)->take(2) as $product)
+    @foreach ($allProducts->skip(5)->take(2) as $product)
+        <div>
+
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
@@ -347,11 +350,12 @@
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
 
-    <div>
-        @foreach ($allProducts->skip(6)->take(2) as $product)
+    @foreach ($allProducts->skip(6)->take(2) as $product)
+        <div>
+
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
@@ -420,6 +424,6 @@
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div> --}}
+        </div>
+    @endforeach
 </div>
