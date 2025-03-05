@@ -136,7 +136,7 @@
 </div>
 
 
-<div class="product-box-slider-2 no-arrow">
+<div class="product-box-slider-2 no-arrow mt-2">
 
 
     @foreach ($allProducts->skip(5)->take(10) as $product)
