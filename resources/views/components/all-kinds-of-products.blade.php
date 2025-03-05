@@ -1,8 +1,8 @@
-{{-- <div class="title section-t-space">
+<div class="title section-t-space">
     <h2>ALL KINDS OF PRODUCTS</h2>
    
 </div>
-
+{{-- 
 <div class="slider-3_1 product-wrapper">
     @foreach ($allProducts->take(3) as $product)
         <div>
