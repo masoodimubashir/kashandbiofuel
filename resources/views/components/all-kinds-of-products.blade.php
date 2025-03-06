@@ -61,7 +61,7 @@
         <div>
 
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
-                <div class="product-image">
+                <div class="product-image mb-2">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" style="width:400px;"
@@ -109,7 +109,7 @@
         <div>
 
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
-                <div class="product-image">
+                <div class="product-image mb-2">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
