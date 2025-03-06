@@ -67,7 +67,7 @@
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" style="height:250px; width: 250px;"
                                 class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
                         @else
-                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload"
+                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload" 
                                 alt="{{ $product->name }}">
                         @endisset
                     </a>
@@ -146,7 +146,7 @@
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
                                 class="img-fluid blur-up lazyload" alt="{{ $product->name }}">
                         @else
-                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload"
+                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload" style="height:250px; width: 250px;"
                                 alt="{{ $product->name }}">
                         @endisset
                     </a>
