@@ -31147,7 +31147,7 @@ body.rtl .menu-label {
 
 .product-box .product-image {
     text-align: center;
-    padding: 20px;
+    /* padding: 20px; */
     position: relative
 }
 
