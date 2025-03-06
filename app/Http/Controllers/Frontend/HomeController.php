@@ -33,4 +33,8 @@ class HomeController extends Controller
     
         return view('frontend.Miscellaneous.terms-and-condition');
     }
+
+    public function privacyPolicy(){
+        return view('frontend.Miscellaneous.privacy-policy');
+    }
 }

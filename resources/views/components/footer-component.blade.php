@@ -75,12 +75,14 @@
                                 <a href="{{route('user.dashboard')}}" class="text-content">Track Order</a>
                             </li>
                             <li>
-                                <a href="{{route('ship.policy')}}" class="text-content">Shipping Policy</a>
+                                <a href="{{route('ship.policy')}}" class="text-content">Return & Refund Policy</a>
                             </li>
                             <li>
-                                <a href="{{route('terms.and.conditions')}}" class="text-content">Shopping FAQs</a>
+                                <a href="{{route('terms.and.conditions')}}" class="text-content">Terms & Condition</a>
                             </li>
-                            
+                            <li>
+                                <a href="{{route('privacy.policy')}}" class="text-content">Privacy Policy</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -97,7 +99,7 @@
                                     <i data-feather="phone"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Hotline 24/7 :</h6>
-                                        <h5>+91 888 104 2340</h5>
+                                        <a href="tel:+918881042340">+918881042340</a>
                                     </div>
                                 </div>
                             </li>
@@ -107,7 +109,7 @@
                                     <i data-feather="mail"></i>
                                     <div class="contact-number">
                                         <h6 class="text-content">Email Address :</h6>
-                                        <h5>Kassh&Biofuel</h5>
+                                        <a href="mailto:kasshandbiofuels@gmail.com"> kasshandbiofuels@gmail.com</a>
                                     </div>
                                 </div>
                             </li>

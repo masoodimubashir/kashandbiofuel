@@ -12,25 +12,23 @@
 
 
     <!-- Category Section Start -->
-    <section class="category-section-2">
+    {{-- <section class="category-section-2">
         <x-shop-by-category />
-    </section>
+    </section> --}}
     <!-- Category Section End -->
 
     <!-- Banner Section Start -->
-    <section class="banner-section ratio_60 wow fadeInUp">
+    {{-- <section class="banner-section ratio_60 wow fadeInUp">
         <div class="container-fluid-lg">
             <x-hot-deals />
         </div>
-    </section>
+    </section> --}}
     <!-- Banner Section End -->
 
     <!-- Product Section Start -->
     <section>
         <div class="container-fluid-lg">
-            {{--   All Kinds Of Products Start --}}
             <x-all-kinds-of-products />
-            {{--  All Kinds Of Products End --}}
         </div>
     </section>
     <!-- Product Section End -->

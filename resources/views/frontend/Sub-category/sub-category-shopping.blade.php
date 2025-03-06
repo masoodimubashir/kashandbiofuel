@@ -78,7 +78,7 @@
                                             </div>
                                             <h6 class="unit">{{ $product->unit }}</h6>
                                             <h5 class="price">
-                                                <span class="theme-color">{{ Number::currency($product->selling_price) }}</span>
+                                                <span class="theme-color">{{ Number::currency($product->selling_price, 'INR') }}</span>
                                                 <del>{{ Number::currency($product->price , 'INR') }}</del>
                                             </h5>
 

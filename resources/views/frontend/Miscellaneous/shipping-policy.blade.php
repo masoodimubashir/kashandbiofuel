@@ -2,30 +2,36 @@
 
 @section('main')
     <div class="container border shadow border-rounded mt-5 mb-5 p-5" style="max-width: 1000px;">
-        <h2 class="text-center mb-4">Shipping Policy</h2>
+        <h2 class="text-center mb-4">Return & Refund Policy</h2>
         <p class=" text-center">Thank you for shopping with Kassh & Biofuel We are dedicated to ensuring
-            a smooth and timely delivery process. Please read our Shipping Policy for more details.</p>
+            a smooth and timely delivery process. Please read our Policy for more details.</p>
 
         <div class="mt-5">
 
-            <h2>1. Order Processing Time</h2>
+            <h2>1. Return Policy</h2>
             <br>
-            <p class="ps-4">Orders are processed within 1-5 business days after payment confirmation.</p>
-            <p class="ps-4">Orders placed on weekends or holidays will be processed the next business day.
+            <p class="ps-4">We have a 2 day return/exchange policy, which means you have 2 days after receiving your item
+                to request a return/exchange. Once the return/exchange is approved it will be delivered in 7-10 business
+                days.</p>
+            <p class="ps-4">
+                To be eligible for a return, your item must be in the same condition that you received it, unworn or unused,
+                with tags, and in its original packaging. You’ll also need the receipt or proof of purchase.
             </p>
-            <p class="ps-4">We will notify you if there are any delays due to high order volumes or unforeseen
-                circumstances.</p>
+
         </div>
 
         <div class="mt-4">
 
-            <h2>2. Shipping Charges</h2>
+            <h2>2. Refund Policy</h2>
             <br>
-            <p class="ps-4">Shipping charges are calculated based on the delivery location and order size.
+            <p class="ps-4">
+                We will notify you once we’ve received and inspected your return, and let you know if the refund was
+                approved or not. If approved, the refund will be credited to original payment method within 7-10 business
+                days. Please remember it can take some time for your bank or credit card company to process and post the
+                refund too.
             </p>
-            <p class="ps-4">Shipping fees are displayed at checkout before completing the order.</p>
-            <p class="ps-4">Free shipping may be offered during promotional periods or on orders over a certain
-                amount.
+            <p class="ps-4">
+                If more than 15 business days have passed since we’ve approved your return, please contact us.
             </p>
         </div>
 
@@ -41,53 +47,22 @@
 
         <div class="mt-4">
 
-            <h2>4. Order Tracking</h2>
+            <h2>4. Shipping and Delivery</h2>
             <br>
             <p class="ps-4">
-                Once your order is shipped, you will receive a tracking number via email. Use this number to monitor
-                your
-                order status through our courier partner’s website.
-
+                We use reliable third-party courier services to deliver our products. While we strive to ensure timely
+                delivery, we do not guarantee delivery times and are not responsible for delays caused by the shipping
+                provider or unforeseen circumstances. You will be notified of the estimated delivery timeline at the time of
+                purchase.
             </p>
-        </div>
-
-        <div class="mt-4">
-
-            <h2>5. Shipping Restrictions</h2>
-            <br>
-            <p class="ps-4">We currently ship only to select regions. Please check our delivery coverage at
-                checkout.
+            <p class="ps-4">
+                We use reliable third-party courier services to deliver our products. While we strive to ensure timely
+                delivery, we do not guarantee delivery times and are not responsible for delays caused by the shipping
+                provider or unforeseen circumstances. You will be notified of the estimated delivery timeline at the time of
+                purchase.
             </p>
-            <p class="ps-4">We are not responsible for delays caused by customs or other regulatory authorities
-                for international
-                orders.</p>
-        </div>
-
-        <div class="mt-4">
-
-            <h2>6. Damaged Or Lost Packages</h2>
-            <br>
-            <p class="ps-4">If your order is damaged or lost during transit, please contact us
-                immediately.</p>
-            <p class="ps-4">We will investigate the issue with the shipping provider and arrange for a replacement
-                if
-                eligible.</p>
-        </div>
-
-        <div class="mt-4">
-
-            <h2>7. Incorrect Shipping Information</h2>
-            <br>
-            <p>Ensure that your shipping details are correct at checkout. We are not responsible for orders shipped to
-                incorrect addresses provided by the customer.</p>
-        </div>
-
-        <div class="mt-4">
-
-            <h2>8. Contact Us</h2>
-            <br>
-            <p>If you have questions about our Shipping Policy, please contact us at:
-                <a href="mailto:support@Kassh & cloth.com">support@Kassh&biofuel.com</a>
+            <p class="ps-4">
+                All the orders will be dispatched in 3-4 business days and will be delivered in 7-10 business days.
             </p>
         </div>
 
