@@ -64,10 +64,10 @@
                 <div class="product-image mb-2">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
-                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" style="width:400px; height: 400px;"
+                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" style="width:400px; height: 200px;"
                                 class="img-fluid blur-up lazyload"  alt="{{ $product->name }}">
                         @else
-                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload" style="width:400px; height: 400px;"
+                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload" style="width:400px; height: 200px;"
                                 alt="{{ $product->name }}">
                         @endisset
                     </a>
@@ -113,9 +113,9 @@
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
-                                class="img-fluid blur-up lazyload" style="width:400px; height: 400px;" alt="{{ $product->name }}">
+                                class="img-fluid blur-up lazyload" style="width:400px; height: 200px;" alt="{{ $product->name }}">
                         @else
-                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload" style="width:400px; height: 400px;"
+                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload" style="width:400px; height: 200px;"
                                 alt="{{ $product->name }}">
                         @endisset
                     </a>
