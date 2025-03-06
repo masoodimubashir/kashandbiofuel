@@ -1,6 +1,6 @@
 <div class="dashboard-order">
     <div class="title">
-        <h2>My Current Orders</h2>
+        <h2>Order History</h2>
         <span class="title-leaf title-leaf-gray">
             <svg class="icon-width bg-gray">
                 <use xlink:href="https://themes.pixelstrap.com/fastkart/assets/svg/leaf.svg#leaf">
@@ -11,42 +11,84 @@
 
     <div class="order-contain">
 
-        @if (count($orderedItems) > 0)
-            @foreach ($orderedItems as $ordered_item)
-                <div class="order-box dashboard-bg-box">
+        @if (count($orders) > 0)
+            @foreach ($orders as $order)
+                <div class="order-box dashboard-bg-box w-100">
                     <div class="order-container">
                         <div class="order-icon">
                             <i data-feather="box"></i>
                         </div>
-
-                        <div class="order-detail">
-                            <h4>Delivers <span>{{ $ordered_item->order->status }}</span></h4>
-                        </div>
+                        @if ($order->status == 'Cancelled')
+                            <div class="text-danger">
+                                <h4>Delivery <span>{{ $order->status }}</span></h4>
+                            </div>
+                        @elseif ($order->status == 'Delivered')
+                            <div class=" text-light">
+                                <h4>Delivery <span>{{ $order->status }}</span></h4>
+                            </div>
+                        @elseif ($order->status == 'Pending')
+                            <div class=" text-danger">
+                                <h4>Delivery <span>{{ $order->status }}</span></h4>
+                            </div>
+                        @else
+                            <div class="text-success">
+                                <h4>Delivery <span>{{ $order->status }}</span></h4>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="product-order-detail">
-                        <a href="{{ route('product.show', ['slug' => $ordered_item->product->slug]) }}" class="order-image">
-                            @isset($ordered_item->product->productAttribute->image_path)
-                                <img src="{{ asset('storage/' . $ordered_item->product->productAttribute->image_path) }}"
-                                    class="img-fluid blur-up lazyload" alt="{{ $ordered_item->product->name }}">
-                            @else
-                                <img src="{{ asset('default_images/product_image.png') }}"
-                                    class="img-fluid blur-up lazyload" alt="{{ $ordered_item->product->name }}">
-                            @endisset
-                        </a>
+
+
 
                         <div class="order-wrap">
-                            <a href="{{ route('product.show', ['slug' => $ordered_item->product->slug]) }}">
-                                <h3>{{ $ordered_item->product->name }}</h3>
-                            </a>
-                            <p class="text-content">
-                                {{ $ordered_item->product->short_description }}
-                            </p>
                             <ul class="product-size">
                                 <li>
                                     <div class="size-box">
-                                        <h6 class="text-content">Price : </h6>
-                                        <h5>{{ $ordered_item->price }}</h5>
+                                        <h6 class="text-content">Total Price : </h6>
+                                        <h5>{{ Number::currency($order->total_amount, 'INR') }}</h5>
+                                    </div>
+                                </li>
+
+                            </ul>
+
+                            <ul class="product-size">
+                                <li>
+                                    <div class="size-box">
+                                        <h6 class="text-content">Transaction Id : </h6>
+                                        <h5>
+                                            {{ $order->transaction->transaction_id }}
+                                        </h5>
+                                    </div>
+                                </li>
+
+
+                                <li>
+                                    <div class="size-box">
+                                        <h6 class="text-content">Order Id </h6>
+                                        <h5>
+
+                                            {{ $order->custom_order_id }}
+
+                                        </h5>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="size-box">
+                                        <h6 class="text-content">Quantity : </h6>
+                                        <h5>
+                                            {{ $order->ordered_items_sum_quantity }} Items
+                                        </h5>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="size-box">
+                                        <h6 class="text-content">Order Date : </h6>
+                                        <h5>
+                                            {{ $order->created_at->format('d-m-Y') }}
+                                        </h5>
                                     </div>
                                 </li>
 

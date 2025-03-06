@@ -31,6 +31,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\User\ApplyCouponController;
 use App\Http\Controllers\User\FrontendAddressController;
+use App\Http\Controllers\User\InvoiceController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserProfileController;
 use Illuminate\Support\Facades\Route;
@@ -123,7 +124,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/order/push-to-shiprocket/{order}', ShipRocketController::class)->name('order.push-to-shiprocket');
 
         Route::get('/contact-us', [DashboardContactUsController::class, 'index'])->name('dashboard.contact-us.index');
-      
+
         Route::get('banners', [BannerController::class, 'index']);
         Route::post('banners', [BannerController::class, 'store']);
         Route::post('banners/update/{id}', [BannerController::class, 'update']);
@@ -165,6 +166,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
         Route::get('/phonepe/redirect', [CheckoutController::class, 'redirect'])->name('payment.redirect');
+
+        Route::get('/download-invoice/{id}', [InvoiceController::class, 'downloadInvoice'])->name('invoice.download');
     });
 });
 

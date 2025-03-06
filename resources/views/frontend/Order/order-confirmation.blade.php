@@ -64,11 +64,11 @@
                             <div class="order-contain">
                                 <h3 class="theme-color">Order Success</h3>
                                 <h5 class="text-content">
-                                   <b>
-                                    Your Order Is Placed You Will Get Notified Via Mail Once Your Order Is Confirmed.
-                                    <br>
-                                    Sit back And Relax
-                                   </b>
+                                    <b>
+                                        Your Order Is Placed You Will Get Notified Via Mail Once Your Order Is Confirmed.
+                                        <br>
+                                        Sit back And Relax
+                                    </b>
                                 </h5>
                                 <h6>Transaction ID: {{ $transaction->transaction_id }}</h6>
                             </div>
@@ -86,66 +86,7 @@
         <div class="container-fluid-lg">
             <div class="row g-sm-4 g-3">
                 <div class="col-xxl-9 col-lg-8">
-                    <div class="cart-table order-table order-table-2">
-                        <div class="table-responsive">
-                            <table class="table mb-0">
-                                <tbody>
-
-                                    @foreach ($transaction->order->orderedItems as $ordered_item)
-                                        <tr>
-                                            <td class="product-detail">
-                                                <div class="product border-0">
-                                                    @isset($ordered_item->product->productAttribute->image_path)
-                                                        <a href="product.left-sidebar.html" class="product-image">
-                                                            <img src="{{ asset('storage/' . $ordered_item->product->productAttribute->image_path) }}"
-                                                                class="img-fluid blur-up lazyload"
-                                                                alt="{{ $ordered_item->product->name }}">
-                                                        </a>
-                                                    @else
-                                                        <a href="product.left-sidebar.html" class="product-image">
-                                                            <img src="{{ asset('default_images/product_image.png') }}"
-                                                                class="img-fluid blur-up lazyload"
-                                                                alt="{{ $ordered_item->product->name }}">
-                                                        </a>
-                                                    @endisset
-                                                    <div class="product-detail">
-                                                        <ul>
-                                                            <li class="name">
-                                                                <a href="product-left-thumbnail.html">
-                                                                    {{ $ordered_item->product->name }}
-                                                                </a>
-                                                            </li>
-
-
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="price">
-                                                <h4 class="table-title text-content">Price</h4>
-                                                <h6 class="theme-color">{{ $ordered_item->product->selling_price }}</h6>
-                                            </td>
-
-                                            <td class="quantity">
-                                                <h4 class="table-title text-content">Qty</h4>
-                                                <h4 class="text-title">{{ $ordered_item->quantity }}</h4>
-                                            </td>
-
-                                            <td class="subtotal">
-                                                <h4 class="table-title text-content">Total</h4>
-                                                <h5>
-                                                    {{ $ordered_item->price }}
-                                                </h5>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    
                 </div>
 
                 <div class="col-xxl-3 col-lg-4">

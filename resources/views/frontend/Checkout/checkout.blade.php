@@ -307,10 +307,6 @@
                         const selectedAttribute = item.product.product_attributes.find(attribute => attribute
                             .id === item.product_attribute_id);
 
-                        // Get the image path from the selected attribute or use default
-                        const imagePath = selectedAttribute && selectedAttribute.image_path ?
-                            `/storage/${selectedAttribute.image_path}` :
-                            '/default_images/product_image.png';
 
                         // Get color information if available
                         const colorInfo = selectedAttribute && selectedAttribute.hex_code ?
@@ -319,7 +315,6 @@
 
                         html += `
                                 <li>
-                                    <img src="${imagePath}" class="img-fluid blur-up lazyloaded checkout-image" alt="${item.product.name}">
                                     <h4>
                                     ${item.product.name} 
                                     ${colorInfo}

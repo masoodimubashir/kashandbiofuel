@@ -27,11 +27,15 @@ class OrderedItem extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function productAttribute(): BelongsTo
+    {
+        return $this->belongsTo(ProductAttribute::class);
+    }
+
     protected function casts(): array
     {
         return [
             'date_of_purchase' => 'datetime',
         ];
     }
-
 }

@@ -3,15 +3,12 @@
 namespace App\View\Components;
 
 use App\Models\Order;
-use App\Models\OrderedItem;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
-class UserOrderComponent extends Component
+class RecentOrders extends Component
 {
-
 
     public $orders;
 
@@ -21,14 +18,13 @@ class UserOrderComponent extends Component
     public function __construct()
     {
 
-        $this->orders = Order::with(['transaction'])
-            ->withSum('orderedItems', 'quantity')
-            ->where('user_id', Auth::id())
-            ->latest()
-            ->take(10)
-            ->get();
+        $this->orders = Order::where([
+            'user_id' => auth()->user()->id,
+            'is_confirmed' => 1
+        ])
+        ->get();
 
-       
+        
     }
 
     /**
@@ -36,6 +32,6 @@ class UserOrderComponent extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.user-order-component');
+        return view('components.recent-orders');
     }
 }

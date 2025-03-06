@@ -167,7 +167,7 @@ class CheckoutController extends Controller
         'order' => fn($query) => $query->with([
           'address',
           'orderedItems' => fn($query) => $query->with([
-            'product' => fn($query) => $query->with('productAttribute')
+            'product' => fn($query) => $query->with('productAttributes')
           ])
         ])->withCount('orderedItems')
       ])

@@ -64,51 +64,65 @@
     <section class="product-section">
         <div class="container-fluid-lg">
             <div class="row">
-                <div class="col-12 wow fadeInUp">
+                <div class="col-xxl-9 col-xl-8 col-lg-7 wow fadeInUp">
                     <div class="row g-4">
                         <div class="col-xl-6 wow fadeInUp">
                             <div class="product-left-box">
                                 <div class="row g-sm-4 g-2">
                                     <div class="col-12">
                                         <div class="product-main no-arrow">
-                                          
 
-                                            @foreach ($product->productAttributes as $product_attribute)
-                                                <div>
-                                                    <div class="slider-image">
-                                                        @isset($product_attribute->image)
-                                                            <div class="slider-image">
-                                                                <img src="{{ asset('storage/' . $product->productAttributes[0]->image) }}"
-                                                                    id="img-1"
-                                                            
-                                                                    data-zoom-image="{{ asset('storage/' . $product->productAttributes[0]->image) }}"
-                                                                    class="img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                                    style="height: 500px;"
-                                                                    alt="">
-                                                            </div>
-                                                        @else
-                                                            <img src="{{ asset('default_images/product_image.png') }}"
-                                                                id="img-1"
-                                                                data-zoom-image="{{ asset('storage/' . $product_attribute->image) }}"
-                                                                class="img-fluid image_zoom_cls-0 blur-up lazyload"
+                                            @foreach ($product->productAttributes as $attributes)
+                                                @php
+                                                    $images = json_decode($attributes->images, true);
+                                                @endphp
+
+                                                @foreach ($images as $key => $image)
+                                                    <div>
+                                                        <div class="slider-image">
+                                                            <img src="{{ asset('storage/' . $image) }}"
+                                                                id="img-{{ $key }}"
+                                                                data-zoom-image="{{ asset('storage/' . $image) }}"
+                                                                class="
+                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
                                                                 alt="">
-                                                        @endisset
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endforeach
                                             @endforeach
-
 
                                         </div>
                                     </div>
 
+                                    <div class="col-12">
+                                        <div class="left-slider-image left-slider no-arrow slick-top">
 
+                                            @foreach ($product->productAttributes as $attributes)
+                                                @php
+                                                    $images = json_decode($attributes->images, true);
+                                                @endphp
+
+                                                @foreach ($images as $image)
+                                                    <div>
+                                                        <div class="sidebar-image">
+                                                            <img src="{{ asset('storage/' . $image) }}"
+                                                                class="img-fluid blur-up lazyload" alt="">
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-xl-6 wow fadeInUp">
                             <div class="right-box-contain">
-                                <h6 class="offer-top">{{ $product->percentage_amount_off }}% OFF</h6>
+                                <h6 class="offer-top">
+                                    {{ $product->percentage_amount_off }}% OFF
+                                </h6>
                                 <h2 class="name">{{ $product->name }}</h2>
                                 <div class="price-rating">
                                     <h3 class="theme-color price">{{ Number::currency($product->selling_price, 'INR') }}
@@ -119,16 +133,11 @@
                                     <div class="product-rating custom-rate">
                                         <ul class="rating">
 
-                                            @for ($i = 0; $i < round($product->reviews_avg_rating); $i++)
-                                                <li>
-                                                    <i data-feather="star"
-                                                        class="{{ $i <= round($product->reviews_avg_rating) ? 'fill' : 'star' }}"></i>
-                                                </li>
-                                            @endfor
-
-
                                         </ul>
-                                        <span class="review">{{ round($product->reviews_count) }} Customer Review</span>
+                                        <span class="review">
+                                            {{ round($product->reviews_count) }}
+                                            Customer Review
+                                        </span>
                                     </div>
                                 </div>
 
@@ -145,46 +154,44 @@
 
                                     <ul class="color circle select-package">
 
-                                        @foreach ($product->productAttributes->unique('hex_code') as $product_attribute)
+                                        @foreach ($product->productAttributes as $attribute)
                                             <li class="form-check">
-                                                <input class="form-check-input" type="radio" name="color"
-                                                    id="color-{{ $product_attribute->id }}"
-                                                    value="{{ $product_attribute->id }}">
-                                                <!-- Ensure value is set -->
-
-                                                <label class="form-check-label" for="color-{{ $product_attribute->id }}">
-                                                    <span
-                                                        style="background-color: {{ $product_attribute->hex_code }};"></span>
+                                                <input class="form-check-input" checked type="radio" name="color"
+                                                    id="{{ $attribute->id }}" value="{{ $attribute->id }}">
+                                                <label class="form-check-label" for="{{ $attribute->id }}">
+                                                    <span style="background-color: {{ $attribute->hex_code }};"></span>
                                                 </label>
                                             </li>
                                         @endforeach
+
                                     </ul>
 
+                                    <div class="product-title">
+                                        <h4>Size </h4>
+                                    </div>
 
+                                    <ul class="image select-package">
+
+                                        @foreach ($product->productAttributes as $attributes)
+                                            @php
+                                                $images = json_decode($attributes->images, true);
+                                                $firstImage = $images[0];
+                                            @endphp
+
+                                                <li class="form-check">
+                                                    <input class="form-check-input"  type="radio" name="size"
+                                                        id="color-{{ $attribute->id }}" {{ $loop->first ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="color-{{ $attribute->id }}">
+                                                        <img src="{{ asset('storage/' . $firstImage) }}"
+                                                            alt="{{ $product->name }}">
+                                                    </label>
+                                                </li>
+                                        @endforeach
+
+                                    </ul>
+                                    
                                 </div>
-
-
                                 <div class="note-box product-package">
-
-                                    {{-- <div class="cart_qty qty-box product-qty">
-                                        <div class="input-group">
-                                            <!-- - Button -->
-                                            <button type="button" data-slug="{{ $product->slug }}"
-                                                data-qty="{{ $product->qty }}" class="qty-left-minus">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-
-                                            <!-- Input Field -->
-                                            <input class="form-control input-number qty-input qty" type="text"
-                                                name="qty" max="{{ $product->qty }}" value="1">
-
-                                            <!-- + Button -->
-                                            <button type="button" data-slug="{{ $product->slug }}"
-                                                data-qty="{{ $product->qty }}" class="qty-right-plus">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div> --}}
 
                                     <button id="cart-btn" class="btn btn-md bg-dark cart-button text-white w-100">Add To
                                         Cart
@@ -198,8 +205,41 @@
                                         <span>Add To Wishlist</span>
                                     </a>
                                 </div>
+
+                                <div class="pickup-box">
+
+                                    <div class="product-info">
+                                        <ul class="product-info-list product-info-list-2">
+                                            <li>MFG : <a href="javascript:void(0)">{{ $product->crafted_date }}</a></li>
+                                            <li>Stock : <a href="javascript:void(0)">{{ $product->qty }} In Stock</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-3 col-xl-4 col-lg-5 d-none d-lg-block wow fadeInUp">
+                    <div class="right-sidebar-box">
+                        <div class="vendor-box">
+                            <div class="vendor-list">
+                                <ul>
+                                    <li>
+                                        <div class="address-contact">
+                                            <i data-feather="phone"></i>
+                                            <a href="tel:+918881042340">Contact Seller: <span class="text-content">+918881042340</span></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
     </section>
     <!-- Product Left Sidebar End -->
 
@@ -419,152 +459,6 @@
     <!-- Nav Tab Section End -->
 
 
-
-
-
-
-
-
-
-
-    <!-- Add to cart Modal Start -->
-    <div class="add-cart-box">
-        <div class="add-image">
-            <img src="../assets/images/cake/pro/1.jpg" class="img-fluid" alt="">
-        </div>
-
-        <div class="add-contain">
-            <h6>Added to Cart</h6>
-        </div>
-    </div>
-    <!-- Add to cart Modal End -->
-
-    <!-- Tap to top and theme setting button start -->
-    <div class="theme-option theme-option-2">
-        <div class="back-to-top">
-            <a id="back-to-top" href="#">
-                <i class="fas fa-chevron-up"></i>
-            </a>
-        </div>
-    </div>
-    <!-- Tap to top and theme setting button end -->
-
-    <!-- Sticky Cart Box Start -->
-    <div class="sticky-bottom-cart">
-        <div class="container-fluid-lg">
-            <div class="row">
-                <div class="col-12">
-                    <div class="cart-content">
-                        <div class="product-image">
-                            <img src="../assets/images/product/category/1.jpg" class="img-fluid blur-up lazyload"
-                                alt="">
-                            <div class="content">
-                                <h5>{{ $product->name }}</h5>
-                                <h6>$32.96
-                                    <del class="text-danger">$96.00</del>
-                                    <span>55% off</span>
-                                </h6>
-                            </div>
-                        </div>
-                        <div class="selection-section">
-                            <div class="form-group mb-0">
-                                <select id="input-state" class="form-control form-select">
-                                    <option selected disabled>Choose Weight...</option>
-                                    <option>1/2 KG</option>
-                                    <option>1 KG</option>
-                                    <option>1.5 KG</option>
-                                </select>
-                            </div>
-                            <div class="cart_qty qty-box product-qty m-0">
-                                <div class="input-group h-100">
-                                    <div class="input-group" style="width: 140px;">
-                                        <button type="button" class="btn btn-outline-secondary btn-decrement"
-                                            data-slug="{{ $product->slug }}" data-qty="{{ $product->qty }}">
-                                            <i class="bi bi-dash"></i>
-                                        </button>
-
-                                        <input type="number" class="form-control text-center quantity-input"
-                                            value="1" min="1" max="{{ $product->qty }}" id="quantityInput">
-
-                                        <button type="button" class="btn btn-outline-secondary btn-increment"
-                                            data-slug="{{ $product->slug }}" data-qty="{{ $product->qty }}">
-                                            <i class="bi bi-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="add-btn">
-                            <a class="btn theme-bg-color text-white wishlist-btn" href="wishlist.html"><i
-                                    class="fa fa-bookmark"></i> Wishlist</a>
-                            <a class="btn theme-bg-color text-white" href="cart.html"><i
-                                    class="fas fa-shopping-cart"></i> Add To Cart</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Sticky Cart Box End -->
-
-    <!-- Review Modal Start -->
-    <div class="modal fade theme-modal question-modal" id="writereview" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Write a review</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal-body pt-0">
-                    <form id="product-review-form" class="product-review-form">
-
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                        <div class="review-box">
-                            <!-- Star Rating Section -->
-                            <div class="product-rating">
-                                <label>Your Rating *</label>
-
-                                <div class="star-rating">
-                                    <!-- Radio input with labels for rating -->
-                                    <input type="radio" id="star5" name="rating" value="5">
-                                    <label for="star5">★</label>
-                                    <input type="radio" id="star4" name="rating" value="4">
-                                    <label for="star4">★</label>
-                                    <input type="radio" id="star3" name="rating" value="3">
-                                    <label for="star3">★</label>
-                                    <input type="radio" id="star2" name="rating" value="2">
-                                    <label for="star2">★</label>
-                                    <input type="radio" id="star1" name="rating" value="1">
-                                    <label for="star1">★</label>
-                                </div>
-                            </div>
-
-                            <!-- Review Content Section -->
-                            <div class="review-box">
-                                <label for="comment" class="form-label">Your Comment *</label>
-                                <textarea id="comment" name="comment" rows="3" class="form-control" placeholder="Write your review here"></textarea>
-                            </div>
-
-                            <!-- Form Submission Buttons -->
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-md btn-theme-outline fw-bold"
-                                    data-bs-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">
-                                    Submit Review
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Review Modal End -->
 
     <!-- Bg overlay Start -->
     <div class="bg-overlay"></div>
