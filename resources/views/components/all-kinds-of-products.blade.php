@@ -1,6 +1,6 @@
 <div class="title section-t-space">
     <h2>ALL KINDS OF PRODUCTS</h2>
-   
+
 </div>
 {{-- 
 <div class="slider-3_1 product-wrapper">
@@ -64,11 +64,12 @@
                 <div class="product-image mb-2">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
-                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}" style="width:400px; height: 200px;"
-                                class="img-fluid blur-up lazyload"  alt="{{ $product->name }}">
-                        @else
-                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload" style="width:400px; height: 200px;"
+                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                                class="img-fluid blur-up lazyload" style="width: 300px; height: 300px; object-fit: cover;"
                                 alt="{{ $product->name }}">
+                        @else
+                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload"
+                                style="width: 300px; height: 300px; object-fit: cover;" alt="{{ $product->name }}">
                         @endisset
                     </a>
 
@@ -94,7 +95,7 @@
                         </ul>
                     </div>
 
-                   
+
                 </div>
             </div>
         </div>
@@ -113,10 +114,11 @@
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image_path)
                             <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
-                                class="img-fluid blur-up lazyload" style="width:400px; height: 200px;" alt="{{ $product->name }}">
-                        @else
-                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload" style="width:400px; height: 200px;"
+                                class="img-fluid blur-up lazyload" style="width: 300px; height: 300px; object-fit: cover;"
                                 alt="{{ $product->name }}">
+                        @else
+                            <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload"
+                                style="width: 300px; height: 300px; object-fit: cover;" alt="{{ $product->name }}">
                         @endisset
                     </a>
 
