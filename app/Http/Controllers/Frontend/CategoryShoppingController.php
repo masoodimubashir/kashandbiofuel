@@ -24,15 +24,17 @@ class CategoryShoppingController extends Controller
             ->with(['productAttribute', 'review', 'category', 'subCategory'])
             ->withAvg('review', 'rating');
 
+        // Filter by subcategories
         if ($request->filled('subcategories')) {
             $query->whereIn('sub_category_id', $request->subcategories);
         }
 
-        if ($request->filled('price')) {
-            [$minPrice, $maxPrice] = explode(';', $request->price);
-            $query->whereBetween('price', [(float)$minPrice, (float)$maxPrice]);
+        // Filter by price range
+        if ($request->has('min_price') && $request->has('max_price')) {
+            $query->whereBetween('selling_price', [$request->min_price, $request->max_price]);
         }
 
+        // Filter by rating
         if ($request->filled('rating')) {
             $query->whereHas('review', function ($q) use ($request) {
                 $q->whereIn('rating', $request->rating);
@@ -42,11 +44,11 @@ class CategoryShoppingController extends Controller
         $products = $query->latest()->paginate(20);
 
         return view('frontend.Category.category-shopping', [
-            'category_id'  => $category_id, // Pass category_id to view
-            'categories'   => Category::where('status', 1)->get(),
+            'category_id' => $category_id,
+            'categories' => Category::where('status', 1)->get(),
             'subCategories' => SubCategory::where('status', 1)->get(),
-            'products'     => $products,
-            'reviews'      => Reviews::latest()->get(),
+            'products' => $products,
+            'reviews' => Reviews::latest()->get(),
         ]);
     }
 }

@@ -74,67 +74,69 @@
                             </div>
 
                             <!-- Product Details -->
+
                             <div class="row">
+                                <!-- Price Fields Section -->
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="price">Price<span
                                             class="text-danger">*</span></label>
                                     <input type="number" step="0.01" class="form-control" id="price"
-                                        name="price">
+                                        name="price" value="{{ $product->price }}">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+
+                                @php
+                                    $gst_amount =
+                                        ($product->selling_price * $product->gst_amount) / (100 + $product->gst_amount);
+
+                                    $selling_price_without_gst = $product->selling_price - $gst_amount;
+                                @endphp
+
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="selling_price_without_gst">Selling Price<span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" step="0.01" class="form-control"
+                                        id="selling_price_without_gst" name="selling_price_without_gst"
+                                        value="{{ $selling_price_without_gst }}">
                                     <div class="invalid-feedback"></div>
                                 </div>
 
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="selling_price">Selling Price<span
+                                    <label class="form-label" for="gst">GST (%)<span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" step="0.01" class="form-control" id="gst"
+                                        name="gst" min="1" max="100" value="{{ $product->gst_amount }}">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="selling_price">Final Price (with GST)<span
                                             class="text-danger">*</span></label>
                                     <input type="number" step="0.01" class="form-control" id="selling_price"
-                                        name="selling_price">
+                                        name="selling_price" value="{{ $product->selling_price }}" readonly>
                                     <div class="invalid-feedback"></div>
                                 </div>
+                            </div>
 
-                                <div class="col-md-3 mb-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label" for="sku">SKU<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="sku" name="sku">
+                                    <input type="text" class="form-control" id="sku" name="sku"
+                                        value="{{ $product->sku }}">
                                     <div class="invalid-feedback"></div>
                                 </div>
 
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label" for="crafted_date">Crafted Date<span
                                             class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="crafted_date" name="crafted_date">
+                                    <input type="date" class="form-control" id="crafted_date" name="crafted_date"
+                                        value="{{ $product->crafted_date }}">
                                     <div class="invalid-feedback"></div>
                                 </div>
-
-                                {{-- <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="qty">Quantity<span
-                                            class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="qty" name="qty">
-                                    <div class="invalid-feedback"></div>
-                                </div> --}}
                             </div>
 
-                            <!-- Additional Details -->
-                            <div class="row">
-
-                                {{-- 
-                                <div class="col-md-6 mb-3">
-
-                                    <label class="form-label" for="tags">Search Tags</label>
-                                    <select class="form-select tags" id="tags" name="search_tags" multiple>
-                                        @if ($product->search_tags)
-                                            @php
-                                                $tags = json_decode($product->search_tags, true); // Decodes into an array
-                                            @endphp
-
-                                            @foreach ($tags as $tag)
-                                                <option value="{{ $tag }}" selected>{{ $tag }}
-                                                </option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <div class="invalid-feedback">Tags Are Required</div>
-                                </div> --}}
-                            </div>
 
 
                             <!-- Descriptions -->
@@ -195,17 +197,17 @@
 
 
                     <!-- Product Attributes Section -->
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Product Attributes</h5>
-                                <button type="button" class="btn btn-primary btn-sm" id="addRowBtn">
-                                    <i class="fas fa-plus"></i> Add Attribute
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <div id="variationRows">
-                                    <!-- Dynamic rows will be added here -->
-                                </div>
-                            </div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Product Attributes</h5>
+                        <button type="button" class="btn btn-primary btn-sm" id="addRowBtn">
+                            <i class="fas fa-plus"></i> Add Attribute
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="variationRows">
+                            <!-- Dynamic rows will be added here -->
+                        </div>
+                    </div>
 
 
                     <div class="col-12">
@@ -222,16 +224,27 @@
 
     @push('dashboard.script')
         <script>
-            // Initialize variables
-
             $(document).ready(function() {
-
                 let removedAttributes = [];
                 let removedImages = [];
 
+                // GST Calculation Variables and Functions
+                const sellingPriceWithoutGst = document.querySelector('#selling_price_without_gst');
+                const gstInput = document.querySelector('#gst');
+                const finalSellingPrice = document.querySelector('#selling_price');
 
+                function calculateFinalPrice() {
+                    const basePrice = parseFloat(sellingPriceWithoutGst.value) || 0;
+                    const gstPercentage = parseFloat(gstInput.value) || 0;
+                    const gstAmount = (basePrice * gstPercentage) / 100;
+                    const totalPrice = basePrice + gstAmount;
+                    finalSellingPrice.value = totalPrice.toFixed(2);
+                }
 
+                sellingPriceWithoutGst.addEventListener('input', calculateFinalPrice);
+                gstInput.addEventListener('input', calculateFinalPrice);
 
+                // Subcategory Loading
                 function loadSubCategories(categoryId, selectedSubCategoryId = null) {
                     if (categoryId) {
                         $.ajax({
@@ -252,178 +265,151 @@
                     }
                 }
 
-                $(document).ready(function() {
-                    let removedAttributes = [];
-                    let removedImages = [];
-
-                    function addVariationRow(data = null) {
-                        const rowIndex = $('.variation-row').length;
-                        const rowHtml = `
-
-                         <div class="card">
+                // Variation Row Functions
+                function addVariationRow(data = null) {
+                    const rowIndex = $('.variation-row').length;
+                    const rowHtml = `
+                    <div class="card">
                         <div class="card-body">
-            <div class="variation-row border rounded p-3 mt-3">
-                <input type="hidden" name="product_attributes[${rowIndex}][id]" value="${data ? data.id : ''}">
-                <div class="row">
-                    <div class="col-md-1">
-                        <label class="form-label">Color</label>
-                        <input type="color" class="form-control" name="product_attributes[${rowIndex}][hex_code]" value="${data ? data.hex_code : '#000000'}" required>
-                        <div class="invalid-feedback"></div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" name="product_attributes[${rowIndex}][qty]" value="${data ? data.qty : ''}" required>
-                        <div class="invalid-feedback"></div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label">Images</label>
-                        <input type="file" class="form-control" name="product_attributes[${rowIndex}][images][]" multiple accept="image/*">
-                        <div class="invalid-feedback"></div>
-                        <div class="existing-images row mt-2">
-                            ${data && data.images ? renderExistingImages(data.images) : ''}
+                            <div class="variation-row border rounded p-3 mt-3">
+                                <input type="hidden" name="product_attributes[${rowIndex}][id]" value="${data ? data.id : ''}">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label class="form-label">Color</label>
+                                        <input type="color" class="form-control" name="product_attributes[${rowIndex}][hex_code]" value="${data ? data.hex_code : '#000000'}" required>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Quantity</label>
+                                        <input type="number" class="form-control" name="product_attributes[${rowIndex}][qty]" value="${data ? data.qty : ''}" required>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Images</label>
+                                        <input type="file" class="form-control" name="product_attributes[${rowIndex}][images][]" multiple accept="image/*">
+                                        <div class="invalid-feedback"></div>
+                                        <div class="existing-images row mt-2">
+                                            ${data && data.images ? renderExistingImages(data.images) : ''}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-danger remove-row mt-4" data-attribute-id="${data ? data.id : ''}">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                `;
+                    $('#variationRows').append(rowHtml);
+                }
 
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-danger remove-row mt-4" data-attribute-id="${data ? data.id : ''}">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                function renderExistingImages(images) {
+                    const imageArray = typeof images === 'string' ? JSON.parse(images) : images;
+                    return imageArray.map(image => `
+                    <div class="col-3 mb-2 image-container">
+                        <div class="position-relative">
+                            <img src="/storage/${image}" class="img-thumbnail" style="height: 100px;">
+                        </div>
                     </div>
-                </div>
-            </div>
-            </div>
-            </div>
-        `;
-                        $('#variationRows').append(rowHtml);
-                    }
+                `).join('');
+                }
 
-                    function renderExistingImages(images) {
-                        const imageArray = typeof images === 'string' ? JSON.parse(images) : images;
-                        return imageArray.map(image => `
-                        
-            <div class="col-3 mb-2 image-container">
-                <div class="position-relative">
-                    <img src="/storage/${image}" class="img-thumbnail" style="height: 100px;">
-                </div>
-            </div>
-          
-        `).join('');
-                    }
+                // Form Initialization
+                function initializeProductForm(productId) {
+                    $.ajax({
+                        url: `/admin/products/${productId}/edit`,
+                        method: 'GET',
+                        success: function(response) {
+                            const product = response.product;
 
-                    function initializeProductForm(productId) {
-                        $.ajax({
-                            url: `/admin/products/${productId}/edit`,
-                            method: 'GET',
-                            success: function(response) {
-                                const product = response.product;
-                                $('#productId').val(product.id);
-                                $('#name').val(product.name);
-                                $('#price').val(product.price);
-                                $('#selling_price').val(product.selling_price);
-                                $('#sku').val(product.sku);
-                                $('#qty').val(product.qty);
-                                $('#crafted_date').val(product.crafted_date);
-                                $('#category_id').val(product.category_id);
-                                $('#description').summernote('code', product.description);
-                                $('#short_description').summernote('code', product
-                                    .short_description);
-                                $('#additional_description').summernote('code', product
-                                    .additional_description);
+                            // Calculate GST values
+                            const gstAmount = (product.selling_price * product.gst_amount) / (100 + product
+                                .gst_amount);
+                            const sellingPriceWithoutGst = product.selling_price - gstAmount;
 
-                                loadSubCategories(product.category_id, product.sub_category_id);
+                            // Set all form values
+                            $('#productId').val(product.id);
+                            $('#name').val(product.name);
+                            $('#price').val(product.price);
+                            $('#selling_price_without_gst').val(sellingPriceWithoutGst.toFixed(2));
+                            $('#gst').val(product.gst_amount);
+                            $('#selling_price').val(product.selling_price);
+                            $('#sku').val(product.sku);
+                            $('#crafted_date').val(product.crafted_date);
+                            $('#category_id').val(product.category_id);
 
-                                if (product.product_attributes?.length) {
-                                    product.product_attributes.forEach(attribute => {
-                                        addVariationRow(attribute);
-                                    });
-                                }
+                            // Set rich text editors
+                            $('#description').summernote('code', product.description);
+                            $('#short_description').summernote('code', product.short_description);
+                            $('#additional_description').summernote('code', product.additional_description);
+
+                            loadSubCategories(product.category_id, product.sub_category_id);
+
+                            if (product.product_attributes?.length) {
+                                product.product_attributes.forEach(attribute => {
+                                    addVariationRow(attribute);
+                                });
                             }
-                        });
-                    }
-
-                    $('#productForm').on('submit', function(e) {
-                        e.preventDefault();
-                        const formData = new FormData(this);
-
-                        $('.variation-row').each(function(index) {
-                            const attributeId = $(this).find(
-                                'input[name^="product_attributes"][name$="[id]"]').val();
-                            if (attributeId) {
-                                formData.append(`product_attributes[${index}][id]`,
-                                    attributeId);
-                            }
-                        });
-
-                        if (removedAttributes.length) {
-                            formData.append('removed_attributes', removedAttributes.join(','));
                         }
-
-                        formData.append('_method', 'PUT');
-
-                        $.ajax({
-                            url: `/admin/products/${$('#productId').val()}`,
-                            method: 'POST',
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function(response) {
-                                Swal.fire('Success', 'Product updated successfully',
-                                        'success')
-                                    .then(() => window.location.href = '/admin/products');
-                            },
-                            error: function(xhr) {
-                                $('.is-invalid').removeClass('is-invalid');
-                                $('.invalid-feedback').empty();
-
-                                const errors = xhr.responseJSON.errors;
-
-                                Object.keys(errors).forEach(field => {
-                                    if (field.includes('product_attributes.')) {
-                                        const [_, index, attribute] = field.split(
-                                            '.');
-                                        $(`[name="product_attributes[${index}][${attribute}]"]`)
-                                            .addClass('is-invalid')
-                                            .siblings('.invalid-feedback')
-                                            .text(errors[field][0]);
-                                    } else {
-                                        $(`#${field}`)
-                                            .addClass('is-invalid')
-                                            .siblings('.invalid-feedback')
-                                            .text(errors[field][0]);
-                                    }
-                                });
-
-                                Swal.fire({
-                                    title: 'Validation Error',
-                                    text: 'Please check the form for errors',
-                                    icon: 'error'
-                                });
-                            }
-                        });
                     });
+                }
 
-                    // Event handlers
-                    $('#addRowBtn').click(() => addVariationRow());
+                // Form Submission
+                $('#productForm').on('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
 
-                    $(document).on('click', '.remove-row', function() {
-                        const attributeId = $(this).data('attribute-id');
+                    $('.variation-row').each(function(index) {
+                        const attributeId = $(this).find(
+                            'input[name^="product_attributes"][name$="[id]"]').val();
                         if (attributeId) {
-                            removedAttributes.push(attributeId);
+                            formData.append(`product_attributes[${index}][id]`, attributeId);
                         }
-                        $(this).closest('.variation-row').remove();
                     });
 
-                    // Initialize form
-                    const productId = window.location.pathname.split('/')[3];
-                    initializeProductForm(productId);
+                    if (removedAttributes.length) {
+                        formData.append('removed_attributes', removedAttributes.join(','));
+                    }
+
+                    formData.append('_method', 'PUT');
+                    formData.append('gst_percentage', gstInput.value);
+                    formData.append('final_price', finalSellingPrice.value);
+
+                    $.ajax({
+                        url: `/admin/products/${$('#productId').val()}`,
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            Swal.fire('Success', 'Product updated successfully', 'success')
+                                .then(() => window.location.href = '/admin/products');
+                        },
+                        error: function(xhr) {
+                            handleFormErrors(xhr);
+                        }
+                    });
                 });
 
+                // Event Handlers
+                $('#addRowBtn').click(() => addVariationRow());
 
+                $(document).on('click', '.remove-row', function() {
+                    const attributeId = $(this).data('attribute-id');
+                    if (attributeId) {
+                        removedAttributes.push(attributeId);
+                    }
+                    $(this).closest('.variation-row').remove();
+                });
+
+                // Initialize form with product ID from URL
+                const productId = window.location.pathname.split('/')[3];
+                initializeProductForm(productId);
             });
         </script>
     @endpush

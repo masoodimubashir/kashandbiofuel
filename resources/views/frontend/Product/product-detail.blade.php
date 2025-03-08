@@ -60,6 +60,8 @@
     </section>
     <!-- Breadcrumb Section End -->
 
+    <input type="text" name="product_id" value="{{ $product->id }}" hidden>
+
     <!-- Product Left Sidebar Start -->
     <section class="product-section">
         <div class="container-fluid-lg">
@@ -73,22 +75,33 @@
                                         <div class="product-main no-arrow">
 
                                             @foreach ($product->productAttributes as $attributes)
-                                                @php
-                                                    $images = json_decode($attributes->images, true);
-                                                @endphp
-
-                                                @foreach ($images as $key => $image)
+                                                @isset($attribute->images)
+                                                    @php
+                                                        $images = json_decode($attributes->images, true);
+                                                    @endphp
+                                                    @foreach ($images as $key => $image)
+                                                        <div>
+                                                            <div class="slider-image">
+                                                                <img src="{{ asset('storage/' . $image) }}"
+                                                                    id="img-{{ $key }}"
+                                                                    data-zoom-image="{{ asset('storage/' . $image) }}"
+                                                                    class="
+                                                   img-fluid image_zoom_cls-0 blur-up lazyload"
+                                                                    alt="">
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @else
                                                     <div>
                                                         <div class="slider-image">
-                                                            <img src="{{ asset('storage/' . $image) }}"
-                                                                id="img-{{ $key }}"
-                                                                data-zoom-image="{{ asset('storage/' . $image) }}"
-                                                                class="
-                                                        img-fluid image_zoom_cls-0 blur-up lazyload"
+                                                            <img src="{{ asset('default_images/product_image.png') }}"
+                                                                id="img"
+                                                                data-zoom-image="{{ asset('default_images/product_image.png') }}"
+                                                                class="img-fluid image_zoom_cls-0 blur-up lazyload"
                                                                 alt="">
                                                         </div>
                                                     </div>
-                                                @endforeach
+                                                @endisset
                                             @endforeach
 
                                         </div>
@@ -98,18 +111,26 @@
                                         <div class="left-slider-image left-slider no-arrow slick-top">
 
                                             @foreach ($product->productAttributes as $attributes)
-                                                @php
-                                                    $images = json_decode($attributes->images, true);
-                                                @endphp
-
-                                                @foreach ($images as $image)
+                                                @isset($attributes->images)
+                                                    @php
+                                                        $images = json_decode($attributes->images, true);
+                                                    @endphp
+                                                    @foreach ($images as $image)
+                                                        <div>
+                                                            <div class="sidebar-image">
+                                                                <img src="{{ asset('storage/' . $image) }}"
+                                                                    class="img-fluid blur-up lazyload" alt="">
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @else
                                                     <div>
                                                         <div class="sidebar-image">
-                                                            <img src="{{ asset('storage/' . $image) }}"
+                                                            <img src="{{ asset('default_images/product_image.png') }}"
                                                                 class="img-fluid blur-up lazyload" alt="">
                                                         </div>
                                                     </div>
-                                                @endforeach
+                                                @endisset
                                             @endforeach
 
                                         </div>
@@ -173,23 +194,32 @@
                                     <ul class="image select-package">
 
                                         @foreach ($product->productAttributes as $attributes)
-                                            @php
-                                                $images = json_decode($attributes->images, true);
-                                                $firstImage = $images[0];
-                                            @endphp
-
+                                            @isset($attributes->images)
+                                                @php
+                                                    $images = json_decode($attributes->images, true);
+                                                    $firstImage = $images[0];
+                                                @endphp
                                                 <li class="form-check">
-                                                    <input class="form-check-input"  type="radio" name="size"
+                                                    <input class="form-check-input" type="radio" name="size"
                                                         id="color-{{ $attribute->id }}" {{ $loop->first ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="color-{{ $attribute->id }}">
                                                         <img src="{{ asset('storage/' . $firstImage) }}"
                                                             alt="{{ $product->name }}">
                                                     </label>
                                                 </li>
+                                            @else
+                                                <li class="form-check">
+
+                                                    <label class="form-check-label" for="color">
+                                                        <img src="{{ asset('default_images/product_image.png') }}"
+                                                            alt="#">
+                                                    </label>
+                                                </li>
+                                            @endisset
                                         @endforeach
 
                                     </ul>
-                                    
+
                                 </div>
                                 <div class="note-box product-package">
 
@@ -230,7 +260,8 @@
                                     <li>
                                         <div class="address-contact">
                                             <i data-feather="phone"></i>
-                                            <a href="tel:+918881042340">Contact Seller: <span class="text-content">+918881042340</span></a>
+                                            <a href="tel:+918881042340">Contact Seller: <span
+                                                    class="text-content">+918881042340</span></a>
                                         </div>
                                     </li>
                                 </ul>

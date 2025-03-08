@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->string('qty')->nullable();
             $table->decimal('selling_price', 10, 2);
+            $table->integer('gst_amount');
             $table->boolean('status');
             $table->date('crafted_date');
             $table->text('short_description');

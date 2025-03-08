@@ -11,6 +11,7 @@
                 </div>
                 <div class="modal-body p-0">
                     <form id="productForm" class="row g-3 p-3 p-md-4 overflow-auto" enctype='multipart/form-data'>
+
                         @csrf
                         <input type="hidden" id="productId" name="product_id">
 
@@ -58,18 +59,34 @@
                         </div>
 
                         <!-- SKU -->
-                        <div class="col-12 col-md-2">
+                        <div class="col-12 col-md-4">
                             <label class="form-label" for="sku">SKU</label>
                             <input class="form-control" id="sku" name="sku" type="text">
                             <div class="invalid-feedback">Please enter SKU</div>
                         </div>
 
                         <!-- Selling Price -->
-                        <div class="col-12 col-md-2">
-                            <label class="form-label" for="selling_price">Selling Price</label>
-                            <input class="form-control" id="selling_price" name="selling_price" type="text">
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="selling_price_without_gst">Selling Price</label>
+                            <input class="form-control" id="selling_price_without_gst" name="selling_price_without_gst"
+                                type="number" step="1" min="0" max="1000000000">
+                            <div class="invalid-feedback">Please enter a valid selling_price_without_gst</div>
+                        </div>
+
+                        <!-- GST Field -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="gst">GST In Percentage - EX: (10%)</label>
+                            <input class="form-control" id="gst" name="gst" type="text">
+                            <div class="invalid-feedback">Please Enter The GST</div>
+                        </div>
+
+                        <!-- Selling Price -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="selling_price">Selling Price (with GST)</label>
+                            <input class="form-control" id="selling_price" name="selling_price" type="text" readonly>
                             <div class="invalid-feedback">Please enter Selling Price</div>
                         </div>
+
 
                         <!-- Description Fields -->
                         <div class="col-12 mt-3">
@@ -201,7 +218,8 @@
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">
                             <i class="fa fa-home"></i></a>
                     </li>
-                    <li class="breadcrumb-item {{ Request::routeIs('products.index') ? 'active' : '' }}">Products</li>
+                    <li class="breadcrumb-item {{ Request::routeIs('products.index') ? 'active' : '' }}">
+                        Products</li>
                 </ol>
             </div>
         </div>
@@ -276,7 +294,7 @@
         <script>
             $(document).ready(function() {
 
-                // Product Table
+
                 const productTable = $('#productsTable').DataTable({
                     processing: true,
                     serverSide: true,
@@ -457,6 +475,7 @@
                 });
 
                 // SEO Form Submission
+
                 $('#seoForm').on('submit', function(e) {
                     e.preventDefault();
 
@@ -496,7 +515,7 @@
                     });
                 });
 
-                // Counter for unique IDs
+
                 let rowCounter = 0;
 
                 // Add row button click handler
@@ -507,30 +526,30 @@
                 function addAttributeRow() {
                     rowCounter++;
                     const rowHtml = `
-                   
-                            <div class="attribute-row row border shadow-md pb-2 pt-2 align-items-end ">
-                                <div class="col-md-1">
-                                    <label class="form-label">Color</label>
-                                    <input type="color" class="form-control form-control-color" name="attributes[${rowCounter}][hex_code]" value="#000000" title="Choose color">
-                                     <div class="invalid-feedback"></div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" name="attributes[${rowCounter}][qty]" min="0">
-                                     <div class="invalid-feedback"></div>
-                                </div>
-                               <div class="col-md-6">
-                                    <label class="form-label">Images</label>
-                                    <input type="file" class="form-control" name="attributes[${rowCounter}][images][]" multiple accept="image/*">
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button type="button" class="btn btn-danger btn-sm remove-row">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </div>
+               
+                        <div class="attribute-row row border shadow-md pb-2 pt-2 align-items-end ">
+                            <div class="col-md-1">
+                                <label class="form-label">Color</label>
+                                <input type="color" class="form-control form-control-color" name="attributes[${rowCounter}][hex_code]" value="#000000" title="Choose color">
+                                 <div class="invalid-feedback"></div>
                             </div>
-                        `;
+                            <div class="col-md-4">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" class="form-control" name="attributes[${rowCounter}][qty]" min="0">
+                                 <div class="invalid-feedback"></div>
+                            </div>
+                           <div class="col-md-6">
+                                <label class="form-label">Images</label>
+                                <input type="file" class="form-control" name="attributes[${rowCounter}][images][]" multiple accept="image/*">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-danger btn-sm remove-row">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
                     $('#variationRows').append(rowHtml);
                 }
 
@@ -539,10 +558,52 @@
                     $(this).closest('.attribute-row').remove();
                 });
 
+                // GST Calculation Variables
+                const sellingPriceWithoutGst = document.querySelector('#selling_price_without_gst');
+                const gstInput = document.querySelector('#gst');
+                const finalSellingPrice = document.querySelector('#selling_price');
+                
+                function validateGstInput(value) {
+                    let numericValue = value.replace(/[^0-9.]/g, '');
+                    numericValue = parseFloat(numericValue) || 0;
+                    
+                    if (numericValue > 100) numericValue = 100;
+                    if (numericValue < 1) numericValue = 1;
+                    
+                    return numericValue;
+                }
+                
+                function calculateFinalPrice() {
+                    const basePrice = parseFloat(sellingPriceWithoutGst.value) || 0;
+                    const gstPercentage = validateGstInput(gstInput.value);
+                    
+                    const gstAmount = (basePrice * gstPercentage) / 100;
+                    const totalPrice = basePrice + gstAmount;
+                    
+                    finalSellingPrice.value = totalPrice.toFixed(2);
+                }
+                
+                // Event listeners for GST calculation
+                sellingPriceWithoutGst.addEventListener('input', calculateFinalPrice);
+                gstInput.addEventListener('input', calculateFinalPrice);
+                
+
+                gstInput.addEventListener('blur', function() {
+                    const validatedValue = validateGstInput(this.value);
+                    this.value = validatedValue + '%';
+                });
+
+
                 $('#productForm').submit(function(e) {
                     e.preventDefault();
-
                     const formData = new FormData(this);
+
+                    const basePrice = parseFloat(sellingPriceWithoutGst.value) || 0;
+                    const gstPercentage = validateGstInput(gstInput.value);
+                    const finalPrice = parseFloat(finalSellingPrice.value) || 0;
+
+                    formData.append('gst_percentage', gstPercentage);
+                    formData.append('final_price', finalPrice);
 
                     $.ajax({
                         url: '/admin/products',
@@ -558,45 +619,35 @@
                             }
                         },
                         error: function(xhr) {
-                            $('.is-invalid').removeClass('is-invalid');
-                            $('.invalid-feedback').empty();
-
-                            const errors = xhr.responseJSON.errors;
-
-                            for (const field in errors) {
-                                if (field.includes('attributes.')) {
-                                    const matches = field.match(/attributes\.(\d+)\.(.+)/);
-                                    if (matches) {
-                                        const [_, index, subField] = matches;
-                                        const inputElement = $(
-                                                `[name="attributes[${index}][${subField}][]"]`)
-                                            .length ?
-                                            $(`[name="attributes[${index}][${subField}][]"]`) :
-                                            $(`[name="attributes[${index}][${subField}]"]`);
-
-                                        inputElement
-                                            .addClass('is-invalid')
-                                            .siblings('.invalid-feedback')
-                                            .text(errors[field][0]);
-                                    }
-                                } else {
-                                    $(`#${field}`)
-                                        .addClass('is-invalid')
-                                        .siblings('.invalid-feedback')
-                                        .text(errors[field][0]);
-                                }
-                            }
-
-                            Swal.fire({
-                                title: 'Validation Error',
-                                text: 'Please check the form for errors',
-                                icon: 'error'
-                            });
-
-
+                            handleFormErrors(xhr);
                         }
                     });
                 });
+
+
+                function handleFormErrors(xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        const errors = xhr.responseJSON.errors;
+
+                        // Clear any existing validation states
+                        $('.is-invalid').removeClass('is-invalid');
+                        $('.invalid-feedback').empty();
+
+                        // Handle field-specific errors
+                        for (const field in errors) {
+                            const inputElement = $(`[name="${field}"]`);
+                            inputElement.addClass('is-invalid');
+                            inputElement.siblings('.invalid-feedback').text(errors[field][0]);
+                        }
+
+                        // Show first error message in Swal
+                        const firstError = Object.values(errors)[0][0];
+                        Swal.fire('Validation Error', firstError, 'error');
+                    } else {
+                        // Handle generic error
+                        Swal.fire('Error', 'An unexpected error occurred. Please try again.', 'error');
+                    }
+                }
 
 
             });

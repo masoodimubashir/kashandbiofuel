@@ -43,6 +43,8 @@ class ProductFactory extends Factory
             'updated_at' => Carbon::now(),
             'category_id' => rand(1, 10),
             'sub_category_id' => rand(1, 10),
+            'gst_amount' => $this->faker->numberBetween(1, 100),
+
 
 
         ];

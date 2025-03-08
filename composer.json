@@ -11,12 +11,14 @@
     "require": {
         "php": "^8.2",
         "ext-curl": "*",
+        "barryvdh/laravel-dompdf": "^3.1",
         "consoletvs/charts": "6.*",
         "laravel/framework": "^11.31",
+        "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.17",
         "laravel/tinker": "^2.9",
-        "santigarcor/laratrust": "^8.3",
         "phpoffice/phpspreadsheet": "^3.3",
+        "santigarcor/laratrust": "^8.3",
         "yajra/laravel-datatables-oracle": "11.0"
     },
     "require-dev": {

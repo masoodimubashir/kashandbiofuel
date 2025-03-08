@@ -32,8 +32,10 @@
 
                 <div class="col-custom-3 wow fadeInUp">
                     <div class="left-box">
-                        <form class="shop-left-sidebar"  action="{{ route('category.index', ['category_id' => request()->category_id]) }}"
-                            method="GET">
+                        <form class="shop-left-sidebar"
+                            action="{{ route('category.index', ['category_id' => request()->category_id]) }}" method="GET"
+                            data-auto-submit="true">
+
 
                             <div class="back-button">
                                 <h3><i class="fa-solid fa-arrow-left"></i> Back</h3>
@@ -159,7 +161,7 @@
                         </div>
 
                         <div class="top-filter-menu">
-                            
+
 
                             <div class="grid-option d-none d-md-block">
                                 <ul>
@@ -247,12 +249,119 @@
 
 
         </div>
-        </div>
     </section>
 
+    @push('frontend.scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form[data-auto-submit="true"]');
+                let searchTimeout;
 
+                if (form) {
+                    // Initialize Ion Range Slider
+                    const $range = $(".js-range-slider");
+                    $range.ionRangeSlider({
+                        type: "double",
+                        min: 0,
+                        max: 10000,
+                        from: getUrlParameter('min_price') || 0,
+                        to: getUrlParameter('max_price') || 10000,
+                        grid: true,
+                        onFinish: function(data) {
+                            clearTimeout(searchTimeout);
+                            updateHiddenInputs(data.from, data.to);
+                            searchTimeout = setTimeout(() => {
+                                form.submit();
+                            }, 500);
+                        }
+                    });
 
+                    // Delayed form submission function
+                    const delayedSubmit = function() {
+                        clearTimeout(searchTimeout);
+                        searchTimeout = setTimeout(() => {
+                            form.submit();
+                        }, 500);
+                    };
 
+                    // Add event listeners to checkboxes
+                    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', delayedSubmit);
+                    });
 
-    <!-- Shop Section End -->
+                    // Back button functionality
+                    const backButton = document.querySelector('.back-button');
+                    if (backButton) {
+                        backButton.addEventListener('click', function() {
+                            window.history.back();
+                        });
+                    }
+
+                    // Clear filters functionality
+                    const clearFiltersBtn = document.getElementById('clear-filters');
+                    if (clearFiltersBtn) {
+                        clearFiltersBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            window.location.href = this.getAttribute('href');
+                        });
+                    }
+                }
+
+                // Helper function to update hidden inputs for price range
+                function updateHiddenInputs(minPrice, maxPrice) {
+                    let minInput = form.querySelector('input[name="min_price"]');
+                    let maxInput = form.querySelector('input[name="max_price"]');
+
+                    if (!minInput) {
+                        minInput = document.createElement('input');
+                        minInput.type = 'hidden';
+                        minInput.name = 'min_price';
+                        form.appendChild(minInput);
+                    }
+
+                    if (!maxInput) {
+                        maxInput = document.createElement('input');
+                        maxInput.type = 'hidden';
+                        maxInput.name = 'max_price';
+                        form.appendChild(maxInput);
+                    }
+
+                    minInput.value = minPrice;
+                    maxInput.value = maxPrice;
+                }
+
+                // Helper function to get URL parameters
+                function getUrlParameter(name) {
+                    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                    const results = regex.exec(location.search);
+                    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+                }
+
+                // Restore filter states from URL parameters
+                function restoreFilterStates() {
+                    // Restore checkboxes
+                    const urlParams = new URLSearchParams(window.location.search);
+
+                    // Restore subcategories
+                    const subcategories = urlParams.getAll('subcategories[]');
+                    subcategories.forEach(id => {
+                        const checkbox = document.querySelector(`input[name="subcategories[]"][value="${id}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+
+                    // Restore ratings
+                    const ratings = urlParams.getAll('rating[]');
+                    ratings.forEach(rating => {
+                        const checkbox = document.querySelector(`input[name="rating[]"][value="${rating}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+
+                // Call restore function on page load
+                restoreFilterStates();
+            });
+        </script>
+    @endpush
 @endsection

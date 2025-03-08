@@ -11,6 +11,7 @@ use App\Service\PhonepeService;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
@@ -51,69 +52,77 @@ class CheckoutController extends Controller
   }
 
 
+  public function getPhonePeToken()
+  {
+      $response = Http::asForm()->post('https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token', [
+          'client_id' => 'KASSHUATCRED_2503071644501134412447',
+          'client_version' => 1,
+          'client_secret' => 'YWQwYjEzYzQtYTVhZS00OGYyLWFiMGQtNTdlMjhjOWVjNmIy',
+          'grant_type' => 'client_credentials'
+      ]);
+  
+      return $response->json();
+  }
+  
   public function checkout(Request $request)
   {
-
-
-    $payload = [
-      "merchantId" => 'M22I1H3KU5WIL',
-      "merchantTransactionId" => uniqid('txn_'),
-      "merchantUserId" => auth()->user()->id,
-      "amount" => 1 * 100,
-      "redirectUrl" => route('payment.redirect'),
-      "callbackUrl" => route('payment.callback'),
-      "mobileNumber" => auth()->user()->address()->first()->phone,
-      "paymentInstrument" => [
-        "type" => "PAY_PAGE"
-      ]
-    ];
-
-    $payloadJson = json_encode($payload);
-    $base64EncodedPayload = base64_encode($payloadJson);
-
-    $endpoint = '/pg/v1/pay';
-    $saltKey = '26c1d1b9-e7f9-48ba-ac69-a009a25efee8';
-    $saltIndex = 1;
-
-    $stringToHash = $base64EncodedPayload . $endpoint . $saltKey;
-    $checksum = hash('sha256', $stringToHash);
-
-    $xVerify = $checksum . '###' . $saltIndex;
-
-    $ch = curl_init();
-
-    curl_setopt($ch, CURLOPT_URL, 'https://api.phonepe.com/apis/hermes/pg/v1/pay');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['request' => $base64EncodedPayload]));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-      'X-VERIFY: ' . $xVerify,
-      'Content-Type: application/json',
-    ]);
-
-    $response = curl_exec($ch);
-
-    if (curl_errno($ch)) {
-      Log::error('cURL Error', ['error' => curl_error($ch)]);
-      curl_close($ch);
-      return response()->json([
-        'success' => false,
-        'message' => 'Failed to initiate payment.',
-      ]);
-    }
-
-    curl_close($ch);
-
-    $responseData = json_decode($response, true);
-
-    if (isset($responseData['data']['instrumentResponse']['redirectInfo']['url'])) {
-      $redirectUrl = $responseData['data']['instrumentResponse']['redirectInfo']['url'];
-      return response()->json(['status' => true, 'redirect_url' => $redirectUrl]);
-    } else {
-      Log::error('PhonePe API Invalid Response', ['response' => $responseData]);
-      // return response()->json(['status' => false, 'message' => 'Failed to obtain redirect URL.']);
-    }
+      try {
+          $payload = [
+              'merchantId' => 'SU2503061711515453461035',
+              'merchantTransactionId' => uniqid('txn_'),
+              'merchantUserId' => auth()->user()->id,
+              'amount' => 1 * 100,
+              'redirectUrl' => route('payment.redirect'),
+              'callbackUrl' => route('payment.callback'),
+              'paymentInstrument' => [
+                  'type' => 'PAY_PAGE',
+              ],
+          ];
+  
+          $payloadJson = json_encode($payload);
+          $base64EncodedPayload = base64_encode($payloadJson);
+          
+          $endpoint = '/pg/v2/pay';
+          $saltKey = 'df71db3d-c393-4412-9a1d-60b0990d675c';
+          $saltIndex = 1;
+  
+          $stringToHash = $base64EncodedPayload . $endpoint . $saltKey;
+          $checksum = hash('sha256', $stringToHash);
+          $xVerify = $checksum . '###' . $saltIndex;
+  
+          $response = Http::withHeaders([
+              'X-VERIFY' => $xVerify,
+              'Content-Type' => 'application/json'
+          ])->post('https://api.phonepe.com/apis/pg/checkout/v2/pay', [
+              'request' => $base64EncodedPayload
+          ]);
+  
+          $responseData = $response->json();
+  
+          if (isset($responseData['data']['instrumentResponse']['redirectInfo']['url'])) {
+              return response()->json([
+                  'success' => true, 
+                  'redirect_url' => $responseData['data']['instrumentResponse']['redirectInfo']['url']
+              ]);
+          }
+  
+          Log::error('PhonePe API Invalid Response', ['response' => $responseData]);
+          return response()->json([
+              'success' => false,
+              'message' => 'Failed to obtain redirect URL'
+          ]);
+  
+      } catch (Exception $e) {
+          Log::error('PhonePe Payment Error: ' . $e->getMessage());
+          return response()->json([
+              'success' => false,
+              'message' => 'Failed to process payment',
+              'error' => $e->getMessage()
+          ], 500);
+      }
   }
+  
+
 
   public function callback(Request $request)
   {
@@ -127,13 +136,13 @@ class CheckoutController extends Controller
 
   public function redirect(Request $request)
   {
+
+    dd($request->all());
     return view('frontend.Order.order-confirmation');
   }
 
   public function cashOnDelivery(StoreOrderRequest $request)
   {
-
-
 
     try {
 

@@ -1,9 +1,7 @@
+<div class="title section-t-space">
+    <h2>ALL KINDS OF PRODUCTS</h2>
 
-
-
-
-
-
+</div>
 
 
 
@@ -104,3 +102,4 @@
 
 
 </div>
+

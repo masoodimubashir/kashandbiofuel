@@ -40,11 +40,6 @@ class ProductController extends Controller
 
                 return DataTables::eloquent($products)
                     ->addColumn('product_name', function ($product) {
-
-                        // $imageUrl = isset($product->productAttribute->image_path) ? 'storage/' . $product->productAttribute->image_path : 'default_images/product_image.png';
-                                // <img src="' . asset($imageUrl) . '" class="card-img-top rounded" alt="Product Image" style="height: 50px; width:50px; object-fit: cover;">
-
-
                         return '
                             <div class="d-flex align-items-center gap-2 border-0">
                                 <div class=" text-center">
@@ -122,10 +117,8 @@ class ProductController extends Controller
     public function show(Product $product)
     {
 
-
         $product = $product->with(['category', 'subCategory', 'productAttributes'])->find($product->id);
         $uniqueHexCodes = $product->productAttributes->unique('hex_code')->pluck('hex_code');
-
 
         return view('layouts.dashboard.Product.view-product', compact('product', 'uniqueHexCodes'));
     }
@@ -176,18 +169,18 @@ class ProductController extends Controller
                 'product_attributes.*.images.*' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:2048',
                 'crafted_date' => 'required|date',
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'status' => 'error',
                     'errors' => $validator->errors()
                 ], 422);
             }
-    
+
             $totalQty = collect($request->product_attributes)->sum('qty');
             $product = Product::findOrFail($id);
             $productFolder = 'products/' . Str::slug($request->name);
-    
+
             $product->update([
                 'category_id' => $request->category_id,
                 'sub_category_id' => $request->sub_category_id,
@@ -206,21 +199,21 @@ class ProductController extends Controller
                 'discounted' => $request->boolean('discounted'),
                 'new_arrival' => $request->boolean('new_arrival'),
             ]);
-    
+
             foreach ($request->product_attributes as $attributeData) {
                 if (isset($attributeData['id'])) {
                     // Update existing attribute
                     $attribute = ProductAttribute::find($attributeData['id']);
                     if ($attribute) {
                         $imagePaths = json_decode($attribute->images) ?? [];
-                        
+
                         // Handle new images
                         if (isset($attributeData['images'])) {
                             foreach ($attributeData['images'] as $image) {
                                 $imagePaths[] = $image->store($productFolder, 'public');
                             }
                         }
-    
+
                         $attribute->update([
                             'hex_code' => $attributeData['hex_code'],
                             'qty' => $attributeData['qty'],
@@ -235,7 +228,7 @@ class ProductController extends Controller
                             $imagePaths[] = $image->store($productFolder, 'public');
                         }
                     }
-    
+
                     ProductAttribute::create([
                         'product_id' => $product->id,
                         'images' => json_encode($imagePaths),
@@ -244,12 +237,12 @@ class ProductController extends Controller
                     ]);
                 }
             }
-    
+
             // Handle removed attributes
             if ($request->filled('removed_attributes')) {
                 $removedIds = explode(',', $request->removed_attributes);
                 $removedAttributes = ProductAttribute::whereIn('id', $removedIds)->get();
-    
+
                 foreach ($removedAttributes as $attribute) {
                     // Delete all images from storage
                     $imagePaths = json_decode($attribute->images) ?? [];
@@ -259,20 +252,18 @@ class ProductController extends Controller
                     $attribute->delete();
                 }
             }
-    
+
             DB::commit();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product updated successfully'
             ]);
-    
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -283,13 +274,15 @@ class ProductController extends Controller
 
         try {
 
+        
+
             $totalQty = collect($request->validated('attributes'))->sum('qty');
 
             $product = Product::create([
                 'name' => $request->name,
                 'sku' => $request->sku,
                 'price' => $request->price,
-                'selling_price' => $request->selling_price,
+                'selling_price' => $request->final_price,
                 'short_description' => $request->short_description,
                 'additional_description' => $request->additional_description,
                 'description' => $request->description,
@@ -299,10 +292,12 @@ class ProductController extends Controller
                 'slug' => Str::slug($request->name),
                 'status' => 1,
                 'qty' => $totalQty,
+                'gst_amount' => $request->gst_percentage,
                 'featured' => $request->boolean('featured'),
                 'discounted' => $request->boolean('discounted'),
                 'new_arrival' => $request->boolean('new_arrival'),
             ]);
+
 
             $productFolder = 'products/' . $product->slug;
             Storage::makeDirectory('public/' . $productFolder);
@@ -348,41 +343,39 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+
             $productFolder = 'products/' . $product->slug;
 
             foreach ($product->productAttributes as $attribute) {
                 $images = json_decode($attribute->images) ?? [];
-                
+
                 foreach ($images as $image) {
                     Storage::disk('public')->delete($image);
                 }
-                
+
                 $attribute->delete();
             }
-        
+
             if (Storage::exists('public/' . $productFolder)) {
 
                 Storage::deleteDirectory('public/' . $productFolder);
             }
-        
+
             $product->forceDelete();
-        
+
             DB::commit();
-        
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product deleted successfully'
             ]);
-        
         } catch (Exception $e) {
             DB::rollBack();
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to delete product'
             ], 500);
         }
-        
     }
 }

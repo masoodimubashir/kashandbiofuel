@@ -161,6 +161,11 @@
                                             <td>{{ $product->qty }}</td>
                                         </tr>
                                         <tr>
+                                            <td><b>Quantity &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+                                            <td>{{ number_format($product->gst_amount) }}%</td>
+
+                                        </tr>
+                                        <tr>
                                             <td><b>Carfted Date &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
                                             <td>{{ $product->crafted_date }}</td>
                                         </tr>

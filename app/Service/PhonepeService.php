@@ -212,20 +212,16 @@ class PhonepeService
             'payment_method' => $request['payment_method'],
         ]);
     
-        // Process each cart item
+     
         foreach ($cartData as $item) {
-            // Get the cart item details
+          
             $cartItem = Cart::findOrFail($item['cart_id']);
             $product = Product::findOrFail($cartItem->product_id);
-
-
             
             Wishlist::where('product_id', $product->id)
                     ->where('user_id', $transaction->user_id)
                     ->delete();
 
-    
-            // Create order item
             $this->createOrderItem([
                 'product_id' => $product->id,
                 'product_attribute_id' => $item['product_attribute_id'],
@@ -233,7 +229,6 @@ class PhonepeService
             ], $order, $product);
 
 
-    
             if ($item['product_attribute_id']) {
                 $productAttribute = ProductAttribute::where('id', $item['product_attribute_id'])
                     ->where('product_id', $product->id)
@@ -247,7 +242,6 @@ class PhonepeService
                 $productAttribute->save();
             }
     
-            // Update main product quantity
             if ($product->qty < $cartItem->qty) {
                 throw new Exception("Insufficient quantity for product: {$product->name}");
             }

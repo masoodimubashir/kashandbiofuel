@@ -42,11 +42,12 @@ class CartController extends Controller
 
         try {
 
+
             $product = Cart::query()
                 ->where([
                     'product_id' => $request->product_id,
                     'product_attribute_id' => $request->product_attribute_id,
-                    'user_id' => auth()->user()->id,
+                    // 'user_id' => auth()->user()->id,
                 ])->first();
 
             if ($product) {
@@ -55,6 +56,7 @@ class CartController extends Controller
                     'message' => 'Item already Exists',
                 ], 404);
             }
+
 
             $this->itemService->addOrUpdateItem($request->validated(), 'cart');
 

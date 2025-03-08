@@ -44,6 +44,7 @@ class Product extends Model
         'featured',
         'discounted',
         'new_arrival',
+        'gst_amount',
     ];
 
     /**
