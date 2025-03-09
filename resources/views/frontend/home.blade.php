@@ -18,6 +18,8 @@
     <!-- Category Section End -->
 
     <!-- Banner Section Start -->
+
+    
     <section class="banner-section ratio_60 wow fadeInUp">
         <div class="container-fluid-lg">
             <x-hot-deals />
