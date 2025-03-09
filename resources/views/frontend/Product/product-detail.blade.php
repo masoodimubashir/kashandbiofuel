@@ -85,7 +85,7 @@
                                                             <div class="slider-image">
                                                                 <img src="{{ asset('storage/' . $image) }}"
                                                                     data-zoom-image="{{ asset('storage/' . $image) }}"
-                                                                    class=" img-fluid image_zoom_cls-0 blur-up lazyload"alt="">
+                                                                    class=" img-fluid image_zoom_cls-0 blur-up lazyload"alt="" style="height: 500px;">
                                                             </div>
                                                         </div>
                                                     @endforeach
