@@ -49,23 +49,21 @@
             </div>
         </div>
     @endforeach
+
 </div>
 
 
-<div class="product-box-slider-2 no-arrow mt-2">
-
-
-    @foreach ($allProducts->skip(5)->take(10) as $product)
+<div class="product-box-slider-2 no-arrow mt-4">
+    @foreach ($allProducts->skip(5)->take(5) as $product)
         <div>
-                <div class="product-box-2 wow fadeIn" data-wow-delay="{{ $loop->index * 0.1 . 's' }}">
-                    <!-- Product Image -->
 
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image mb-2">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
                         @isset($product->productAttribute->image)
                             <img src="{{ asset('storage/' . $product->productAttribute->image) }}"
-                                class="img-fluid blur-up lazyload " style="height: 150px; width: 150px;" alt="{{ $product->name }}">
+                                class="img-fluid blur-up lazyload" style="width: 300px; height: 300px; object-fit: cover;"
+                                alt="{{ $product->name }}">
                         @else
                             <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload"
                                 style="width: 300px; height: 300px; object-fit: cover;" alt="{{ $product->name }}">
@@ -94,12 +92,9 @@
                         </ul>
                     </div>
 
+
                 </div>
             </div>
         </div>
     @endforeach
-
-
-
 </div>
-

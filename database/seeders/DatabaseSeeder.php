@@ -16,12 +16,12 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(30)->create();
         $this->call(LaratrustSeeder::class);
-        // $this->call(CategorySeeder::class);
-        // $this->call(SubCategorySeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(SubCategorySeeder::class);
         $this->call([
-            // ProductSeeder::class,
-            // ProductAttributeSeeder::class,
-            // ReviewSeeder::class
+            ProductSeeder::class,
+            ProductAttributeSeeder::class,
+            ReviewSeeder::class
         ]);
 
         $user = User::factory()->create([
