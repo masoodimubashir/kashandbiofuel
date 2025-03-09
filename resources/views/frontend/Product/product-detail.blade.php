@@ -74,20 +74,18 @@
                                     <div class="col-12">
                                         <div class="product-main no-arrow">
 
-                                            @foreach ($product->productAttributes as $attributes)
+
+                                            @foreach ($product->productAttributes as $attribute)
                                                 @isset($attribute->images)
                                                     @php
-                                                        $images = json_decode($attributes->images, true);
+                                                        $images = json_decode($attribute->images, true);
                                                     @endphp
-                                                    @foreach ($images as $key => $image)
+                                                    @foreach ($images as $image)
                                                         <div>
                                                             <div class="slider-image">
                                                                 <img src="{{ asset('storage/' . $image) }}"
-                                                                    id="img-{{ $key }}"
                                                                     data-zoom-image="{{ asset('storage/' . $image) }}"
-                                                                    class="
-                                                   img-fluid image_zoom_cls-0 blur-up lazyload"
-                                                                    alt="">
+                                                                    class=" img-fluid image_zoom_cls-0 blur-up lazyload"alt="">
                                                             </div>
                                                         </div>
                                                     @endforeach
@@ -110,10 +108,10 @@
                                     <div class="col-12">
                                         <div class="left-slider-image left-slider no-arrow slick-top">
 
-                                            @foreach ($product->productAttributes as $attributes)
-                                                @isset($attributes->images)
+                                            @foreach ($product->productAttributes as $attribute)
+                                                @isset($attribute->images)
                                                     @php
-                                                        $images = json_decode($attributes->images, true);
+                                                        $images = json_decode($attribute->images, true);
                                                     @endphp
                                                     @foreach ($images as $image)
                                                         <div>
