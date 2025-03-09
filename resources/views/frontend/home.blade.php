@@ -9,8 +9,6 @@
     </section>
     <!-- Home Section End -->
 
-
-
     <!-- Category Section Start -->
     <section class="category-section-2">
         <x-shop-by-category />
