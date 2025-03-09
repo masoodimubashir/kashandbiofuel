@@ -12,8 +12,8 @@
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image mb-2">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
-                        @isset($product->productAttribute->image_path)
-                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                        @isset($product->productAttribute->image)
+                            <img src="{{ asset('storage/' . $product->productAttribute->image) }}"
                                 class="img-fluid blur-up lazyload" style="width: 300px; height: 300px; object-fit: cover;"
                                 alt="{{ $product->name }}">
                         @else
@@ -63,8 +63,8 @@
             <div class="product-box product-box-bg wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-image mb-2">
                     <a href="{{ route('product.show', [$product->slug]) }}" class="product-image">
-                        @isset($product->productAttribute->image_path)
-                            <img src="{{ asset('storage/' . $product->productAttribute->image_path) }}"
+                        @isset($product->productAttribute->image)
+                            <img src="{{ asset('storage/' . $product->productAttribute->image) }}"
                                 class="img-fluid blur-up lazyload " style="height: 150px; width: 150px;" alt="{{ $product->name }}">
                         @else
                             <img src="{{ asset('default_images/product_image.png') }}" class="img-fluid blur-up lazyload"
