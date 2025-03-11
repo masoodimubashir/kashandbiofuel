@@ -3,9 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\OrderPlacedEvent;
-use App\Mail\OrderShipped;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Mail\OrderPlaced;
 use Illuminate\Support\Facades\Mail;
 
 class OrderPlacedListener
@@ -23,6 +21,6 @@ class OrderPlacedListener
      */
     public function handle(OrderPlacedEvent $event): void
     {
-        Mail::to('masudimubashir@gmail.com')->send(new OrderShipped($event->order));
+        Mail::to('masudimubashir@gmail.com')->send(new OrderPlaced($event->order));
     }
 }

@@ -20,4 +20,8 @@ class UserDashboardController extends Controller
 
 
     }
+
+    public function trackOrder(){
+        return view('user.track-order');
+    }
 }

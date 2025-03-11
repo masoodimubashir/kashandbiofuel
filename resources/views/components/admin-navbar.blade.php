@@ -1,5 +1,3 @@
-
-
 <div class="top-nav top-header sticky-header">
     <div class="container-fluid-lg">
         <div class="row">
@@ -12,16 +10,15 @@
                         </span>
                     </button>
                     <a href="#" class="web-logo nav-logo">
-                        <img src="../assets/images/logo/kassh & biofuels (1) (1).png"
-                            class="img-fluid blur-up lazyload" alt="">
+                        <img src="../assets/images/logo/kassh & biofuels (1) (1).png" class="img-fluid blur-up lazyload"
+                            alt="">
                     </a>
 
                     <div class="middle-box">
-                    
+
                         <div class="search-box">
                             <div class="input-group">
-                                <input type="search" class="form-control"
-                                    placeholder="I'm searching for...">
+                                <input type="search" class="form-control" placeholder="I'm searching for...">
                                 <button class="btn" type="button" id="button-addon2">
                                     <i data-feather="search"></i>
                                 </button>
@@ -35,8 +32,7 @@
                                 <span class="input-group-text">
                                     <i data-feather="search" class="font-light"></i>
                                 </span>
-                                <input type="text" class="form-control search-type"
-                                    placeholder="Search here..">
+                                <input type="text" class="form-control search-type" placeholder="Search here..">
                                 <span class="input-group-text close-search">
                                     <i data-feather="x" class="font-light"></i>
                                 </span>
@@ -72,8 +68,7 @@
                                 <div class="onhover-dropdown header-badge">
                                     <button type="button" class="btn p-0 position-relative header-wishlist">
                                         <i data-feather="shopping-cart"></i>
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge">2
+                                        <span class="position-absolute top-0 start-100 translate-middle badge">2
                                             <span class="visually-hidden">unread messages</span>
                                         </span>
                                     </button>

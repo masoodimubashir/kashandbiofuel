@@ -85,7 +85,8 @@
                                                             <div class="slider-image">
                                                                 <img src="{{ asset('storage/' . $image) }}"
                                                                     data-zoom-image="{{ asset('storage/' . $image) }}"
-                                                                    class=" img-fluid image_zoom_cls-0 blur-up lazyload"alt="" style="height: 500px;">
+                                                                    class=" img-fluid image_zoom_cls-0 blur-up lazyload"alt=""
+                                                                    style="height: 500px;">
                                                             </div>
                                                         </div>
                                                     @endforeach
@@ -148,7 +149,17 @@
                                         <del class="text-content">
                                             {{ Number::currency($product->price, 'INR') }}
                                         </del>
+
+                                        <p>
+                                            Inclusive Of All Taxes ---
+                                            GST({{ $product->gst_amount }}%)
+
+
+                                        </p>
                                     </h3>
+
+
+
                                     <div class="product-rating custom-rate">
                                         <ul class="rating">
 
@@ -255,13 +266,33 @@
                         <div class="vendor-box">
                             <div class="vendor-list">
                                 <ul>
+
                                     <li>
                                         <div class="address-contact">
+
+                                            <i data-feather="box"> </i>
+
+                                            <a href="tel:+918881042340">Sold By:
+                                                <span class="text-content">
+                                                    Kassh & BioFuel PVT LTD<br>
+                                                    Papum Pare, Arunachal Pradesh, India - 791113
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </li>
+
+
+
+                                    <li>
+                                        <div class="address-contact">
+
                                             <i data-feather="phone"></i>
                                             <a href="tel:+918881042340">Contact Seller: <span
                                                     class="text-content">+918881042340</span></a>
                                         </div>
                                     </li>
+
+
                                 </ul>
                             </div>
                         </div>

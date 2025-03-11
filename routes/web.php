@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\Route;
 
 // Checking Session User For Testing
 Route::get('/s', function () {
-    dd(request()->cookie('guest_id'));
+    dd(session()->all());
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -122,7 +122,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('/order', OrderController::class);
 
-        Route::post('/order/push-to-shiprocket/{order}', ShipRocketController::class)->name('order.push-to-shiprocket');
+
+        Route::post('/order/push-to-shiprocket/{order}', [ShipRocketController::class, 'pushOrder'])->name('order.push-to-shiprocket');
 
         Route::get('/contact-us', [DashboardContactUsController::class, 'index'])->name('dashboard.contact-us.index');
 
@@ -151,6 +152,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:user')->prefix('user')->group(function () {
 
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+        Route::get('/track-order', [UserDashboardController::class, 'trackOrder'])->name('track-order');
 
         Route::post('/product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
 
@@ -162,11 +164,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::get('/order-placed/{transaction_id}', [CheckoutController::class, 'orderPlaced'])->name('checkout.order-placed');
-        Route::post('/checkout/phonepe', [CheckoutController::class, 'checkout'])->name('checkout.phonepe.store');
+        Route::post('/checkout/phonepe', [CheckoutController::class, 'initiatePayment'])->name('checkout.phonepe.store');
         Route::post('/cash-on-delivery', [CheckoutController::class, 'cashOnDelivery'])->name('checkout.cash-on-delivery');
 
-        Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
-        Route::get('/phonepe/redirect', [CheckoutController::class, 'redirect'])->name('payment.redirect');
+        // Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
+        Route::get('/phonepe/redirect/{merchant_order_id}', [CheckoutController::class, 'checkOrderStatus'])->name('payment.redirect');
 
         Route::get('/download-invoice/{id}', [InvoiceController::class, 'downloadInvoice'])->name('invoice.download');
     });

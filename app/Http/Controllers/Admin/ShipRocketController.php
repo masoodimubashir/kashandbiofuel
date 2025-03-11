@@ -15,10 +15,12 @@ class ShipRocketController extends Controller
 
     public function __construct(private ShipRocketService $shipRocketService) {}
 
-    public function __invoke(Order $order)
+    public function pushOrder(Order $order)
     {
 
         try {
+
+
             $response = app(ShipRocketService::class)->pushOrder($order);
 
             return response()->json([
@@ -34,4 +36,5 @@ class ShipRocketController extends Controller
             ], $e->getCode() ?: 500);
         }
     }
+
 }

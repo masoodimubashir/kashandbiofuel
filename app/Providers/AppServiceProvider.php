@@ -3,11 +3,12 @@
 namespace App\Providers;
 
 use App\Events\OrderPlacedEvent;
+use App\Events\OrderShippedEvent;
 use App\Interface\ItemInterface;
 use App\Listeners\OrderPlacedListener;
+use App\Listeners\OrderShippedListener;
+use App\Listeners\OrderShippedListner;
 use App\Repository\BaseRepository;
-use App\Repository\CartRepository;
-use App\Repository\WishlistRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,6 +43,9 @@ class AppServiceProvider extends ServiceProvider
         OrderPlacedEvent::class => [
             OrderPlacedListener::class,
         ],
+        OrderShippedEvent::class => [
+            OrderShippedListener::class,
+        ]
     ];
 
     /**

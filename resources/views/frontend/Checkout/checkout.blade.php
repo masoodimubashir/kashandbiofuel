@@ -175,7 +175,7 @@
 
                             </ul>
                         </div>
-                        <a href="{{ route('payment.redirect') }}" id="placeOrderButton"
+                        <a  id="placeOrderButton"
                             class="btn theme-bg-color text-white btn-md w-100 mt-4 mb-4 fw-bold">Place Order
                         </a>
 
@@ -403,6 +403,7 @@
                             },
                             beforeSend: () => utils.updateButton(true),
                             success: (response) => {
+
                                 if (response.status) {
                                     window.location.href = response.redirect_url;
                                 } else {
@@ -476,6 +477,7 @@
 
                                 $('#editProfile').modal('hide');
                                 resetFormAndErrors();
+                                window.location.reload();
                             }
                         },
                         error: function(xhr) {

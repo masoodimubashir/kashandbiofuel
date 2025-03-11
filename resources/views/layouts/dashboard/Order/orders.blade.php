@@ -106,7 +106,6 @@
                                             <th scope="col">Customer</th>
                                             <th scope="col">Address</th>
                                             <th scope="col">Total Amount</th>
-                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -132,7 +131,8 @@
                         url: '{{ route('order.index') }}',
                         type: 'GET',
                     },
-                    columns: [{
+                    columns: [
+                        {
                             data: 'status',
                             name: 'status',
                             orderable: false,
@@ -159,14 +159,7 @@
                             data: 'total_amount',
                             name: 'total_amount'
                         },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            sortable: false
-                        },
-
-
+                      
                     ]
                 });
 

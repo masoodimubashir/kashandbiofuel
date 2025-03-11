@@ -2,38 +2,55 @@
 
 namespace App\Service;
 
+use App\Events\OrderShippedEvent;
 use App\Models\Order;
 use Http;
+use Illuminate\Support\Facades\Mail;
 
 class ShipRocketService
 {
-    private const TOKEN_CACHE_KEY = 'shiprocket_token';
-    private const TOKEN_CACHE_DURATION = 60 * 24;
-
-    public function pushOrder(Order $order): array
+    private const API_BASE_URL = 'https://apiv2.shiprocket.in/v1/external/';
+    
+    public function pushOrder(Order $order)
     {
-        if (!$order->is_confirmed) {
-            throw new \Exception('Order must be confirmed before pushing to ShipRocket', 422);
+        // $this->validateOrder($order);
+        
+        // $token = $this->getToken();
+        // $orderData = $this->prepareOrderData($order);
+        
+        // $response = Http::withToken($token)
+        //     ->post(self::API_BASE_URL . 'orders/create/adhoc', $orderData);
+            
+        // if ($response->failed()) {
+        //     throw new \Exception('ShipRocket API request failed: ' , 422);
+        // }
+
+        // $order->update([
+        //     'is_shipped' => true,
+        //     'order_message' => 'Shipped'
+        // ]);
+
+
+
+        event(new OrderShippedEvent($order));
+
+
+        // return [
+        //     'status' => $response->status(),
+        //     'message' => 'Order successfully pushed to ShipRocket',
+        //     'data' => $response->json()
+        // ];
+    }
+
+    private function validateOrder(Order $order): void 
+    {
+
+        if ($order->is_shipped) {
+            throw new \Exception('Order Has Been Already Pushed To Ship Rocket', 422);
         }
 
-        try {
-            $response = Http::withToken($this->getToken())
-                ->post(
-                    'https://apiv2.shiprocket.in/v1/external/orders/create/adhoc',
-                    $this->prepareOrderData($order)
-                );
-
-            if ($response->failed()) {
-                throw new \Exception('ShipRocket API request failed: ' . $response->body(), $response->status());
-            }
-
-            return [
-                'status' => $response->status(),
-                'message' => 'Order successfully pushed to ShipRocket',
-                'data' => $response->json()
-            ];
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), $e->getCode() ?: 500);
+        if (!$order->is_confirmed) {
+            throw new \Exception('Order must be confirmed before pushing to ShipRocket', 422);
         }
     }
 
@@ -69,7 +86,7 @@ class ShipRocketService
             'billing_phone' => $address->phone,
             'shipping_is_billing' => true,
             'order_items' => $this->formatOrderItems($order->orderedItems),
-            'payment_method' => $order->payment_method,
+            'payment_method' => 'Prepaid',
             'sub_total' => $order->total_amount,
             'length' => 1,
             'breadth' => 1,
@@ -80,14 +97,16 @@ class ShipRocketService
 
     private function formatOrderItems($orderedItems): array
     {
-        return $orderedItems->map(fn($item) => [
-            'name' => $item->product->name,
-            'sku' => $item->product->name,
-            'units' => $item->quantity,
-            'selling_price' => $item->product->selling_price,
-            'discount' => 0,
-            'tax' => 0,
-            'hsn' => '1',
-        ])->toArray();
+        return $orderedItems->map(function($item) {
+            return [
+                'name' => $item->product->name,
+                'sku' => $item->product->name,
+                'units' => $item->quantity,
+                'selling_price' => $item->product->selling_price,
+                'discount' => 0,
+                'tax' => 0,
+                'hsn' => '1',
+            ];
+        })->toArray();
     }
 }

@@ -1,7 +1,6 @@
 @extends('welcome')
 @section('main')
-    <!-- Breadcrumb Section Start -->
-    <!-- Breadcrumb Section Start -->
+{{ $data }}
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
             <div class="row">
@@ -85,9 +84,61 @@
     <section class="cart-section section-b-space">
         <div class="container-fluid-lg">
             <div class="row g-sm-4 g-3">
+
                 <div class="col-xxl-9 col-lg-8">
-                    
+                    <div class="cart-table order-table order-table-2">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <tbody>
+                                    {{-- @if ($transaction->order)
+                                        @foreach ($transaction->order->ordered_items as $item)
+                                            <tr>
+                                                <td class="product-detail">
+                                                    <div class="product border-0">
+                                                        <a href="{{ route('product.show', $item->product->slug) }}"
+                                                            class="product-image">
+                                                            <img src="{{ asset('storage/' . $item->product->product_attributes[0]->images ?? '') }}"
+                                                                class="img-fluid blur-up lazyload"
+                                                                alt="{{ $item->product->name }}">
+                                                        </a>
+                                                        <div class="product-detail">
+                                                            <ul>
+                                                                <li class="name">
+                                                                    <a
+                                                                        href="{{ route('product.show', $item->product->slug) }}">{{ $item->product->name }}</a>
+                                                                </li>
+                                                                <li class="text-content">SKU: {{ $item->product->sku }}</li>
+                                                                <li class="text-content">Color:
+                                                                    {{ $item->product_attribute->hex_code }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td class="price">
+                                                    <h4 class="table-title text-content">Price</h4>
+                                                    <h6 class="theme-color">₹{{ $item->price }}</h6>
+                                                </td>
+
+                                                <td class="quantity">
+                                                    <h4 class="table-title text-content">Qty</h4>
+                                                    <h4 class="text-title">{{ $item->quantity }}</h4>
+                                                </td>
+
+                                                <td class="subtotal">
+                                                    <h4 class="table-title text-content">Total</h4>
+                                                    <h5>₹{{ $item->price * $item->quantity }}</h5>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                    @endif --}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
 
                 <div class="col-xxl-3 col-lg-4">
                     <div class="row g-4">
@@ -95,13 +146,13 @@
                             <div class="summery-box">
                                 <div class="summery-header">
                                     <h3>Price Details</h3>
-                                    <h5 class="ms-auto theme-color">({{ $transaction->order->ordered_items_count }})</h5>
+                                    {{-- <h5 class="ms-auto theme-color">({{ $transaction->order->ordered_items_count }})</h5> --}}
                                 </div>
 
                                 <ul class="summery-total">
                                     <li class="list-total">
                                         <h4>Total (INR)</h4>
-                                        <h4 class="price">{{ $transaction->order->total_amount }}</h4>
+                                        {{-- <h4 class="price">{{ $transaction->order->total_amount }}</h4> --}}
                                     </li>
                                 </ul>
                             </div>
@@ -116,11 +167,11 @@
                                 <ul class="summery-contain pb-0 border-bottom-0">
                                     <li class="d-block">
                                         <h4>
-                                            {{ $transaction->order->address->address }}
+                                            {{-- {{ $transaction->order->address->address }} --}}
                                         </h4>
                                         <h4 class="mt-2">
-                                            {{ $transaction->order->address->city }} -
-                                            {{ $transaction->order->address->state }}
+                                            {{-- {{ $transaction->order->address->city }} - --}}
+                                            {{-- {{ $transaction->order->address->state }} --}}
                                         </h4>
                                     </li>
 
@@ -143,7 +194,7 @@
                                 <ul class="summery-contain pb-0 border-bottom-0">
                                     <li class="d-block pt-0">
                                         <p class="text-content">
-                                            {{ $transaction->order->payment_method }}
+                                            {{-- {{ $transaction->order->payment_method }} --}}
                                         </p>
                                     </li>
                                 </ul>

@@ -8,17 +8,18 @@ use App\Models\Address;
 use App\Models\Cart;
 use App\Models\Transaction;
 use App\Service\PhonepeService;
-use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class CheckoutController extends Controller
 {
-
-
   private $phonepeService;
+  private const TOKEN_ENDPOINT = 'https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token';
+  private const PAYMENT_ENDPOINT = 'https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay';
+  private const STATUS_ENDPOINT = 'https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/order/';
 
   public function __construct(PhonepeService $phonepeService)
   {
@@ -27,7 +28,6 @@ class CheckoutController extends Controller
 
   public function index(Request $request)
   {
-
     $address = Address::where('user_id', auth()->user()->id)->first();
 
     if ($request->ajax()) {
@@ -52,137 +52,169 @@ class CheckoutController extends Controller
   }
 
 
-  public function getPhonePeToken()
+  public function initiatePayment(Request $request)
   {
-      $response = Http::asForm()->post('https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token', [
-          'client_id' => 'KASSHUATCRED_2503071644501134412447',
-          'client_version' => 1,
-          'client_secret' => 'YWQwYjEzYzQtYTVhZS00OGYyLWFiMGQtNTdlMjhjOWVjNmIy',
-          'grant_type' => 'client_credentials'
-      ]);
-  
-      return $response->json();
-  }
-  
-  public function checkout(Request $request)
-  {
-      try {
-          $payload = [
-              'merchantId' => 'SU2503061711515453461035',
-              'merchantTransactionId' => uniqid('txn_'),
-              'merchantUserId' => auth()->user()->id,
-              'amount' => 1 * 100,
-              'redirectUrl' => route('payment.redirect'),
-              'callbackUrl' => route('payment.callback'),
-              'paymentInstrument' => [
-                  'type' => 'PAY_PAGE',
-              ],
-          ];
-  
-          $payloadJson = json_encode($payload);
-          $base64EncodedPayload = base64_encode($payloadJson);
-          
-          $endpoint = '/pg/v2/pay';
-          $saltKey = 'df71db3d-c393-4412-9a1d-60b0990d675c';
-          $saltIndex = 1;
-  
-          $stringToHash = $base64EncodedPayload . $endpoint . $saltKey;
-          $checksum = hash('sha256', $stringToHash);
-          $xVerify = $checksum . '###' . $saltIndex;
-  
-          $response = Http::withHeaders([
-              'X-VERIFY' => $xVerify,
-              'Content-Type' => 'application/json'
-          ])->post('https://api.phonepe.com/apis/pg/checkout/v2/pay', [
-              'request' => $base64EncodedPayload
-          ]);
-  
-          $responseData = $response->json();
-  
-          if (isset($responseData['data']['instrumentResponse']['redirectInfo']['url'])) {
-              return response()->json([
-                  'success' => true, 
-                  'redirect_url' => $responseData['data']['instrumentResponse']['redirectInfo']['url']
-              ]);
-          }
-  
-          Log::error('PhonePe API Invalid Response', ['response' => $responseData]);
-          return response()->json([
-              'success' => false,
-              'message' => 'Failed to obtain redirect URL'
-          ]);
-  
-      } catch (Exception $e) {
-          Log::error('PhonePe Payment Error: ' . $e->getMessage());
-          return response()->json([
-              'success' => false,
-              'message' => 'Failed to process payment',
-              'error' => $e->getMessage()
-          ], 500);
+    try {
+
+
+      $accessToken = $this->validateToken();
+
+      $merchantOrderId = uniqid('TX');
+
+      $payload = [
+        "merchantOrderId" => $merchantOrderId,
+        "amount" => $request->total_price * 100,
+        "expireAfter" => 1200,
+        "metaInfo" => [
+          "udf1" => "Order payment",
+          "udf2" => json_encode($request->cart_data),
+          'udf3' => $request->address_id,
+        ],
+        "paymentFlow" => [
+          "type" => "PG_CHECKOUT",
+          "message" => "Payment for order",
+          "merchantUrls" => [
+            "redirectUrl" => route('payment.redirect', $merchantOrderId)
+          ]
+        ]
+      ];
+
+
+      $response = Http::withHeaders([
+        'Content-Type' => 'application/json',
+        'Authorization' => 'O-Bearer ' . $accessToken
+      ])->post(self::PAYMENT_ENDPOINT, $payload);
+
+      $responseData = $response->json();
+
+
+      if (isset($responseData['redirectUrl'])) {
+        session(['current_order_id' => $merchantOrderId]);
+
+        return response()->json([
+          'status' => true,
+          'redirect_url' => $responseData['redirectUrl'],
+          'order_id' => $responseData['orderId']
+        ]);
       }
+
+      throw new Exception('Invalid payment response');
+    } catch (Exception $e) {
+      return response()->json([
+        'status' => false,
+        'message' => 'Payment initialization failed',
+        'error' => $e->getMessage()
+      ], 500);
+    }
   }
-  
 
-
-  public function callback(Request $request)
+  private function getAccessToken()
   {
+    try {
 
-    session(['data' => 'test']);
+      $response = Http::withHeaders([
+        'Content-Type' => 'application/x-www-form-urlencoded'
+      ])->asForm()->post(self::TOKEN_ENDPOINT, [
+        'client_id' => config('services.phonePe.client_id'),
+        'client_version' => 1,
+        'client_secret' => config('services.phonePe.client_secret'),
+        'grant_type' => 'client_credentials'
+      ]);
 
-    Log::info('Callback request received');
 
-    dd($request->all());
+      $tokenData = $response->json();
+
+
+      if (!isset($tokenData['access_token'])) {
+        throw new Exception('Invalid token response');
+      }
+
+      session([
+        'phonepe_token' => $tokenData['access_token'],
+        'token_expires_at' => $tokenData['expires_at']
+      ]);
+
+      return $tokenData['access_token'];
+    } catch (Exception $e) {
+      Log::error('PhonePe Token Error: ' . $e->getMessage());
+      throw $e;
+    }
   }
 
-  public function redirect(Request $request)
+  private function validateToken()
   {
-
-    dd($request->all());
-    return view('frontend.Order.order-confirmation');
+    $expiresAt = session('token_expires_at');
+    return (!$expiresAt || Carbon::now()->timestamp >= $expiresAt)
+      ? $this->getAccessToken()
+      : session('phonepe_token');
   }
 
-  public function cashOnDelivery(StoreOrderRequest $request)
+
+
+  public function checkOrderStatus(Request $request,$merchantOrderId)
   {
 
     try {
 
-      if ($request->ajax()) {
+      // dd($request->all());
 
-        $response = $this->phonepeService->checkout($request->validated());
+      $accessToken = $this->validateToken();
 
-        return response()->json([
-          'status' => $response['status'],
-          'payment_method' => $response['payment_method'],
-          'message' => $response['message'],
-          'transaction_id' => $response['transaction_id'],
-          'redirect_url' => $response['redirect_url'],
-        ]);
-      }
+      $response = Http::withHeaders([
+        'Content-Type' => 'application/json',
+        'Authorization' => 'O-Bearer ' . $accessToken
+      ])->get(self::STATUS_ENDPOINT . $merchantOrderId . '/status');
+
+      $orderData = $response->json();
+
+      return match ($orderData['state']) {
+        'COMPLETED' => $this->handleCompletedPayment($orderData),
+        'PENDING' => $this->handlePendingPayment($orderData),
+        'FAILED' => $this->handleFailedPayment($orderData),
+        default => throw new Exception('Invalid payment state received')
+      };
     } catch (Exception $e) {
-      return response()->json([
-        'success' => false,
-        'message' => $e->getMessage(),
-        'error' => 'Failed to process cash on delivery payment'
-      ]);
+      return [
+        'status' => false,
+        'message' => 'Failed to check payment status',
+        'error' => $e->getMessage()
+      ];
     }
   }
 
-
-  public function orderPlaced($transaction_id)
+  private function handleCompletedPayment($orderData)
   {
 
-    $transaction = Transaction::query()
-      ->with([
-        'order' => fn($query) => $query->with([
-          'address',
-          'orderedItems' => fn($query) => $query->with([
-            'product' => fn($query) => $query->with('productAttributes')
-          ])
-        ])->withCount('orderedItems')
-      ])
-      ->where('transaction_id', $transaction_id)->first();
+
+    $data = $this->phonepeService->processSuccessfulPayment($orderData);
 
 
-    return view('frontend.Order.order-confirmation', compact('transaction'));
+    return view('frontend.Order.order-confirmation', compact('data'));
+  }
+
+  private function handlePendingPayment($orderData)
+  {
+
+    dd('pending');
+
+    return [
+      'status' => 'pending',
+      'message' => 'Payment is being processed',
+      'data' => $orderData,
+      'expires_at' => $orderData['expireAt']
+    ];
+  }
+
+  private function handleFailedPayment($orderData): array
+  {
+
+    dd('failed');
+
+    return [
+      'status' => false,
+      'message' => 'Payment failed',
+      'data' => $orderData,
+      'transaction' => $transaction
+    ];
   }
 }

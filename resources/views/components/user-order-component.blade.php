@@ -18,23 +18,7 @@
                         <div class="order-icon">
                             <i data-feather="box"></i>
                         </div>
-                        @if ($order->status == 'Cancelled')
-                            <div class="text-danger">
-                                <h4>Delivery <span>{{ $order->status }}</span></h4>
-                            </div>
-                        @elseif ($order->status == 'Delivered')
-                            <div class=" text-light">
-                                <h4>Delivery <span>{{ $order->status }}</span></h4>
-                            </div>
-                        @elseif ($order->status == 'Pending')
-                            <div class=" text-danger">
-                                <h4>Delivery <span>{{ $order->status }}</span></h4>
-                            </div>
-                        @else
-                            <div class="text-success">
-                                <h4>Delivery <span>{{ $order->status }}</span></h4>
-                            </div>
-                        @endif
+                                <h4>Order <span>{{ $order->order_message }}</span></h4>
                     </div>
 
                     <div class="product-order-detail">

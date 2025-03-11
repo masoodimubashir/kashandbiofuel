@@ -18,7 +18,9 @@ class Order extends Model
         'is_delivered',
         'is_confirmed',
         'transaction_id',
-        'payment_method'
+        'order_message',
+        'is_shipped',
+        'tracking_id',
     ];
 
 
@@ -29,6 +31,7 @@ class Order extends Model
             'is_cancelled' => 'boolean',
             'is_delivered' => 'boolean',
             'is_confirmed' => 'boolean',
+            'is_shipped' => 'boolean',
         ];
     }
 
@@ -57,15 +60,19 @@ class Order extends Model
     public function getStatusAttribute()
     {
         if ($this->is_cancelled) {
-            return 'Cancelled';
+            return 'CANCELLED';
         }
 
         if ($this->is_delivered) {
-            return 'Delivered';
+            return 'DELIVERED';
         }
 
         if ($this->is_confirmed) {
-            return 'Confirmed';
+            return 'CONFIRMED';
+        }
+
+        if ($this->is_shipped) {
+            return 'SHIPPED';
         }
 
         return 'Pending';

@@ -216,6 +216,9 @@ trait HelperClass
             'contact_number' => $order->address->user->contact_number ?? null,
             'pincode' => $order->address->pin_code ?? null,
             'payment_method' => $order->payment_method ?? null,
+            'order_message' => strtoupper($order->order_message) ?? null,
+            'tracking_id' => $order->tracking_id ?? 'NA',
+            'is_shipped' => $order->is_shipped ?? null,
 
             'orderedItems' => collect($order->orderedItems)->map(function ($item) {
                 // Get all product attributes for the product

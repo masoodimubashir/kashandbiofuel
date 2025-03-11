@@ -28,24 +28,22 @@ class OrderController extends Controller
     public function index(Request $request)
     {
 
-
         if ($request->ajax()) {
-
 
             $orders = Order::query()
                 ->with(['user', 'address'])
-                ->when($request->status, function ($q) use ($request) {
-                    list($status, $value) = explode('-', $request->status);
+                // ->when($request->status, function ($q) use ($request) {
+                //     list($status, $value) = explode('-', $request->status);
 
-                    $value = filter_var($value, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+                //     $value = filter_var($value, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
 
-                    return match ($status) {
-                        'cancelled' => $q->where('is_cancelled', $value),
-                        'confirmed' => $q->where('is_confirmed', $value),
-                        'delivered' => $q->where('is_delivered', $value),
-                        default => $q,
-                    };
-                })
+                //     return match ($status) {
+                //         'cancelled' => $q->where('is_cancelled', $value),
+                //         'confirmed' => $q->where('is_confirmed', $value),
+                //         'delivered' => $q->where('is_delivered', $value),
+                //         default => $q,
+                //     };
+                // })
                 ->when($request->price_range, function ($q) use ($request) {
                     list($min, $max) = explode('-', $request->price_range);
                     if ($max === 'above') {
@@ -53,7 +51,6 @@ class OrderController extends Controller
                     }
                     return $q->whereBetween('total_amount', [$min, $max]);
                 });
-
 
             try {
 
@@ -154,6 +151,7 @@ class OrderController extends Controller
         ])->find($id);
 
         $order = $this->transformOrder($order);
+
 
         return view('layouts.dashboard.Order.view-order', compact('order'));
     }

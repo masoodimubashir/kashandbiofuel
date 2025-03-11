@@ -40,9 +40,8 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI')
     ],
     'phonePe' => [
-        'merchantId' => env('PHONEPE_MERCHANT_ID'),
-        'salt_key' => env('PHONEPE_SALT_KEY'),
-        'redirect_url' => env('PHONEPE_REDIRECT_URL'),
+        'client_id' => env('PHONEPE_CLIENT_ID'),
+        'client_secret' => env('PHONEPE_CLIENT_SECRET'),
     ],
     'shiprocket' => [
         'api_key' => env('SHIPROCKET_API_KEY'),

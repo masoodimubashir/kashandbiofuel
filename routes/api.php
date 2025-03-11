@@ -8,6 +8,6 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 
-Route::get('/phonepe-test', function () {
-    dd('test');
+Route::get('/phonepe-test', function (Request $request) {
+   dd($request->all());
 });
