@@ -1,8 +1,6 @@
 @extends('welcome')
 
 @section('main')
-   
-
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
         <div class="container-fluid-lg">
@@ -28,18 +26,16 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Order Detail Section Start -->
-    <section class="order-detail">
+    <section class="order-detail mb-5">
         <div class="container-fluid-lg">
             <div class="row g-sm-4 g-3">
                 <div class="col-xxl-3 col-xl-4 col-lg-6">
                     <div class="order-image text-center">
-                        <img src="{{ asset('front/assets/images/delivery-truck.svg') }}" 
-                             class="img-fluid blur-up lazyload" 
-                             alt="Delivery Status"
-                             style="max-width: 250px">
+                        <img src="{{ asset('front/assets/images/delivery-truck.svg') }}" class="img-fluid blur-up lazyload"
+                            alt="Delivery Status" style="max-width: 250px">
                     </div>
                 </div>
-                
+
 
                 <div class="col-xxl-9 col-xl-8 col-lg-6">
                     <div class="row g-sm-4 g-3">
@@ -50,8 +46,8 @@
                                 </div>
 
                                 <div class="order-details-name">
-                                    <h5 class="text-content">Tracking Code</h5>
-                                    <h2 class="theme-color">MH4285UY</h2>
+                                    <h5 class="text-content">Order ID</h5>
+                                    <h2 class="theme-color">{{ $order->custom_order_id }}</h2>
                                 </div>
                             </div>
                         </div>
@@ -77,8 +73,8 @@
                                 </div>
 
                                 <div class="order-details-name">
-                                    <h5 class="text-content">Package Info</h5>
-                                    <h4>Letter</h4>
+                                    <h5 class="text-content">Transaction ID</h5>
+                                    <h4>{{ $order->transaction->transaction_id }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +100,8 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">Destination</h5>
-                                    <h4>Flokagata 24, 105 Reykjavik, Iceland</h4>
+                                    <h4>{{ $order->address->address }}, {{ $order->address->state }} ,
+                                        {{ $order->address->city }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -124,28 +121,31 @@
 
                         <div class="col-12 overflow-hidden">
                             <ol class="progtrckr">
-                                <li class="progtrckr-done">
+                                <li class="progtrckr-{{ $order->is_confirmed ? 'done' : 'todo' }}">
                                     <h5>Order Processing</h5>
-                                    <h6>05:43 AM</h6>
                                 </li>
-                                <li class="progtrckr-done">
-                                    <h5>Pre-Production</h5>
-                                    <h6>01:21 PM</h6>
+
+                                <li
+                                    class="progtrckr-{{ $order->is_confirmed && !$order->is_cancelled ? 'done' : 'todo' }}">
+                                    <h5>Order Placed</h5>
                                 </li>
-                                <li class="progtrckr-done">
-                                    <h5>In Production</h5>
-                                    <h6>Processing</h6>
+
+                                <li
+                                    class="progtrckr-{{ $order->transaction_id && !$order->is_cancelled ? 'done' : 'todo' }}">
+                                    <h5>Payment</h5>
+
                                 </li>
-                                <li class="progtrckr-todo">
+
+                                <li class="progtrckr-{{ $order->is_shipped ? 'done' : 'todo' }}">
                                     <h5>Shipped</h5>
-                                    <h6>Pending</h6>
                                 </li>
-                                <li class="progtrckr-todo">
+
+                                <li class="progtrckr-{{ $order->is_delivered ? 'done' : 'todo' }}">
                                     <h5>Delivered</h5>
-                                    <h6>Pending</h6>
                                 </li>
                             </ol>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -154,7 +154,7 @@
     <!-- Order Detail Section End -->
 
     <!-- Order Table Section Start -->
-    <section class="order-table-section section-b-space">
+    {{-- <section class="order-table-section section-b-space">
         <div class="container-fluid-lg">
             <div class="row">
                 <div class="col-12">
@@ -202,6 +202,6 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Order Table Section End -->
 @endsection

@@ -18,9 +18,6 @@
             </div>
         </form>
 
-
-
-
         <div class="tab-pane fade show active" id="pills-data" role="tabpanel">
             <div class="download-table">
                 <div class="table-responsive">

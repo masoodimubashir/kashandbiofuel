@@ -20,29 +20,30 @@ class OrderRevenueChart extends Chart
 
     public function makeChart()
     {
-        // Get revenue data for last 12 months
-        $today = Carbon::today();
-        $lastYear = Carbon::today()->subYear();
-
         $revenueData = Order::where('is_confirmed', 1)
-            ->whereBetween('created_at', [$lastYear, $today])
-            ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, SUM(total_amount) as revenue')
-            ->groupBy('year', 'month')
-            ->orderBy('year')
+            ->whereYear('created_at', Carbon::now()->year)
+            ->selectRaw('MONTH(created_at) as month, SUM(total_amount) as revenue')
+            ->groupBy('month')
             ->orderBy('month')
             ->get();
 
-        // Prepare labels and data
-        $labels = [];
-        $data = [];
+        // Initialize array with all months
+        $monthlyRevenue = array_fill(1, 12, 0);
 
+        // Fill in actual revenue data
         foreach ($revenueData as $record) {
-            $monthName = Carbon::create()->month($record->month)->format('F');
-            $labels[] = $monthName . ' ' . $record->year;
-            $data[] = $record->revenue;
+            $monthlyRevenue[$record->month] = $record->revenue;
         }
 
-        // Set chart options
+        // Create labels and data arrays for chart
+        $labels = [];
+        $data = [];
+        for ($month = 1; $month <= 12; $month++) {
+            $labels[] = Carbon::create()->month($month)->format('F');
+            $data[] = $monthlyRevenue[$month];
+        }
+
+        // Set chart configuration
         $this->options([
             'responsive' => true,
             'scales' => [
@@ -54,12 +55,12 @@ class OrderRevenueChart extends Chart
             ]
         ]);
 
-        // Set chart labels and data
         $this->labels($labels);
         $this->dataset('Monthly Revenue', 'line', $data)
             ->color('#36A2EB')
             ->fill(false)
             ->linetension(0.3);
+
 
         return $this;
     }

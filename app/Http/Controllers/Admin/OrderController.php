@@ -32,18 +32,22 @@ class OrderController extends Controller
 
             $orders = Order::query()
                 ->with(['user', 'address'])
-                // ->when($request->status, function ($q) use ($request) {
-                //     list($status, $value) = explode('-', $request->status);
+                ->when($request->status, function ($query) use ($request) {
+                    list($status, $value) = explode('-', $request->status);
 
-                //     $value = filter_var($value, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+                    return match ($status) {
+                        'shipped' => $query->where('is_shipped', true)
+                                          ->where('is_confirmed', true),
+                        'confirmed' => $query->where('is_confirmed', true)
+                                            ->where('is_shipped', false),
+                        'pending' => $query->where('is_confirmed', false)
+                                          ->where('is_cancelled', false),
+                        'cancelled' => $query->where('is_cancelled', true),
+                        default => $query
+                    };
+                    
+                })
 
-                //     return match ($status) {
-                //         'cancelled' => $q->where('is_cancelled', $value),
-                //         'confirmed' => $q->where('is_confirmed', $value),
-                //         'delivered' => $q->where('is_delivered', $value),
-                //         default => $q,
-                //     };
-                // })
                 ->when($request->price_range, function ($q) use ($request) {
                     list($min, $max) = explode('-', $request->price_range);
                     if ($max === 'above') {
@@ -86,6 +90,8 @@ class OrderController extends Controller
                                 <option value="is_confirmed" ' . ($order->is_confirmed ? 'selected' : '') . '>Confirmed</option>
                                 <option value="is_delivered" ' . ($order->is_delivered ? 'selected' : '') . '>Delivered</option>
                                 <option value="is_cancelled" ' . ($order->is_cancelled ? 'selected' : '') . '>Cancelled</option>
+                                <option value="is_cancelled" ' . ($order->is_cancelled ? 'selected' : '') . '>Cancelled</option>
+
                             </select>
                         ';
                     })
@@ -200,7 +206,7 @@ class OrderController extends Controller
             }
 
             if ($validatedData['value'] == 1) {
-                $fieldsToReset = ['is_cancelled', 'is_delivered', 'is_confirmed'];
+                $fieldsToReset = ['is_cancelled', 'is_delivered', 'is_confirmed',];
 
                 $fieldsToReset = array_filter($fieldsToReset, function ($field) use ($validatedData) {
                     return $field !== $validatedData['field'];

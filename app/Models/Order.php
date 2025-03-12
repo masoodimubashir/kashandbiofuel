@@ -59,24 +59,24 @@ class Order extends Model
 
     public function getStatusAttribute()
     {
-        if ($this->is_cancelled) {
-            return 'CANCELLED';
+        switch (true) {
+            case $this->is_cancelled:
+                return 'CANCELLED';
+                
+            case $this->is_delivered && $this->is_confirmed && $this->is_shipped:
+                return 'DELIVERED';
+                
+            case $this->is_shipped && $this->is_confirmed:
+                return 'SHIPPED';
+                
+            case $this->is_confirmed:
+                return 'CONFIRMED';
+                
+            default:
+                return 'PENDING';
         }
-
-        if ($this->is_delivered) {
-            return 'DELIVERED';
-        }
-
-        if ($this->is_confirmed) {
-            return 'CONFIRMED';
-        }
-
-        if ($this->is_shipped) {
-            return 'SHIPPED';
-        }
-
-        return 'Pending';
     }
+    
 
     public function getYestardayDateAttribute()
     {

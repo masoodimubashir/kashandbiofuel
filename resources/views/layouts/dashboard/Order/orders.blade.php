@@ -70,12 +70,14 @@
 
                                     <div class="col">
                                         <select class="form-select product-filter" id="status-select">
-                                            <option selected value="">Status</option>
+                                            <option value="">All Orders</option>
+                                            <option value="pending-0">Pending</option>
                                             <option value="cancelled-1">Cancelled</option>
                                             <option value="confirmed-1">Confirmed</option>
-                                            <option value="delivered-1">Delivered</option>
+                                            <option value="shipped-1">Shipped</option>
                                         </select>
                                     </div>
+                                    
 
                                     <div class="col">
                                         <select class="form-select product-filter" id="price-select">
@@ -131,8 +133,7 @@
                         url: '{{ route('order.index') }}',
                         type: 'GET',
                     },
-                    columns: [
-                        {
+                    columns: [{
                             data: 'status',
                             name: 'status',
                             orderable: false,
@@ -159,7 +160,11 @@
                             data: 'total_amount',
                             name: 'total_amount'
                         },
-                      
+                        {
+                            data: 'action',
+                            name: 'action',
+                        }
+
                     ]
                 });
 
@@ -198,12 +203,9 @@
 
 
                 $('.product-filter').on('change', function() {
-                    let status = $('#status-select').val();
-                    let priceRange = $('#price-select').val();
-
                     ordersTable.ajax.url('{{ route('order.index') }}?' + $.param({
-                        price_range: priceRange,
-                        status: status
+                        price_range: $('#price-select').val(),
+                        status: $('#status-select').val()
                     })).load();
                 });
 

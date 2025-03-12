@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->string('custom_order_id')->unique();
             $table->string('transaction_id')->unique();
             $table->unsignedBigInteger('total_amount');
-            // $table->enum('payment_method', ['cod', 'online']);
             $table->date('date_of_purchase');
             $table->boolean('is_cancelled')->default(0);
             $table->boolean('is_delivered')->default(0);
