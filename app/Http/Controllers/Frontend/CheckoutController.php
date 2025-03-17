@@ -105,11 +105,10 @@ class CheckoutController extends Controller
     try {
       $accessToken = $this->phonePeHelper->validateToken();
 
-      dd($accessToken);
-
       $orderData = $this->phonePeHelper->fetchOrderStatus($accessToken, $merchantOrderId);
 
       return $this->handleOrderStatus($orderData);
+
     } catch (Exception $e) {
       Log::error('Order Status Check Error: ' . $e->getMessage());
       return $this->phonePeHelper->formatErrorResponse('Failed to check payment status');
