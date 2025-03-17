@@ -82,7 +82,7 @@ class CheckoutController extends Controller
 
     return [
       "merchantOrderId" => $merchantOrderId,
-      "amount" => 1 * 100,
+      "amount" => $request->total_price * 100,
       "metaInfo" => [
         "udf1" => "Order payment",
         "udf2" => json_encode($request->cart_data),
