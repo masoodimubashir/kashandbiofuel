@@ -36,7 +36,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="{{ route('admin.dashboard') }}">
-                            <i data-feather="home"></i>
+                            <i class="fa fa-home"></i>
                         </a>
                     </li>
                     <li class="breadcrumb-item {{ Request::routeIs('order.index') ? 'active' : '' }}">
@@ -54,7 +54,9 @@
                 <div class="card p-3">
 
                     <div class="list-product-header">
+
                         <div>
+                            
                             <div class="light-box">
                                 <a data-bs-toggle="collapse" href="#collapseProduct" role="button"
                                     aria-expanded="false" aria-controls="collapseProduct">
@@ -88,6 +90,7 @@
                                             <option value="10001-above">10001 and above</option>
                                         </select>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -160,10 +163,7 @@
                             data: 'total_amount',
                             name: 'total_amount'
                         },
-                        {
-                            data: 'action',
-                            name: 'action',
-                        }
+                       
 
                     ]
                 });

@@ -6,6 +6,7 @@ use App\Events\OrderShippedEvent;
 use App\Models\Order;
 use Http;
 use Illuminate\Support\Facades\Mail;
+use Log;
 
 class ShipRocketService
 {
@@ -13,33 +14,33 @@ class ShipRocketService
     
     public function pushOrder(Order $order)
     {
-        // $this->validateOrder($order);
+        $this->validateOrder($order);
         
-        // $token = $this->getToken();
-        // $orderData = $this->prepareOrderData($order);
+        $token = $this->getToken();
+
+        $orderData = $this->prepareOrderData($order);
         
-        // $response = Http::withToken($token)
-        //     ->post(self::API_BASE_URL . 'orders/create/adhoc', $orderData);
+        $response = Http::withToken($token)
+            ->post(self::API_BASE_URL . 'orders/create/adhoc', $orderData);
             
-        // if ($response->failed()) {
-        //     throw new \Exception('ShipRocket API request failed: ' , 422);
-        // }
+        if ($response->failed()) {
+            Log::error(''. $response);
+            throw new \Exception('ShipRocket API request failed: ' , 422);
+        }
 
-        // $order->update([
-        //     'is_shipped' => true,
-        //     'order_message' => 'Shipped'
-        // ]);
-
-
+        $order->update([
+            'is_shipped' => true,
+            'order_message' => 'Shipped'
+        ]);
 
         event(new OrderShippedEvent($order));
 
 
-        // return [
-        //     'status' => $response->status(),
-        //     'message' => 'Order successfully pushed to ShipRocket',
-        //     'data' => $response->json()
-        // ];
+        return [
+            'status' => $response->status(),
+            'message' => 'Order successfully pushed to ShipRocket',
+            'data' => $response->json()
+        ];
     }
 
     private function validateOrder(Order $order): void 
@@ -100,7 +101,7 @@ class ShipRocketService
         return $orderedItems->map(function($item) {
             return [
                 'name' => $item->product->name,
-                'sku' => $item->product->name,
+                'sku' => $item->id,
                 'units' => $item->quantity,
                 'selling_price' => $item->product->selling_price,
                 'discount' => 0,

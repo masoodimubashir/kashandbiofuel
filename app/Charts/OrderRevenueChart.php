@@ -20,7 +20,7 @@ class OrderRevenueChart extends Chart
 
     public function makeChart()
     {
-        $revenueData = Order::where('is_confirmed', 1)
+        $revenueData = Order::where('is_shipped', 1)
             ->whereYear('created_at', Carbon::now()->year)
             ->selectRaw('MONTH(created_at) as month, SUM(total_amount) as revenue')
             ->groupBy('month')
@@ -56,7 +56,7 @@ class OrderRevenueChart extends Chart
         ]);
 
         $this->labels($labels);
-        $this->dataset('Monthly Revenue', 'line', $data)
+        $this->dataset('Monthly Revenue', 'bar', $data)
             ->color('#36A2EB')
             ->fill(false)
             ->linetension(0.3);

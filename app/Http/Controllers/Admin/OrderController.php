@@ -37,15 +37,14 @@ class OrderController extends Controller
 
                     return match ($status) {
                         'shipped' => $query->where('is_shipped', true)
-                                          ->where('is_confirmed', true),
+                            ->where('is_confirmed', true),
                         'confirmed' => $query->where('is_confirmed', true)
-                                            ->where('is_shipped', false),
+                            ->where('is_shipped', false),
                         'pending' => $query->where('is_confirmed', false)
-                                          ->where('is_cancelled', false),
+                            ->where('is_cancelled', false),
                         'cancelled' => $query->where('is_cancelled', true),
                         default => $query
                     };
-                    
                 })
 
                 ->when($request->price_range, function ($q) use ($request) {
@@ -59,43 +58,31 @@ class OrderController extends Controller
             try {
 
                 return DataTables::eloquent($orders)
-                    ->addColumn('status', function ($order) {
-
-                        $badgeClass = match ($order->status) {
-                            'Confirmed', 'Delivered' => 'bg-success-subtle text-success-emphasis border-success-subtle',
-                            'Cancelled' => 'bg-danger-subtle text-danger-emphasis border-danger-subtle',
-                            default => 'bg-warning-subtle text-warning-emphasis border-warning-subtle',
-                        };
-
-                        $statusDropdown = '<div class="badge ' . $badgeClass . ' rounded-pill">' . $order->status . '</div>';
-
-                        $showButton = '<a href="' . route('order.show', $order->id) . '">
-                             <i style="cursor:pointer;" class="fa-regular fa-eye fs-5 text-success me-3 showBtn" title="Show"></i>
-                        </a>';
-
-                        return '<div class="d-flex align-items-center justify-content-left gap-3">
-                             ' . $statusDropdown . $showButton . '
-                         </div>';
-                    })
+                ->addColumn('status', function ($order) {
+                    $badgeClass = match ($order->status) {
+                        'Confirmed', 'Delivered' => 'bg-success-subtle text-success-emphasis border-success-subtle',
+                        'Cancelled' => 'bg-danger-subtle text-danger-emphasis border-danger-subtle',
+                        default => 'bg-warning-subtle text-warning-emphasis border-warning-subtle',
+                    };
+                    
+                    $statusDropdown = '<div class="badge ' . $badgeClass . ' rounded-pill">' . $order->status . '</div>';
+                    
+                    $showButton = '<a href="' . route('order.show', $order->id) . '">
+                        <i style="cursor:pointer;" class="fa-regular fa-eye fs-5 text-success me-3 showBtn" title="Show"></i>
+                    </a>';
+                    
+                    return '<div class="d-flex align-items-center justify-content-left gap-3">
+                        ' . $statusDropdown . $showButton . '
+                    </div>';
+                })
                     ->addColumn('user_name', function ($order) {
                         return $order->user ? $order->user->name : 'N/A';
                     })
                     ->addColumn('address', function ($order) {
                         return $order->address ? $order->address->address : 'N/A';
                     })
-                    ->addColumn('action', function ($order) {
-                        return '
-                            <select class="form-select form-select-sm changeStatus" style="cursor:pointer" data-id="' . $order->id . '">
-                                <option selected disabled>Choose Action</option>
-                                <option value="is_confirmed" ' . ($order->is_confirmed ? 'selected' : '') . '>Confirmed</option>
-                                <option value="is_delivered" ' . ($order->is_delivered ? 'selected' : '') . '>Delivered</option>
-                                <option value="is_cancelled" ' . ($order->is_cancelled ? 'selected' : '') . '>Cancelled</option>
-                                <option value="is_cancelled" ' . ($order->is_cancelled ? 'selected' : '') . '>Cancelled</option>
 
-                            </select>
-                        ';
-                    })
-                    ->rawColumns(['status', 'action'])
+                    ->rawColumns(['status'])
                     ->orderColumn('created_at', 'created_at $1')
                     ->make(true);
             } catch (Exception $e) {
@@ -153,7 +140,8 @@ class OrderController extends Controller
             'address' => function ($query) {
                 $query->with('user');
             },
-            'transaction'
+            'transaction',
+            'refund'
         ])->find($id);
 
         $order = $this->transformOrder($order);
@@ -176,27 +164,13 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $validatedData = $request->validate([
             'field' => 'required|string|in:is_cancelled,is_delivered,is_confirmed',
             'value' => 'required|boolean',
         ]);
 
         try {
-
-
-            $order = Order::with([
-                'orderedItems' => function ($query) {
-                    $query->with('product', function ($query) {
-                        $query->with('productAttributes');
-                    });
-                },
-                'address' => function ($query) {
-                    $query->with('user');
-                },
-                'transaction'
-            ])->find($id);
-
+            $order = Order::find($id);
 
             if (!$order) {
                 return response()->json([
@@ -207,47 +181,34 @@ class OrderController extends Controller
 
             if ($validatedData['value'] == 1) {
                 $fieldsToReset = ['is_cancelled', 'is_delivered', 'is_confirmed',];
-
                 $fieldsToReset = array_filter($fieldsToReset, function ($field) use ($validatedData) {
                     return $field !== $validatedData['field'];
                 });
-
                 foreach ($fieldsToReset as $field) {
                     $order->{$field} = 0;
                 }
             }
 
-            $order->{$validatedData['field']} = $validatedData['value'];
-            $order->save();
 
-            if ($validatedData['field'] === 'is_confirmed' && $order->save()) {
+            if (($validatedData['field'] === 'is_delivered')) {
 
-                event(new OrderPlacedEvent($order));
+                $order->is_delivered = $validatedData['value'];
 
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Order confirmed successfully'
-                ]);
-            }
+                $order->order_message = 'Delivered';
 
-            if (($validatedData['field'] === 'is_cancelled') && $order->save()) {
-
-                $this->orderService->cancelOrder($order);
+                $order->save();
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'Order cancelled successfully',
-                    'redirect_url' => route('order.index')
+                    'message' => 'Order marked as delivered successfully'
                 ]);
             }
-
 
             return response()->json([
                 'status' => true,
                 'message' => 'Field updated successfully.',
             ]);
         } catch (Exception $e) {
-
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update status. ',

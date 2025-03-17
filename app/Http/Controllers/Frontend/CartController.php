@@ -43,12 +43,19 @@ class CartController extends Controller
         try {
 
 
-            $product = Cart::query()
-                ->where([
-                    'product_id' => $request->product_id,
-                    'product_attribute_id' => $request->product_attribute_id,
-                    // 'user_id' => auth()->user()->id,
-                ])->first();
+            $product =  Cart::query()
+                ->where(function ($query) {
+                    if (auth()->check()) {
+                        $query->where('user_id', auth()->user()->id);
+                    }
+                })
+                ->orWhere(function ($query) {
+                    if (isset($_COOKIE['guest_id']) || session()->has('guest_id')) {
+                        $guestId = $_COOKIE['guest_id'] ?? session()->get('guest_id');
+                        $query->where('guest_id', $guestId);
+                    }
+                })
+                ->first();
 
             if ($product) {
                 return response()->json([
@@ -149,7 +156,7 @@ class CartController extends Controller
                 'product_attribute_id' => $request->product_attribute_id,
             ])->first();
 
-        
+
             if ($wish_list_item) {
                 return response()->json([
                     'status' => false,

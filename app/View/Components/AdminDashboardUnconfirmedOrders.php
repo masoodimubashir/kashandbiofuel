@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Models\Order;
 use App\Models\OrderedItem;
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -17,18 +18,8 @@ class AdminDashboardUnconfirmedOrders extends Component
      */
     public function __construct()
     {
-        $this->unConfirmedOrders = OrderedItem::query()
-        ->with([
-            'product' => fn($query) => ($query->with('productAttribute')),
-            'order' => fn($query) => ($query->where('is_confirmed', 1))
-        ])
-        ->whereHas('order', function($query) {
-            $query->where([
-                'is_confirmed' => 0,
-                'is_delivered' => 0,
-                'is_cancelled' => 0
-            ]);
-        })
+        $this->unConfirmedOrders = Order::query()
+        ->where('is_confirmed', 0)
         ->latest()
         ->take(5)
         ->get();

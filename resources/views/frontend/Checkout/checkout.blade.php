@@ -89,59 +89,7 @@
                                 </li>
 
 
-                                <li>
-                                    <div class="checkout-icon">
-                                        <lord-icon target=".nav-item" src="https://cdn.lordicon.com/qmcsqnle.json"
-                                            trigger="loop-on-hover" colors="primary:#0baf9a,secondary:#0baf9a"
-                                            class="lord-icon">
-                                        </lord-icon>
-                                    </div>
-                                    <div class="checkout-box">
-                                        <div class="checkout-title">
-                                            <h4>Payment Option</h4>
-                                        </div>
 
-                                        <div class="checkout-detail">
-                                            <div class="accordion accordion-flush custom-accordion"
-                                                id="accordionFlushExample">
-
-                                                <div class="accordion-item col-md-6">
-                                                    <div class="accordion-header" id="flush-headingFour">
-                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseFour">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="cash">
-                                                                    <input class="form-check-input mt-0" type="radio"
-                                                                        value="cod" name="flexRadioDefault"
-                                                                        id="cash" checked>
-                                                                    Cash On Delivery
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="accordion-item col-md-6">
-                                                    <div class="accordion-header" id="flush-headingOne">
-                                                        <div class="accordion-button collapsed" data-bs-toggle="collapse"
-                                                            data-bs-target="#flush-collapseOne">
-                                                            <div class="custom-form-check form-check mb-0">
-                                                                <label class="form-check-label" for="credit"><input
-                                                                        class="form-check-input mt-0" type="radio"
-                                                                        value="online" name="flexRadioDefault"
-                                                                        id="credit">
-                                                                    Pay Online
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -175,8 +123,8 @@
 
                             </ul>
                         </div>
-                        <a  id="placeOrderButton"
-                            class="btn theme-bg-color text-white btn-md w-100 mt-4 mb-4 fw-bold">Place Order
+                        <a id="placeOrderButton" class="btn theme-bg-color text-white btn-md w-100 mt-4 mb-4 fw-bold">Place
+                            Order
                         </a>
 
                         <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0  w-100" data-bs-toggle="modal"
@@ -273,6 +221,7 @@
     @push('frontend.scripts')
         <script>
             $(document).ready(function() {
+
                 const urlParams = new URLSearchParams(window.location.search);
                 const cartData = JSON.parse(urlParams.get('cart_data'));
                 const checkoutPrice = urlParams.get('checkout_price');
@@ -280,8 +229,7 @@
                 const config = {
                     urls: {
                         checkout: "{{ route('checkout.index') }}",
-                        phonepe: "{{ route('checkout.phonepe.store') }}",
-                        cashOnDelivery: "{{ route('checkout.cash-on-delivery') }}"
+                        phonepe: "{{ route('checkout.phonepe.store') }}"
                     },
                     cartData: {
                         data: cartData,
@@ -289,13 +237,14 @@
                     }
                 };
 
+
                 const elements = {
                     summaryContainer: $('#summery-contain'),
                     totalPriceElement: $('#cart-total-price'),
                     placeOrderButton: $('#placeOrderButton'),
-                    paymentMethod: $('input[name="flexRadioDefault"]'),
                     addressInput: $('input[name="address"]')
                 };
+
 
                 const templates = {
                     cartItem: (item) => {
@@ -361,20 +310,14 @@
                 };
 
                 const orderProcessor = {
-
                     validateOrder: () => {
                         const selectedAddress = elements.addressInput.filter(':checked').val();
-
-                        const paymentMethod = elements.paymentMethod.filter(':checked').val();
 
                         if (!selectedAddress || selectedAddress === undefined) {
                             utils.showError('Error', 'Please select an address to continue.');
                             return false;
                         }
-                        if (!paymentMethod || paymentMethod === undefined) {
-                            utils.showError('Error', 'Please select a payment method to continue.');
-                            return false;
-                        }
+
                         if (!config.cartData.totalPrice) {
                             utils.showError('Error', 'Please add items to cart to continue.');
                             return false;
@@ -383,19 +326,17 @@
                         return true;
                     },
 
-                    processOrder: (paymentMethod) => {
+                    processOrder: () => {
                         const orderData = {
                             cart_data: config.cartData.data,
                             total_price: config.cartData.totalPrice,
                             address_id: elements.addressInput.filter(':checked').val(),
-                            payment_method: paymentMethod
                         };
 
-                        const url = paymentMethod === 'online' ? config.urls.phonepe : config.urls
-                            .cashOnDelivery;
+
 
                         $.ajax({
-                            url: url,
+                            url: config.urls.phonepe,
                             type: "POST",
                             data: orderData,
                             headers: {
@@ -403,7 +344,6 @@
                             },
                             beforeSend: () => utils.updateButton(true),
                             success: (response) => {
-
                                 if (response.status) {
                                     window.location.href = response.redirect_url;
                                 } else {
@@ -415,6 +355,7 @@
                         });
                     }
                 };
+
 
                 const utils = {
                     showError: (title, message) => Swal.fire(title, message, 'error'),
@@ -428,10 +369,10 @@
                 elements.placeOrderButton.on('click', function(e) {
                     e.preventDefault();
                     if (orderProcessor.validateOrder()) {
-                        const paymentMethod = elements.paymentMethod.filter(':checked').val();
-                        orderProcessor.processOrder(paymentMethod);
+                        orderProcessor.processOrder();
                     }
                 });
+
 
                 cartActions.fetchSummary();
 
@@ -498,6 +439,8 @@
                         }
                     });
                 });
+
+
             });
         </script>
     @endpush

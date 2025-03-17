@@ -19,9 +19,11 @@ return new class extends Migration {
             $table->boolean('is_delivered')->default(0);
             $table->boolean('is_confirmed')->default(0);
             $table->boolean('is_shipped')->default(0);
+            $table->boolean('is_pending')->default(0);
             $table->string('order_message');
             $table->string('tracking_id')->nullable();
             $table->timestamps();
+
         });
     }
 

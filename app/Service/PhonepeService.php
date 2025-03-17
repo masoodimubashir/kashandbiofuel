@@ -62,17 +62,20 @@ class PhonepeService
 
     private function createTransaction($orderData)
     {
+
         return Transaction::create([
             'user_id' => auth()->user()->id,
-            'amount' => $orderData['amount'],
+            'amount' => $orderData['amount'] / 100,
             'status' => true,
             'payment_method' => 'phonepe',
-            'transaction_id' => $orderData['paymentDetails'][0]['transactionId'],
-            'payment_details' => json_encode($orderData['paymentDetails'])
+            'transaction_id' => $orderData['metaInfo']['udf4'],
+            'payment_details' => json_encode($orderData['paymentDetails']),
+            'phonepe_transaction_id' => $orderData['paymentDetails'][0]['transactionId'],
+            'payment_date' => now(),
         ]);
     }
 
-    private function createOrder($orderData, $transaction)
+    private function createOrder($orderData, $transaction): Order
     {
 
 
@@ -86,11 +89,10 @@ class PhonepeService
             'total_amount' => $transaction->amount,
             'date_of_purchase' => now(),
             'transaction_id' => $transaction->id,
-            'is_confirmed' => true,
+            'is_confirmed' => 1,
             'payment_method' => 'phonepe',
-            'order_message' => 'placed'
+            'order_message' => 'confirmed'
         ]);
-
 
 
         foreach ($cartData as $item) {

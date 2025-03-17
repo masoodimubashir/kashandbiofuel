@@ -2,201 +2,137 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Class\PhonePeHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreOrderRequest;
-use App\Models\Address;
-use App\Models\Cart;
-use App\Models\Transaction;
+use App\Models\{Address, Cart, Transaction};
+use App\Models\Refund;
 use App\Service\PhonepeService;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
+use Exception;
 
 class CheckoutController extends Controller
 {
   private $phonepeService;
-  private const TOKEN_ENDPOINT = 'https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token';
-  private const PAYMENT_ENDPOINT = 'https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay';
-  private const STATUS_ENDPOINT = 'https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/order/';
+  private $phonePeHelper;
 
-  public function __construct(PhonepeService $phonepeService)
+  public function __construct(PhonepeService $phonepeService, PhonePeHelper $phonePeHelper)
   {
     $this->phonepeService = $phonepeService;
+    $this->phonePeHelper = $phonePeHelper;
   }
 
-  public function index(Request $request)
+  public function index(Request $request): View|JsonResponse
   {
-    $address = Address::where('user_id', auth()->user()->id)->first();
-
     if ($request->ajax()) {
-      $cart_data = $request->cart_data;
-      $cart_ids = collect($cart_data)->pluck('cart_id')->toArray();
-      $checkout_price = $request->checkout_price;
-
-      $cart_items = Cart::with(['product' => fn($query) => $query->with('productAttributes')])
-        ->whereIn('id', $cart_ids)
-        ->get();
-
-      return response()->json([
-        'message' => 'Cart items fetched successfully',
-        'cart_items' => $cart_items,
-        'checkout_price' => (int)$checkout_price,
-        'cart_data' => $cart_data,
-        'status' => true
-      ]);
+      return $this->handleAjaxRequest($request);
     }
 
+    $address = Address::where('user_id', auth()->user()->id)->first();
     return view('frontend.Checkout.checkout', compact('address'));
   }
 
+  private function handleAjaxRequest(Request $request): JsonResponse
+  {
+    $cart_ids = collect($request->cart_data)->pluck('cart_id')->toArray();
 
-  public function initiatePayment(Request $request)
+    $cart_items = Cart::with(['product' => fn($query) => $query->with('productAttributes')])
+      ->whereIn('id', $cart_ids)
+      ->get();
+
+    return response()->json([
+      'message' => 'Cart items fetched successfully',
+      'cart_items' => $cart_items,
+      'checkout_price' => (int)$request->checkout_price,
+      'cart_data' => $request->cart_data,
+      'status' => true
+    ]);
+  }
+
+  public function initiatePayment(Request $request): JsonResponse
   {
     try {
 
-
-      $accessToken = $this->validateToken();
-
+      $accessToken = $this->phonePeHelper->validateToken();
       $merchantOrderId = uniqid('TX');
+      $payload = $this->buildPaymentPayload($request, $merchantOrderId);
 
-      $payload = [
-        "merchantOrderId" => $merchantOrderId,
-        "amount" => $request->total_price * 100,
-        "expireAfter" => 1200,
-        "metaInfo" => [
-          "udf1" => "Order payment",
-          "udf2" => json_encode($request->cart_data),
-          'udf3' => $request->address_id,
-        ],
-        "paymentFlow" => [
-          "type" => "PG_CHECKOUT",
-          "message" => "Payment for order",
-          "merchantUrls" => [
-            "redirectUrl" => route('payment.redirect', $merchantOrderId)
-          ]
-        ]
-      ];
+      $response = $this->phonePeHelper->makePaymentRequest($accessToken, $payload);
 
-
-      $response = Http::withHeaders([
-        'Content-Type' => 'application/json',
-        'Authorization' => 'O-Bearer ' . $accessToken
-      ])->post(self::PAYMENT_ENDPOINT, $payload);
-
-      $responseData = $response->json();
-
-
-      if (isset($responseData['redirectUrl'])) {
+      if (isset($response['redirectUrl'])) {
         session(['current_order_id' => $merchantOrderId]);
 
         return response()->json([
           'status' => true,
-          'redirect_url' => $responseData['redirectUrl'],
-          'order_id' => $responseData['orderId']
+          'redirect_url' => $response['redirectUrl']
         ]);
       }
 
       throw new Exception('Invalid payment response');
     } catch (Exception $e) {
-      return response()->json([
-        'status' => false,
-        'message' => 'Payment initialization failed',
-        'error' => $e->getMessage()
-      ], 500);
+      return response()->json($this->phonePeHelper->formatErrorResponse($e->getMessage()), 500);
     }
   }
 
-  private function getAccessToken()
+  private function buildPaymentPayload(Request $request, string $merchantOrderId): array
+  {
+
+    return [
+      "merchantOrderId" => $merchantOrderId,
+      "amount" => $request->total_price * 100,
+      "expireAfter" => 1200,
+      "metaInfo" => [
+        "udf1" => "Order payment",
+        "udf2" => json_encode($request->cart_data),
+        'udf3' => $request->address_id,
+        'udf4' => $merchantOrderId,
+      ],
+      "paymentFlow" => [
+        "type" => "PG_CHECKOUT",
+        "message" => "Payment for order",
+        "merchantUrls" => [
+          "redirectUrl" => route('payment.redirect', $merchantOrderId)
+        ]
+      ]
+    ];
+  }
+
+  public function checkOrderStatus(string $merchantOrderId): View|array
   {
     try {
-
-      $response = Http::withHeaders([
-        'Content-Type' => 'application/x-www-form-urlencoded'
-      ])->asForm()->post(self::TOKEN_ENDPOINT, [
-        'client_id' => config('services.phonePe.client_id'),
-        'client_version' => 1,
-        'client_secret' => config('services.phonePe.client_secret'),
-        'grant_type' => 'client_credentials'
-      ]);
-
-
-      $tokenData = $response->json();
-
-
-      if (!isset($tokenData['access_token'])) {
-        throw new Exception('Invalid token response');
-      }
-
-      session([
-        'phonepe_token' => $tokenData['access_token'],
-        'token_expires_at' => $tokenData['expires_at']
-      ]);
-
-      return $tokenData['access_token'];
+      $accessToken = $this->phonePeHelper->validateToken();
+      $orderData = $this->phonePeHelper->fetchOrderStatus($accessToken, $merchantOrderId);
+      return $this->handleOrderStatus($orderData);
     } catch (Exception $e) {
-      Log::error('PhonePe Token Error: ' . $e->getMessage());
-      throw $e;
+      Log::error('Order Status Check Error: ' . $e->getMessage());
+      return $this->phonePeHelper->formatErrorResponse('Failed to check payment status');
     }
   }
 
-  private function validateToken()
+  private function handleOrderStatus(array $orderData): View|array
   {
-    $expiresAt = session('token_expires_at');
-    return (!$expiresAt || Carbon::now()->timestamp >= $expiresAt)
-      ? $this->getAccessToken()
-      : session('phonepe_token');
+    return match ($orderData['state']) {
+      'COMPLETED' => $this->handleCompletedPayment($orderData),
+      'PENDING' => $this->handlePendingPayment($orderData),
+      'FAILED' => $this->handleFailedPayment(),
+      default => throw new Exception('Invalid payment state received')
+    };
   }
 
-
-
-  public function checkOrderStatus(Request $request,$merchantOrderId)
+  private function handleCompletedPayment(array $orderData): View
   {
-
-    try {
-
-      // dd($request->all());
-
-      $accessToken = $this->validateToken();
-
-      $response = Http::withHeaders([
-        'Content-Type' => 'application/json',
-        'Authorization' => 'O-Bearer ' . $accessToken
-      ])->get(self::STATUS_ENDPOINT . $merchantOrderId . '/status');
-
-      $orderData = $response->json();
-
-      return match ($orderData['state']) {
-        'COMPLETED' => $this->handleCompletedPayment($orderData),
-        'PENDING' => $this->handlePendingPayment($orderData),
-        'FAILED' => $this->handleFailedPayment($orderData),
-        default => throw new Exception('Invalid payment state received')
-      };
-    } catch (Exception $e) {
-      return [
-        'status' => false,
-        'message' => 'Failed to check payment status',
-        'error' => $e->getMessage()
-      ];
-    }
-  }
-
-  private function handleCompletedPayment($orderData)
-  {
-
-
     $data = $this->phonepeService->processSuccessfulPayment($orderData);
-
-
-    return view('frontend.Order.order-confirmation', compact('data'));
+    return view('frontend.Order.order-confirmation', [
+      'transaction' => $data['transaction'],
+      'order' => $data['order']
+    ]);
   }
 
-  private function handlePendingPayment($orderData)
+  private function handlePendingPayment(array $orderData): array
   {
-
-    dd('pending');
-
     return [
       'status' => 'pending',
       'message' => 'Payment is being processed',
@@ -205,16 +141,134 @@ class CheckoutController extends Controller
     ];
   }
 
-  private function handleFailedPayment($orderData): array
+  private function handleFailedPayment(): View
   {
+    return view('frontend.Order.order-failed');
+  }
 
-    dd('failed');
+  public function refund(string $txn_id): View|array
+  {
+    try {
 
+      $transaction = Transaction::with('order')
+        ->where('transaction_id', $txn_id)
+        ->firstOrFail();
+
+      $accessToken = $this->phonePeHelper->validateToken();
+
+      $refundData = $this->buildRefundPayload($transaction);
+
+      $response = $this->phonePeHelper->initiateRefundRequest($accessToken, $refundData);
+
+      if ($response->successful()) {
+
+        $this->createRefund($response->json(), $transaction, $refundData);
+
+        $refundresponse = $this->phonePeHelper->fetchRefundStatus($accessToken, $refundData['merchantRefundId']);
+
+        $transaction->order->update([
+          'is_cancelled' => 1,
+        ]);
+
+        return view('frontend.Order.refund-confirmation', compact('refundresponse', 'transaction'));
+      }
+
+      return $this->phonePeHelper->formatErrorResponse('Failed to initiate refund', $response->json());
+    } catch (Exception $e) {
+      Log::error('Refund Error: ' . $e->getMessage());
+      return $this->phonePeHelper->formatErrorResponse('Error processing refund');
+    }
+  }
+
+  private function buildRefundPayload(Transaction $transaction): array
+  {
+    return [
+      'merchantRefundId' => 'REF-' . uniqid(),
+      'originalMerchantOrderId' => $transaction->transaction_id,
+      'amount' => $transaction->order->total_amount
+    ];
+  }
+
+  public function checkRefundStatus(string $merchantRefundId): array
+  {
+    try {
+      $accessToken = $this->phonePeHelper->validateToken();
+      $refundData = $this->phonePeHelper->fetchRefundStatus($accessToken, $merchantRefundId);
+      return $this->processRefundStatus($refundData);
+    } catch (Exception $e) {
+      Log::error('PhonePe Refund Status Check Error: ' . $e->getMessage());
+      return $this->phonePeHelper->formatErrorResponse('Failed to check refund status');
+    }
+  }
+
+  private function processRefundStatus(array $refundData): array
+  {
+    $handlers = [
+      'COMPLETED' => fn() => $this->handleCompletedRefund($refundData),
+      'PENDING' => fn() => $this->handlePendingRefund($refundData),
+      'FAILED' => fn() => $this->handleFailedRefund($refundData)
+    ];
+
+    return $handlers[$refundData['state']]() ?? [
+      'status' => false,
+      'message' => 'Invalid refund state received'
+    ];
+  }
+
+  private function handleCompletedRefund(array $refundData): array
+  {
+    return [
+      'status' => true,
+      'message' => 'Refund completed successfully',
+      'data' => [
+        'refund_id' => $refundData['refundId'],
+        'amount' => $refundData['amount'],
+        'original_order_id' => $refundData['originalMerchantOrderId'],
+        'timestamp' => Carbon::createFromTimestamp($refundData['timestamp'] / 1000),
+        'transaction_details' => $refundData['splitInstruments']
+      ]
+    ];
+  }
+
+  private function handlePendingRefund(array $refundData): array
+  {
+    return [
+      'status' => true,
+      'message' => 'Refund is being processed',
+      'data' => [
+        'refund_id' => $refundData['refundId'],
+        'amount' => $refundData['amount'],
+        'timestamp' => Carbon::createFromTimestamp($refundData['timestamp'] / 1000)
+      ]
+    ];
+  }
+
+  private function handleFailedRefund(array $refundData): array
+  {
     return [
       'status' => false,
-      'message' => 'Payment failed',
-      'data' => $orderData,
-      'transaction' => $transaction
+      'message' => 'Refund failed',
+      'error' => [
+        'code' => $refundData['errorCode'],
+        'detailed_code' => $refundData['detailedErrorCode']
+      ]
     ];
+  }
+
+
+  private function createRefund($refundPayload, $transaction, $refundData)
+  {
+
+    $refund = new Refund();
+    $refund->order_id = $transaction->order->id; 
+    $refund->transaction_id = $transaction->id; 
+    $refund->refund_id = $refundData['merchantRefundId']; 
+    $refund->amount = $transaction->amount; 
+    $refund->status = $refundPayload['state']; 
+    $refund->phonepe_refund_id = $refundPayload['refundId']; 
+    $refund->refund_initiated_at = now(); 
+    $refund->save();
+
+    return $refund;
   }
 }

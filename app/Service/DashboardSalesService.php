@@ -17,26 +17,28 @@ class DashboardSalesService
         $this->orders = Order::query()
             ->latest()
             ->get();
-            
     }
 
     public function getConfirmedOrders()
     {
         return $this->orders
-            ->where('is_confirmed', 1)
+            ->where(
+                'is_shipped', 1,
+            )
             ->count();
     }
 
     public function getTotalRevenue()
     {
         return $this->orders
-            ->where('is_confirmed', 1)
+            ->where('is_shipped', 1)
             ->sum('total_amount');
     }
 
     public function getDailyOrders()
     {
         return Order::query()
+            ->where('is_shipped', 1)
             ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
             ->count();
     }
@@ -45,10 +47,8 @@ class DashboardSalesService
     public function getDailyRevenue()
     {
         return $this->orders
-            ->where('is_confirmed', 1)
+            ->where('is_shipped', 1)
             ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
             ->sum('total_amount');
     }
-
-
 }

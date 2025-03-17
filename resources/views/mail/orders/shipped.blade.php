@@ -119,7 +119,7 @@ margin-bottom: 10px;
 </div>
 
 <div class="tracking-button">
-<a href="{{ route('track-order') }}" class="btn">Track Your Order</a>
+<a href="{{ route('track-order', $order->id) }}" class="btn">Track Your Order</a>
 </div>
 </div>
 </div>

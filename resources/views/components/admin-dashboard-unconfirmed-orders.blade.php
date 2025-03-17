@@ -43,26 +43,15 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="flex-shrink-0">
-                                                @isset($order->product->productAttribute->image_path)
-                                                    <img class="img-30 b-r-10"
-                                                        src="{{ asset('storage/' . $order->product->productAttribute->image_path) }}"
-                                                        alt="">
-                                                @else
-                                                    <img class="img-30 b-r-10"
-                                                        src="{{ asset('default_images/product_image.png') }}"
-                                                        alt="">
-                                                @endisset
-                                            </div>
+                                           
                                             <div class="flex-grow-1"><a href="product.html">
-                                                    <h5 class="f-w-600">{{ $order->product->name }}</h5>
                                                     <span>
-                                                        {{ $order->order?->date_of_purchase->format('d-M-y') }}
+                                                        {{ $order->date_of_purchase->format('d-M-y') }}
                                                     </span>
                                                 </a></div>
                                         </div>
                                     </td>
-                                    <td>{{ $order->order?->custom_order_id ?? 'N/A' }}</td>
+                                    <td>{{ $order?->custom_order_id ?? 'N/A' }}</td>
 
                                     <td>{{ Number::currency($order->price, 'INR') }}</td>
                                     <td>
@@ -73,7 +62,7 @@
                                     'Cancelled' => 'bg-danger-subtle text-danger-emphasis border-danger-subtle',
                                     default => 'bg-warning-subtle text-warning-emphasis border-warning-subtle',
                                 } }} btn">
-                                            {{ $order->order?->status ?? 'N/A' }}
+                                            {{ $order?->status ?? 'N/A' }}
                                         </div>
                                     </td>
                                 </tr>

@@ -219,6 +219,7 @@ trait HelperClass
             'order_message' => strtoupper($order->order_message) ?? null,
             'tracking_id' => $order->tracking_id ?? 'NA',
             'is_shipped' => $order->is_shipped ?? null,
+            'refund_status' => $order->refund->status ?? 'No Refund Request Yet',
 
             'orderedItems' => collect($order->orderedItems)->map(function ($item) {
                 // Get all product attributes for the product

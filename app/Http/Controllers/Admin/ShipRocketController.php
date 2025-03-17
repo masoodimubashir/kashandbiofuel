@@ -9,6 +9,7 @@ use App\Models\OrderedItem;
 use App\Service\ShipRocketService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ShipRocketController extends Controller
 {
@@ -20,6 +21,7 @@ class ShipRocketController extends Controller
 
         try {
 
+            
 
             $response = app(ShipRocketService::class)->pushOrder($order);
 

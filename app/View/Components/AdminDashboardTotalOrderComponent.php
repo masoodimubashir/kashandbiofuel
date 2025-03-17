@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Models\Order;
 use App\Models\OrderedItem;
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -17,8 +18,7 @@ class AdminDashboardTotalOrderComponent extends Component
      */
     public function __construct()
     {
-        $this->totalOrders = OrderedItem::query()
-            ->with(['product' => fn($query) => ($query->with('productAttribute')), 'order'])
+        $this->totalOrders = Order::query()
             ->latest()
             ->take(5)
             ->get();

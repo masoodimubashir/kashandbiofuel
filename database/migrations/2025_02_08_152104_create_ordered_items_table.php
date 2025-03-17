@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('custom_order_id');
             $table->timestamps();
         });
+
     }
 
     public function down(): void

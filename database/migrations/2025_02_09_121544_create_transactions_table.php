@@ -11,10 +11,15 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->unsignedBigInteger('amount');
-            $table->boolean('status')->comment('0 = pending, 1 = success, 2 = failed');
+            $table->boolean('status');
             $table->string('transaction_id');
+            $table->string('phonepe_transaction_id')->nullable();
+            $table->timestamp('payment_date')->nullable();
             $table->timestamps();
+
+            
         });
+
     }
 
     public function down(): void

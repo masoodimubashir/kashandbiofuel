@@ -13,6 +13,8 @@ class Transaction extends Model
         'amount',
         'status',
         'transaction_id',
+        'phonepe_transaction_id',
+        'payment_date'
     ];
 
     public function user(): BelongsTo

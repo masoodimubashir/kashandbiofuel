@@ -59,9 +59,8 @@
                                 </div>
 
                                 <div class="order-details-name">
-                                    <h5 class="text-content">Service</h5>
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/inner-page/brand-name.svg"
-                                        class="img-fluid blur-up lazyload" alt="">
+                                    <h5 class="text-content">Purchase Date </h5>
+                                    {{ $order->date_of_purchase->format('d-M-Y') }}
                                 </div>
                             </div>
                         </div>
@@ -87,7 +86,7 @@
 
                                 <div class="order-details-name">
                                     <h5 class="text-content">From</h5>
-                                    <h4>STR. Smardan 9, Bucuresti, romania.</h4>
+                                    <h4>.</h4>
                                 </div>
                             </div>
                         </div>
@@ -106,18 +105,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-4 col-sm-6">
-                            <div class="order-details-contain">
-                                <div class="order-tracking-icon">
-                                    <i class="text-content" data-feather="calendar"></i>
-                                </div>
-
-                                <div class="order-details-name">
-                                    <h5 class="text-content">Estimated Time</h5>
-                                    <h4>7 Frb, 05:05pm</h4>
-                                </div>
-                            </div>
-                        </div>
+                     
 
                         <div class="col-12 overflow-hidden">
                             <ol class="progtrckr">

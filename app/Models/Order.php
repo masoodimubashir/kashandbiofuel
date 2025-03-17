@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -57,26 +58,31 @@ class Order extends Model
         return $this->belongsTo(Transaction::class);
     }
 
+    public function refund(): HasOne
+    {
+        return $this->hasOne(Refund::class);
+    }
+
     public function getStatusAttribute()
     {
         switch (true) {
             case $this->is_cancelled:
                 return 'CANCELLED';
-                
+
             case $this->is_delivered && $this->is_confirmed && $this->is_shipped:
                 return 'DELIVERED';
-                
+
             case $this->is_shipped && $this->is_confirmed:
                 return 'SHIPPED';
-                
+
             case $this->is_confirmed:
                 return 'CONFIRMED';
-                
+
             default:
                 return 'PENDING';
         }
     }
-    
+
 
     public function getYestardayDateAttribute()
     {

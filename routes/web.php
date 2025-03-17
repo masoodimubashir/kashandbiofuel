@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminRefundController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChangeFlagsController;
@@ -122,6 +123,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('/order', OrderController::class);
 
+        Route::resource('/refund', AdminRefundController::class);
 
         Route::post('/order/push-to-shiprocket/{order}', [ShipRocketController::class, 'pushOrder'])->name('order.push-to-shiprocket');
 
@@ -152,7 +154,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:user')->prefix('user')->group(function () {
 
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
-        Route::get('/track-order', [UserDashboardController::class, 'trackOrder'])->name('track-order');
+        Route::get('/track-order/{id}', [UserDashboardController::class, 'trackOrder'])->name('track-order');
 
         Route::post('/product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
 
@@ -164,7 +166,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::get('/order-placed/{transaction_id}', [CheckoutController::class, 'orderPlaced'])->name('checkout.order-placed');
-        Route::post('/checkout/phonepe', [CheckoutController::class, 'initiatePayment'])->name('checkout.phonepe.store');
+        Route::post('/phonepe', [CheckoutController::class, 'initiatePayment'])->name('checkout.phonepe.store');
+        Route::get('/orders/cancel/{transaction_id}', [CheckoutController::class, 'refund'])->name('checkout.refund');
         Route::post('/cash-on-delivery', [CheckoutController::class, 'cashOnDelivery'])->name('checkout.cash-on-delivery');
 
         // Route::post('/phonepe/callback', [CheckoutController::class, 'callback'])->name('payment.callback');
