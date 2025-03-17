@@ -428,7 +428,7 @@
           </div>
           <div class="refund-detail-item">
             <span class="refund-detail-label">Payment Method:</span>
-            <span class="refund-detail-value">{{ $refundresponse['paymentMode'] }} ({{ $refundresponse['splitInstruments'][0]['instrument']['maskedAccountNumber'] }})</span>
+            <span class="refund-detail-value"> ({{ $refundresponse['splitInstruments'][0]['instrument']['maskedAccountNumber'] }})</span>
           </div>
           <div class="refund-detail-item">
             <span class="refund-detail-label">Status:</span>

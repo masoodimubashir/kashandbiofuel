@@ -188,7 +188,7 @@ class CheckoutController extends Controller
     return [
       'merchantRefundId' => 'REF-' . uniqid(),
       'originalMerchantOrderId' => $transaction->transaction_id,
-      'amount' => $transaction->order->total_amount
+      'amount' => $transaction->order->total_amount * 100,
     ];
   }
 
