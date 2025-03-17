@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\{Http, Log, Session};
 class PhonePeHelper
 {
     private const ENDPOINTS = [
-        // 'TOKEN' => 'https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token',
-        // 'PAYMENT' => 'https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay',
-        // 'STATUS' => 'https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/order/',
-        // 'REFUND' => 'https://api-preprod.phonepe.com/apis/pg-sandbox/payments/v2/refund',
 
         'TOKEN' => 'https://api.phonepe.com/apis/identity-manager/v1/oauth/token',
         'PAYMENT' => 'https://api.phonepe.com/apis/pg/checkout/v2/pay',

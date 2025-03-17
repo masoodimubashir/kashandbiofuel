@@ -82,8 +82,7 @@ class CheckoutController extends Controller
 
     return [
       "merchantOrderId" => $merchantOrderId,
-      "amount" => $request->total_price * 100,
-      "expireAfter" => 1200,
+      "amount" => 1 * 100,
       "metaInfo" => [
         "udf1" => "Order payment",
         "udf2" => json_encode($request->cart_data),
@@ -102,9 +101,14 @@ class CheckoutController extends Controller
 
   public function checkOrderStatus(string $merchantOrderId): View|array
   {
+
     try {
       $accessToken = $this->phonePeHelper->validateToken();
+
+      dd($accessToken);
+
       $orderData = $this->phonePeHelper->fetchOrderStatus($accessToken, $merchantOrderId);
+
       return $this->handleOrderStatus($orderData);
     } catch (Exception $e) {
       Log::error('Order Status Check Error: ' . $e->getMessage());
