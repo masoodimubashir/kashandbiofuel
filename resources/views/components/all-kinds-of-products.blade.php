@@ -1,4 +1,4 @@
-<div class="title section-t-space">
+{{-- <div class="title section-t-space">
     <h2>ALL KINDS OF PRODUCTS</h2>
 
 </div>
@@ -97,4 +97,4 @@
             </div>
         </div>
     @endforeach
-</div>
+</div> --}}
