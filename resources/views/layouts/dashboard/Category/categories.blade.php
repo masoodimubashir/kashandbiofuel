@@ -114,8 +114,7 @@
                         url: '/admin/categories',
                         type: 'GET',
                     },
-                    columns: [
-                        {
+                    columns: [{
                             data: 'category_image',
                             name: 'category_image'
                         },
@@ -241,7 +240,6 @@
                 // Handle Delete button click
                 $(document).on('click', '.deleteBtn', function() {
                     var categoryId = $(this).data('id');
-
                     // Show confirmation dialog
                     Swal.fire({
                         title: 'Are you sure?',
@@ -265,9 +263,15 @@
                                         'success');
                                     category.ajax.reload(null, false);
                                 },
-                                error: function() {
-                                    Swal.fire('Error!', 'Failed to delete category.',
-                                        'error');
+                                error: function(xhr) {
+                                    // Parse the error response and extract the message
+                                    let errorMessage = 'Failed to delete category.';
+
+                                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                                        errorMessage = xhr.responseJSON.message;
+                                    }
+
+                                    Swal.fire('Error!', errorMessage, 'error');
                                 }
                             });
                         }

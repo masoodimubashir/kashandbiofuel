@@ -77,9 +77,7 @@ class SubCategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -206,8 +204,17 @@ class SubCategoryController extends Controller
     public function destroy(SubCategory $subCategory)
     {
         try {
-            $subCategory->delete();
+            // Check if subcategory has products before deleting
+            if ($subCategory->products()->exists()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This item contains some records in procusts. Please delete the product first.'
+                ], 422);
+            }
 
+    
+
+            $subCategory->delete();
             return response()->json([
                 'status' => 'success',
                 'message' => 'SubCategory deleted successfully'
@@ -215,7 +222,7 @@ class SubCategoryController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete SubCategory',
+                'message' => 'Failed to delete SubCategory: ' . $e->getMessage()
             ], 500);
         }
     }

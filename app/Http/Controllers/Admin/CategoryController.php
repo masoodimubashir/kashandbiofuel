@@ -256,26 +256,30 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         try {
-
             $category = Category::findOrFail($category->id);
-
-
+            
+            if ($category->subCategories()->exists()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This item contains some records in subcategory. Please delete the subcategories first.'
+                ], 422); 
+            }
+            
             if (!is_null($category->image_path) && Storage::disk('public')->exists($category->image_path)) {
                 Storage::disk('public')->delete($category->image_path);
             }
-
+            
             $category->delete();
-
+            
             return response()->json([
                 'status' => 'success',
-                'message' => 'category deleted successfully'
+                'message' => 'Category deleted successfully'
             ]);
         } catch (Exception $e) {
-            dd($e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete category',
-            ], 500);
+                'message' => 'Failed to delete category: ' . $e->getMessage() 
+            ], 422);
         }
     }
 }
