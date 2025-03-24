@@ -1,40 +1,36 @@
 <x-guest-layout>
 
     <!-- mobile fix menu start -->
-    <div class="mobile-menu d-md-none d-block mobile-cart">
+    <div class="mobile-menu d-md-none d-block mobile-cart pb-4">
         <ul>
-            <li class="active">
-                <a href="index.html">
-                    <i class="iconly-Home icli"></i>
-                    <span>Home</span>
+            <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                <a href="{{ route('home') }}">
+                    <span>
+                        <i data-feather="home"></i>
+
+                        {{-- Home --}}
+                    </span>
                 </a>
             </li>
 
-            <li class="mobile-category">
-                <a href="javascript:void(0)">
-                    <i class="iconly-Category icli js-link"></i>
-                    <span>Category</span>
+            <li class="{{ request()->routeIs('wishlist.view-wishlist') ? 'active' : '' }}">
+                <a href="{{ route('wishlist.view-wishlist') }}" class="notifi-wishlist">
+
+                    <span>
+                        <i data-feather="heart"></i>
+                        {{-- My Wish --}}
+                    </span>
                 </a>
             </li>
 
-            <li>
-                <a href="search.html" class="search-box">
-                    <i class="iconly-Search icli"></i>
-                    <span>Search</span>
-                </a>
-            </li>
+            <li class="{{ request()->routeIs('cart.view-cart') ? 'active' : '' }}">
 
-            <li>
-                <a href="wishlist.html" class="notifi-wishlist">
-                    <i class="iconly-Heart icli"></i>
-                    <span>My Wish</span>
-                </a>
-            </li>
+                <a href="{{ route('cart.view-cart') }}" class="fly-cate">
+                    <span>
+                        <i data-feather="shopping-cart"></i>
 
-            <li>
-                <a href="cart.html">
-                    <i class="iconly-Bag-2 icli fly-cate"></i>
-                    <span>Cart</span>
+                        {{-- Cart --}}
+                    </span>
                 </a>
             </li>
         </ul>
