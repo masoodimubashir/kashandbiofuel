@@ -1,6 +1,11 @@
 @extends('welcome')
 
+@section('title', 'Home')
+
+
 @section('main')
+
+
     <!-- Home Section Start -->
     <section class="home-section pt-2">
         <div class="container-fluid-lg">

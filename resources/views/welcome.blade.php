@@ -11,7 +11,7 @@
     <link rel="icon" href="{{ asset('favicon_io/android-chrome-512x512.png') }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', 'Default') | {{ config('app.name', 'Kash') }}</title>
 
     <!-- bootstrap css -->
     <link id="rtl-link" rel="stylesheet" type="text/css" href="{{ asset('front/assets/css/vendors/bootstrap.css') }}">
