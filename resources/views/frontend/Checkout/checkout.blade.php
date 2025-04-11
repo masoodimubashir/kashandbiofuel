@@ -41,6 +41,11 @@
                                     </div>
                                     <div class="checkout-box">
 
+                                        <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0  w-100"
+                                            data-bs-toggle="modal" data-bs-target="#editProfile"><i data-feather="plus"
+                                                class="me-2"></i> Add New Address
+
+                                        </button>
 
                                         <div class="checkout-detail">
                                             <div class="row g-4">
@@ -78,7 +83,7 @@
                                                             </div>
                                                         </div>
                                                     @else
-                                                        <div class="text-danger">
+                                                        <div class="text-danger mt-2">
                                                             Add an address to continue.
                                                         </div>
                                                     @endif
@@ -127,10 +132,7 @@
                             Order
                         </a>
 
-                        <button class="btn theme-bg-color text-white btn-sm fw-bold mt-lg-0  w-100" data-bs-toggle="modal"
-                            data-bs-target="#editProfile"><i data-feather="plus" class="me-2"></i> Add New Address
 
-                        </button>
 
                     </div>
                 </div>
