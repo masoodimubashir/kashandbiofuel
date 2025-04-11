@@ -19,44 +19,61 @@
 
                     <div class="total-box">
                         <div class="row g-sm-4 g-3">
+
+
+
                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                <div class="total-contain">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/order.svg"
-                                        class="img-1 blur-up lazyload" alt="">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/order.svg"
-                                        class="blur-up lazyload" alt="">
+                                <div class="total-contain text-center">
+                                    <i class="fas fa-ban fa-3x mb-2 text-danger"></i>
                                     <div class="total-detail">
-                                        <h5>Total Order</h5>
-                                        <h3>{{ $order_count }}</h3>
+                                        <h5>Cancelled Orders</h5>
+                                        <h3>{{ $cancelled_count }}</h3>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                <div class="total-contain">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/pending.svg"
-                                        class="img-1 blur-up lazyload" alt="">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/pending.svg"
-                                        class="blur-up lazyload" alt="">
+                                <div class="total-contain text-center">
+                                    <i class="fas fa-box-open fa-3x mb-2 text-success"></i>
                                     <div class="total-detail">
-                                        <h5>Total Pending Order</h5>
-                                        <h3>254</h3>
+                                        <h5>Delivered Orders</h5>
+                                        <h3>{{ $delivered_count }}</h3>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
-                                <div class="total-contain">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/wishlist.svg"
-                                        class="img-1 blur-up lazyload" alt="">
-                                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/svg/wishlist.svg"
-                                        class="blur-up lazyload" alt="">
+                                <div class="total-contain text-center">
+                                    <i class="fas fa-check-circle fa-3x mb-2 text-primary"></i>
                                     <div class="total-detail">
-                                        <h5>Total Wishlist</h5>
-                                        <h3>32158</h3>
+                                        <h5>Confirmed Orders</h5>
+                                        <h3>{{ $confirmed_count }}</h3>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
+                                <div class="total-contain text-center">
+                                    <i class="fas fa-truck-moving fa-3x mb-2 text-warning"></i>
+                                    <div class="total-detail">
+                                        <h5>Shipped Orders</h5>
+                                        <h3>{{ $shipped_count }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xxl-4 col-lg-6 col-md-4 col-sm-6">
+                                <div class="total-contain text-center">
+                                    <i class="fas fa-hourglass-half fa-3x mb-2 text-secondary"></i>
+                                    <div class="total-detail">
+                                        <h5>Pending Orders</h5>
+                                        <h3>{{ $pending_count }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
 
@@ -79,7 +96,7 @@
             <div class="tab-pane fade" id="pills-download" role="tabpanel">
 
                 <x-recent-orders />
-                
+
             </div>
 
 

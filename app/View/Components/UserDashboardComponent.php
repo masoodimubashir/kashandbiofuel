@@ -9,7 +9,12 @@ use Illuminate\View\Component;
 class UserDashboardComponent extends Component
 {
 
-    public int $order_count;
+    public int $cancelled_count;
+    public int $delivered_count;
+    public int $confirmed_count;
+    public int $shipped_count;
+    public int $pending_count;
+
 
     /**
      * Create a new component instance.
@@ -18,7 +23,11 @@ class UserDashboardComponent extends Component
     {
         $user = auth()->user();
 
-        $this->order_count = $user->orders()->count();
+        $this->cancelled_count = $user->orders()->where('is_cancelled', true)->count();
+        $this->delivered_count = $user->orders()->where('is_delivered', true)->count();
+        $this->confirmed_count = $user->orders()->where('is_confirmed', true)->count();
+        $this->shipped_count = $user->orders()->where('is_shipped', true)->count();
+        $this->pending_count = $user->orders()->where('is_pending', true)->count();
     }
 
     /**

@@ -26,9 +26,11 @@
     <div class="row">
         <div class="col-12">
             <div class="category-slider arrow-slider">
+                
                 @foreach ($categories as $category)
                     <div>
                         <div class="shop-category-box border-0 wow fadeIn"
+
                             @if (!$loop->first) data-wow-delay="0.35s" @endif>
 
                             <a href="{{ route('category.index', $category->id) }}" class="circle-1">
