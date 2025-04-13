@@ -212,9 +212,9 @@
                             type: "GET",
                             success: (response) => {
                                 elements.cartItemsContainer.html(renderCartItems(response.data));
-                                elements.checkOutPrice.text(`${response.check_out_price}`);
-                                elements.price.text(`${response.check_out_price}`);
-                                elements.couponDiscount.text('0.00');
+                                elements.checkOutPrice.text(`₹${response.check_out_price}`);
+                                elements.price.text(`₹${response.check_out_price}`);
+                                elements.couponDiscount.text('₹0.00');
                             },
                             error: utils.handleErrors
                         });
