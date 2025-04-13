@@ -33,7 +33,7 @@
 
                             @if (!$loop->first) data-wow-delay="0.35s" @endif>
 
-                            <a href="{{ route('category.index', $category->id) }}" class="circle-1">
+                            <a href="{{ route('category.index', $category->id) }}" class="circle-1" style="width: max-content !important;">
 
                                 @isset($category->image_path)
                                     <img src="{{ asset('storage/' . $category->image_path) }}"
