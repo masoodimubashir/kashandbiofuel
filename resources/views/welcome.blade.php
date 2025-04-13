@@ -147,9 +147,9 @@
                 <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                     <a href="{{ route('home') }}">
                         <span>
+                            
                             <i data-feather="home"></i>
 
-                            {{-- Home --}}
                         </span>
                     </a>
                 </li>

@@ -1,4 +1,5 @@
 @extends('welcome')
+
 @section('main')
     <!-- Breadcrumb Section Start -->
     <section class="breadcrumb-section pt-0">
@@ -92,8 +93,6 @@
                                         </div>
                                     </div>
                                 </li>
-
-
 
                             </ul>
                         </div>
