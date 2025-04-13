@@ -38,11 +38,11 @@
                                 @isset($category->image_path)
                                     <img src="{{ asset('storage/' . $category->image_path) }}"
                                         class="img-fluid blur-up lazyload" alt=""
-                                        style="width: 150px; height: 150px;">
+                                        style="width: 200px; height: 200px;">
                                 @else
                                     <img src="{{ asset('default_images/product_image.png') }}"
                                         class="img-fluid blur-up lazyload" alt=""
-                                        style="width: 150px; height: 150px;">
+                                        style="width: 200px; height: 200px;">
                                 @endisset
 
                             </a>
