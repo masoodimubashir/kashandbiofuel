@@ -33,16 +33,16 @@
 
                             @if (!$loop->first) data-wow-delay="0.35s" @endif>
 
-                            <a href="{{ route('category.index', $category->id) }}" class="circle-1" style="width: max-content !important;">
+                            <a href="{{ route('category.index', $category->id) }}" class="circle-1" style="width: max-content !important; margin: 10px !important;">
 
                                 @isset($category->image_path)
                                     <img src="{{ asset('storage/' . $category->image_path) }}"
                                         class="img-fluid blur-up lazyload" alt=""
-                                        style="width: 200px; height: 200px;">
+                                        style="width: 190px; height: 190px;">
                                 @else
                                     <img src="{{ asset('default_images/product_image.png') }}"
                                         class="img-fluid blur-up lazyload" alt=""
-                                        style="width: 200px; height: 200px;">
+                                        style="width: 190px; height: 190px;">
                                 @endisset
 
                             </a>
