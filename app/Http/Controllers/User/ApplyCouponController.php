@@ -26,7 +26,6 @@ class ApplyCouponController extends Controller
 
                 [$items, $check_out_price, $discount] = $this->itemService->getItems($request, 'cart');
 
-                    Log::info('Cart items fetched successfully', ['items' => $items]);
 
                 return response()->json([
                     'status' => true,

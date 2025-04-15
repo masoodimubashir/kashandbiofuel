@@ -298,6 +298,19 @@
                     },
 
                     clearCoupon: () => {
+
+                        // Get the current coupon discount value and convert it to a number
+                        const currentDiscount = parseFloat(elements.couponDiscount.text().replace(/[^\d.-]/g,
+                            ''));
+
+                        // Check if there's any discount applied
+                        if (currentDiscount <= 0) {
+                            // No coupon applied, show message and return
+                            utils.showAlert('Info', 'There is no coupon to be cleared', 'info');
+                            return;
+                        }
+
+                        // If there is a coupon (discount > 0), proceed with removing it
                         $.ajax({
                             url: "{{ route('apply-coupon') }}",
                             type: "PUT",
@@ -319,6 +332,10 @@
                             error: utils.handleErrors
                         });
                     },
+
+
+
+
 
                     proceedToCheckout: () => {
                         const cartItems = [];
