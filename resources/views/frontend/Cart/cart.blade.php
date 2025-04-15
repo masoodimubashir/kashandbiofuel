@@ -196,7 +196,7 @@
                                 <h4 class="table-title text-content">Action</h4>
                                 <a class="save save-for-later notifi-wishlist" style="cursor: pointer"
                                     data-product-id=${cartItem.product_id}
-                                    data-cart-id="${cartItem.id}">Save for later
+                                    data-cart-id="${cartItem.id}">Add To Wishlist
                                 </a>
                                 <a class="remove close_button" data-id="${cartItem.id}">Remove</a>
                             </td>
