@@ -2,36 +2,20 @@
 
 @section('main')
     <style>
-        .star-rating {
-            display: flex;
-            flex-direction: row-reverse;
-            /* Display stars right-to-left */
-            justify-content: flex-start;
-        }
-
-        .star-rating input {
-            display: none;
-            /* Hide the radio buttons */
-        }
-
-        .star-rating label {
-            font-size: 2rem;
-            /* Adjust size of the stars */
-            color: lightgray;
-            /* Default color of stars */
+        .star-rating .fa-star {
+            font-size: 24px;
+            color: #ddd;
             cursor: pointer;
-            /* Pointer cursor for selection */
+            transition: color 0.2s;
+            margin-right: 5px;
         }
 
-        .star-rating input:checked~label {
-            color: gold;
-            /* Highlight selected stars */
+        .star-rating .selected {
+            color: #ffc107;
         }
 
-        .star-rating label:hover,
-        .star-rating label:hover~label {
-            color: gold;
-            /* Highlight stars on hover */
+        .text-danger {
+            font-size: 0.875rem;
         }
     </style>
 
@@ -469,7 +453,7 @@
                                                                 <div>
                                                                     <div class="people-image people-text">
                                                                         <img alt="user" class="img-fluid "
-                                                                            src="../assets/images/review/1.jpg">
+                                                                            src="{{ $review->user->image_path }}">
                                                                     </div>
                                                                 </div>
                                                                 <div class="people-comment">
@@ -523,269 +507,292 @@
     <!-- Bg overlay Start -->
     <div class="bg-overlay"></div>
     <!-- Bg overlay End -->
+
+
+
+
+    <div class="modal fade theme-modal question-modal" id="writereview" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Write a review</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body pt-0">
+                    <form class="product-review-form" id="product-review-form">
+                        <!-- Star Rating -->
+                        <div class="review-box">
+                            <label class="form-label d-block">Rating</label>
+                            <div class="star-rating" id="star-rating">
+                                <i class="fa fa-star" data-value="5"></i>
+                                <i class="fa fa-star" data-value="4"></i>
+                                <i class="fa fa-star" data-value="3"></i>
+                                <i class="fa fa-star" data-value="2"></i>
+                                <i class="fa fa-star" data-value="1"></i>
+                            </div>
+                            <input type="hidden" name="rating" id="rating">
+                            <div class="text-danger" id="rating-error"></div>
+                        </div>
+
+                        <!-- Review Content -->
+                        <div class="review-box mt-3">
+                            <label for="content" class="form-label">Your Review *</label>
+                            <textarea id="content" name="comment" rows="3" class="form-control"
+                                placeholder="Write your review here..."></textarea>
+                            <div class="text-danger" id="content-error"></div>
+                        </div>
+
+                        <!-- Modal Footer Buttons -->
+                        <div class="modal-footer mt-3">
+                            <button type="button" class="btn btn-md btn-theme-outline fw-bold"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Save
+                                changes</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('frontend.scripts')
     <script>
         $(document).ready(function() {
-
-            const product_attribute_id = $('input[name="color"]');
+            const productAttributeInputs = $('input[name="color"]');
             const qtyInput = $('input[name="qty"]');
-            const productSlug = window.location.pathname.split('/')[2];
             const product_id = $('input[name="product_id"]').val();
             const productAttributes = @json($product->productAttributes);
+            let selectedRating = 0;
 
-            // Event Listeners
-            setupEventListeners();
+            // Initialize all events
+            initRatingStars();
+            initQtyButtons();
+            initColorImagePreview();
+            initCartAndWishlist();
+            initReviewForm();
 
-            // Function to register event listeners
-            function setupEventListeners() {
-                // Handle color selection
-                product_attribute_id.on('change', handleColorChange);
+            /** ========== STAR RATING ========== **/
+            function initRatingStars() {
+                const stars = $('#star-rating .fa-star');
 
-                // Add to Cart
-                $('#cart-btn').on('click', async function(event) {
-                    event.preventDefault();
-                    await handleCartAction('{{ route('cart.add-to-cart') }}', addToCart);
+                stars.on('mouseenter', function() {
+                    highlightStars($(this).data('value'));
                 });
 
-                // Add to Wishlist
-                $('#wishlist-btn').on('click', async function(event) {
-                    event.preventDefault();
-                    await handleCartAction('{{ route('wishlist.add-to-wishlist') }}', addToWishlist);
+                stars.on('mouseleave', function() {
+                    highlightStars(selectedRating);
                 });
 
-                $('#product-review-form').on('submit', handleReviewFormSubmit);
+                stars.on('click', function() {
+                    selectedRating = $(this).data('value');
+                    $('#rating').val(selectedRating);
+                    highlightStars(selectedRating);
+                });
             }
 
-            function handleColorChange(event) {
-                event.preventDefault();
-                const productAttributeId = $(this).val(); // Get the selected color's product attribute ID
-
-                // Find the corresponding product attribute
-                const productAttribute = productAttributes.find(attr => attr.id == productAttributeId);
-
-                if (productAttribute) {
-                    // Update the main product image
-                    const mainImage = $('#img-1');
-                    mainImage.attr('src', productAttribute.image ?
-                        `{{ asset('storage/') }}/${productAttribute.image}` :
-                        `{{ asset('default_images/product_image.png') }}`);
-                    mainImage.attr('data-zoom-image', productAttribute.image ?
-                        `{{ asset('storage/') }}/${productAttribute.image}` :
-                        `{{ asset('default_images/product_image.png') }}`);
-
-                    // Update the thumbnail images
-                    const thumbnailContainer = $(`.sidebar-image[data-attribute-id="${productAttributeId}"]`);
-                    const thumbnailImage = thumbnailContainer.find('img');
-                    thumbnailImage.attr('src', productAttribute.image ?
-                        `{{ asset('storage/') }}/${productAttribute.image}` :
-                        `{{ asset('default_images/product_image.png') }}`);
-                }
+            function highlightStars(rating) {
+                $('#star-rating .fa-star').each(function() {
+                    const starValue = $(this).data('value');
+                    $(this).toggleClass('selected', starValue <= rating);
+                });
             }
-            async function handleCartAction(url, action) {
-                const product_attribute_id = $('input[name="color"]:checked').val();
-                const qty = 1;
-                const data = createFormData({
-                    product_attribute_id,
+
+            /** ========== COLOR CHANGE PREVIEW ========== **/
+            function initColorImagePreview() {
+                productAttributeInputs.on('change', function() {
+                    const id = $(this).val();
+                    const attr = productAttributes.find(a => a.id == id);
+
+                    if (attr) {
+                        const imgSrc = attr.image ? `{{ asset('storage') }}/${attr.image}` :
+                            `{{ asset('default_images/product_image.png') }}`;
+                        $('#img-1').attr('src', imgSrc).attr('data-zoom-image', imgSrc);
+
+                        const thumb = $(`.sidebar-image[data-attribute-id="${id}"] img`);
+                        thumb.attr('src', imgSrc);
+                    }
+                });
+            }
+
+            /** ========== CART / WISHLIST ========== **/
+            function initCartAndWishlist() {
+                $('#cart-btn').on('click', function(e) {
+                    e.preventDefault();
+                    submitCartOrWishlist('{{ route('cart.add-to-cart') }}');
+                });
+
+                $('#wishlist-btn').on('click', function(e) {
+                    e.preventDefault();
+                    submitCartOrWishlist('{{ route('wishlist.add-to-wishlist') }}');
+                });
+            }
+
+            async function submitCartOrWishlist(url) {
+                const selectedColor = $('input[name="color"]:checked').val();
+                const qty = parseInt(qtyInput.val()) || 1;
+
+                const formData = createFormData({
+                    product_attribute_id: selectedColor,
                     qty,
                     product_id
                 });
-                await action(data, url);
+
+                await ajaxRequest(formData, url);
             }
 
-            async function addToCart(formData, url) {
-                return ajaxRequest(formData, url);
-            }
+            /** ========== REVIEW FORM SUBMIT ========== **/
+            function initReviewForm() {
+                $('#product-review-form').on('submit', async function(e) {
 
-            async function addToWishlist(formData, url) {
-                return ajaxRequest(formData, url);
-            }
+                    e.preventDefault();
+                    const rating = $('#rating').val();
+                    const content = $('#content').val().trim();
 
-            async function handleReviewFormSubmit(event) {
-                event.preventDefault();
 
-                if (!validateReviewForm()) return;
 
-                const formData = new FormData(this);
-
-                const reviewList = $('#review-list');
-                const url = "{{ route('product.review.store') }}";
-
-                try {
-                    const response = await submitReview(formData, url);
-
-                    if (response.status === 'success') {
-                        refreshReviewList(reviewList, response.data);
-                        resetForm('#product-review-form');
-                        $('#writereview').modal('hide');
-                    }
-                } catch (error) {
-                    if (error.status === 422) {
-                        handleError(error);
-                    } else if (error.status === 401) {
-                        window.location.href = '{{ route('login') }}';
+                    let hasError = false;
+                    if (!rating) {
+                        $('#rating-error').text('Rating is required.');
+                        hasError = true;
                     } else {
-                        handleError(error);
+                        $('#rating-error').text('');
                     }
-                }
+
+                    if (!content) {
+                        $('#content-error').text('Review content is required.');
+                        hasError = true;
+                    } else {
+                        $('#content-error').text('');
+                    }
+
+                    if (hasError) return;
+
+                    const formData = new FormData(this);
+                    formData.append('product_id', product_id);
+
+                    const url = "{{ route('product.review.store') }}";
+
+                    try {
+                        const response = await ajaxRequest(formData, url);
+                        if (response.status === 'success') {
+                            refreshReviewList($('#review-list'), response.data);
+                            this.reset();
+                            $('#rating').val('');
+                            selectedRating = 0;
+                            highlightStars(0);
+                            $('#writereview').modal('hide');
+                            showAlert('Success!', 'Review submitted successfully!', 'success');
+                        }
+                    } catch (error) {
+                        if (error.status === 422) handleError(error);
+                        if (error.status === 401) window.location.href = '{{ route('login') }}';
+                    }
+                });
             }
 
-            async function submitReview(formData, url) {
-                return ajaxRequest(formData, url);
+            /** ========== QUANTITY BUTTONS ========== **/
+            function initQtyButtons() {
+                $(document).on('click', '.qty-left-minus', function() {
+                    const input = $(this).siblings('.qty-input');
+                    let val = parseInt(input.val()) || 1;
+                    if (val > 1) input.val(--val);
+                    else showAlert('Error', 'Quantity cannot be less than 1.', 'error');
+                });
+
+                $(document).on('click', '.qty-right-plus', function() {
+                    const input = $(this).siblings('.qty-input');
+                    const max = $(this).data('qty');
+                    let val = parseInt(input.val()) || 1;
+                    if (val < max) input.val(++val);
+                    else showAlert('Error', `You cannot add more than ${max} items.`, 'error');
+                });
+            }
+
+            /** ========== HELPERS ========== **/
+            function createFormData(data) {
+                const formData = new FormData();
+                for (let key in data) formData.append(key, data[key]);
+                return formData;
             }
 
             async function ajaxRequest(formData, url) {
                 return $.ajax({
-                    url: url,
-                    type: "POST",
+                    url,
+                    method: "POST",
                     data: formData,
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     processData: false,
-                    contentType: false,
-                    success: function(response) {
-
-                        if (response.status === true) {
-                            window.location.href = response.redirect_url;
-                        } else {
-                            showAlert('Success!', response.message, 'success');
-                        }
-                    },
-                    error: function(error) {
-                        if (error.status === 401) {
-                            window.location.href = '{{ route('login') }}';
-                        }
-                        if (error.status === 422) {
-                            handleError(error);
-                        }
-                        if (error.status === 404) {
-                            showAlert('Error!', error.responseJSON.message, 'error');
-                        }
-                    }
+                    contentType: false
                 });
             }
 
-            function createFormData(data) {
-                const formData = new FormData();
-                for (const [key, value] of Object.entries(data)) {
-                    formData.append(key, value);
-                }
-                return formData;
+            function refreshReviewList(list, reviews) {
+                list.empty();
+                reviews.forEach(review => appendReview(list, review));
             }
 
-            function validateReviewForm() {
-                const rating = $('input[name="rating"]:checked').val();
-                const comment = $('#comment').val();
-
-                if (!rating || !comment) {
-                    showAlert('Error!', 'Rating and comment are required.', 'error');
-                    return false;
-                }
-                return true;
-            }
-
-            function refreshReviewList(reviewList, reviews) {
-                reviewList.empty();
-                reviews.forEach(review => {
-                    appendReview(reviewList, review);
-                });
-            }
-
-            function appendReview(reviewList, review) {
-                const fallbackImage = '/front/assets/images/review/no-image.jpg';
-                const userImage = review.user.profile_image || fallbackImage;
-                const userName = review.user.name || 'Anonymous';
-                const reviewDate = formatDate(review.created_at) || 'Just now';
-                const stars = generateRatingStars(review.rating || 0);
+            function appendReview(list, review) {
+                const userImage = review.user?.profile_image || '/front/assets/images/review/no-image.jpg';
+                const userName = review.user?.name || 'Anonymous';
+                const reviewDate = formatDate(review.created_at);
+                const stars = generateStars(review.rating || 0);
 
                 const reviewHtml = `
-            <li>
-                <div class="people-box">
-                    <div>
+                <li>
+                    <div class="people-box">
                         <div class="people-image people-text">
-                            <img alt="user" class="img-fluid" src="${userImage}">
+                            <img src="${userImage}" class="img-fluid" alt="user" />
                         </div>
-                    </div>
-                    <div class="people-comment">
-                        <div class="people-name">
-                            <a href="javascript:void(0)" class="name">${userName}</a>
-                            <div class="date-time">
-                                <h6 class="text-content">${reviewDate}</h6>
-                                <div class="product-rating">
-                                    <ul class="rating">${stars}</ul>
+                        <div class="people-comment">
+                            <div class="people-name">
+                                <a href="#" class="name">${userName}</a>
+                                <div class="date-time">
+                                    <h6 class="text-content">${reviewDate}</h6>
+                                    <div class="product-rating"><ul class="rating">${stars}</ul></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="reply">
-                            <p>${review.comment}</p>
+                            <div class="reply"><p>${review.comment}</p></div>
                         </div>
                     </div>
-                </div>
-            </li>
-        `;
-                reviewList.prepend(reviewHtml);
+                </li>
+            `;
+                list.prepend(reviewHtml);
             }
 
-            function generateRatingStars(rating) {
-                const maxStars = 5;
-                return Array.from({
-                    length: maxStars
-                }, (_, index) => {
-                    const filledClass = index < rating ? 'fill' : '';
-                    return `<li><i data-feather="star" class="${filledClass}"></i></li>`;
-                }).join('');
+            function generateStars(rating) {
+                return [...Array(5)].map((_, i) =>
+                    `<li><i data-feather="star" class="${i < rating ? 'fill' : ''}"></i></li>`
+                ).join('');
             }
 
-            function formatDate(isoDate) {
-                const options = {
+            function formatDate(iso) {
+                return new Date(iso).toLocaleString('en-US', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit'
-                };
-                return new Date(isoDate).toLocaleDateString('en-US', options);
+                });
             }
 
-            function resetForm(formSelector) {
-                $(formSelector)[0].reset();
-            }
-
-            function showAlert(title, message, type) {
-                Swal.fire(title, message, type);
+            function showAlert(title, text, type) {
+                Swal.fire(title, text, type);
             }
 
             function handleError(error) {
-                const errorMessage = error.responseJSON?.message || 'Something went wrong.';
-                showAlert('Error!', errorMessage, 'error');
+                const msg = error.responseJSON?.message || 'Something went wrong.';
+                showAlert('Error!', msg, 'error');
             }
-
-            $(document).on('click', '.qty-left-minus', function() {
-                const input = $(this).siblings('.qty-input');
-                const maxQty = $(this).data('qty');
-                let currentValue = parseInt(input.val());
-
-                if (currentValue > 1) {
-                    currentValue--;
-                    input.val(currentValue);
-                } else {
-                    showAlert('Error', 'Quantity cannot be less than 1.', 'error');
-                }
-            });
-
-            $(document).on('click', '.qty-right-plus', function() {
-                const input = $(this).siblings('.qty-input');
-                const maxQty = $(this).data('qty');
-                let currentValue = parseInt(input.val());
-                if (currentValue < maxQty) {
-                    currentValue++;
-                    input.val(currentValue);
-                } else {
-                    showAlert('Error', 'You cannot add more than ' + maxQty + ' items.', 'error');
-                }
-            });
         });
     </script>
 @endpush

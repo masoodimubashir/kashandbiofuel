@@ -51,9 +51,9 @@ class FrontendProductController extends Controller
     public function checkProductQuantity(Request $request, string $slug)
     {
         try {
-            $product = Product::where('slug', $slug)->firstOrFail();
 
-            dd($request->input('qty'));
+
+            $product = Product::where('slug', $slug)->firstOrFail();
 
             $requestedQty = $request->input('qty');
 

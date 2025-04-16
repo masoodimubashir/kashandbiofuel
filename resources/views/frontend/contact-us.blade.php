@@ -79,7 +79,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-xxl-6 col-lg-12 col-sm-6">
+                                        <div class="col-12">
                                             <div class="contact-detail-box">
                                                 <div class="contact-icon">
                                                     <i class="fa-solid fa-location-dot"></i>
@@ -97,20 +97,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-xxl-6 col-lg-12 col-sm-6">
-                                            <div class="contact-detail-box">
-                                                <div class="contact-icon">
-                                                    <i class="fa-solid fa-building"></i>
-                                                </div>
-                                                <div class="contact-detail-title">
-                                                    <h4>Bournemouth Office</h4>
-                                                </div>
-
-                                                <div class="contact-detail-contain">
-                                                    <p>Visitación de la Encina 22</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>

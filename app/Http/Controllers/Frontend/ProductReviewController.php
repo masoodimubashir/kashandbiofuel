@@ -30,9 +30,11 @@ class ProductReviewController extends Controller
 
 
                 if ($validator->fails()) {
+                    Log::error('Validation failed: ' . $validator->errors());
                     return response()->json([
                         'status' => 'error',
                         'message' => 'Something went wrong. Data cannot be saved.'
+                        
                     ], 422);
                 }
 
@@ -57,6 +59,7 @@ class ProductReviewController extends Controller
             } catch (Exception $e) {
 
                 Log::error($e->getMessage());
+
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Something went wrong.'
