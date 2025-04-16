@@ -635,119 +635,149 @@
                 });
             }
 
+            
+
             async function submitCartOrWishlist(url) {
-                const selectedColor = $('input[name="color"]:checked').val();
-                const qty = parseInt(qtyInput.val()) || 1;
 
-                const formData = createFormData({
-                    product_attribute_id: selectedColor,
-                    qty,
-                    product_id
-                });
+                try {
+                    const selectedColor = $('input[name="color"]:checked').val();
+                    const qty = parseInt(qtyInput.val()) || 1;
 
-                await ajaxRequest(formData, url);
-            }
+                    const formData = createFormData({
+                        product_attribute_id: selectedColor,
+                        qty,
+                        product_id
+                    });
 
-            /** ========== REVIEW FORM SUBMIT ========== **/
-            function initReviewForm() {
-                $('#product-review-form').on('submit', async function(e) {
+                    const response = await ajaxRequest(formData, url);
 
-                    e.preventDefault();
-                    const rating = $('#rating').val();
-                    const content = $('#content').val().trim();
+                    console.log(response);
 
 
-
-                    let hasError = false;
-                    if (!rating) {
-                        $('#rating-error').text('Rating is required.');
-                        hasError = true;
-                    } else {
-                        $('#rating-error').text('');
+                    if (response.status === true) {
+                        window.location.href = response.redirect_url;
+                    } else if (response.status === false) {
+                        showAlert('Success!', response.message, 'success');
+                    }
+                } catch (error) {
+                    if (error.status === 401) {
+                        window.location.href = '{{ route('login') }}';
                     }
 
-                    if (!content) {
-                        $('#content-error').text('Review content is required.');
-                        hasError = true;
-                    } else {
-                        $('#content-error').text('');
+                    if (error.status === 422) {
+                        handleError(error);
                     }
 
-                    if (hasError) return;
-
-                    const formData = new FormData(this);
-                    formData.append('product_id', product_id);
-
-                    const url = "{{ route('product.review.store') }}";
-
-                    try {
-                        const response = await ajaxRequest(formData, url);
-                        if (response.status === 'success') {
-                            refreshReviewList($('#review-list'), response.data);
-                            this.reset();
-                            $('#rating').val('');
-                            selectedRating = 0;
-                            highlightStars(0);
-                            $('#writereview').modal('hide');
-                            showAlert('Success!', 'Review submitted successfully!', 'success');
-                        }
-                    } catch (error) {
-                        if (error.status === 422) handleError(error);
-                        if (error.status === 401) window.location.href = '{{ route('login') }}';
+                    if (error.status === 404) {
+                        showAlert('Error!', error.responseJSON.message, 'error');
                     }
-                });
+                }
+
             }
 
-            /** ========== QUANTITY BUTTONS ========== **/
-            function initQtyButtons() {
-                $(document).on('click', '.qty-left-minus', function() {
-                    const input = $(this).siblings('.qty-input');
-                    let val = parseInt(input.val()) || 1;
-                    if (val > 1) input.val(--val);
-                    else showAlert('Error', 'Quantity cannot be less than 1.', 'error');
-                });
 
-                $(document).on('click', '.qty-right-plus', function() {
-                    const input = $(this).siblings('.qty-input');
-                    const max = $(this).data('qty');
-                    let val = parseInt(input.val()) || 1;
-                    if (val < max) input.val(++val);
-                    else showAlert('Error', `You cannot add more than ${max} items.`, 'error');
-                });
-            }
 
-            /** ========== HELPERS ========== **/
-            function createFormData(data) {
-                const formData = new FormData();
-                for (let key in data) formData.append(key, data[key]);
-                return formData;
-            }
+        /** ========== REVIEW FORM SUBMIT ========== **/
+        function initReviewForm() {
+            $('#product-review-form').on('submit', async function(e) {
 
-            async function ajaxRequest(formData, url) {
-                return $.ajax({
-                    url,
-                    method: "POST",
-                    data: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    processData: false,
-                    contentType: false
-                });
-            }
+                e.preventDefault();
+                const rating = $('#rating').val();
+                const content = $('#content').val().trim();
 
-            function refreshReviewList(list, reviews) {
-                list.empty();
-                reviews.forEach(review => appendReview(list, review));
-            }
+                let hasError = false;
+                if (!rating) {
+                    $('#rating-error').text('Rating is required.');
+                    hasError = true;
+                } else {
+                    $('#rating-error').text('');
+                }
 
-            function appendReview(list, review) {
-                const userImage = review.user?.profile_image || '/front/assets/images/review/no-image.jpg';
-                const userName = review.user?.name || 'Anonymous';
-                const reviewDate = formatDate(review.created_at);
-                const stars = generateStars(review.rating || 0);
+                if (!content) {
+                    $('#content-error').text('Review content is required.');
+                    hasError = true;
+                } else {
+                    $('#content-error').text('');
+                }
 
-                const reviewHtml = `
+                if (hasError) return;
+
+                const formData = new FormData(this);
+                formData.append('product_id', product_id);
+
+                const url = "{{ route('product.review.store') }}";
+
+                try {
+                    const response = await ajaxRequest(formData, url);
+
+                    if (response.status === 'success') {
+                        refreshReviewList($('#review-list'), response.data);
+                        this.reset();
+                        $('#rating').val('');
+                        selectedRating = 0;
+                        highlightStars(0);
+                        $('#writereview').modal('hide');
+                        showAlert('Success!', 'Review submitted successfully!', 'success');
+                    }
+                } catch (error) {
+                    if (error.status === 422) handleError(error);
+                    if (error.status === 401) window.location.href = '{{ route('login') }}';
+                }
+            });
+        }
+
+        /** ========== QUANTITY BUTTONS ========== **/
+        function initQtyButtons() {
+            $(document).on('click', '.qty-left-minus', function() {
+                const input = $(this).siblings('.qty-input');
+                let val = parseInt(input.val()) || 1;
+                if (val > 1) input.val(--val);
+                else showAlert('Error', 'Quantity cannot be less than 1.', 'error');
+            });
+
+            $(document).on('click', '.qty-right-plus', function() {
+                const input = $(this).siblings('.qty-input');
+                const max = $(this).data('qty');
+                let val = parseInt(input.val()) || 1;
+                if (val < max) input.val(++val);
+                else showAlert('Error', `You cannot add more than ${max} items.`, 'error');
+            });
+        }
+
+        /** ========== HELPERS ========== **/
+        function createFormData(data) {
+            const formData = new FormData();
+            for (let key in data) formData.append(key, data[key]);
+            return formData;
+        }
+
+        async function ajaxRequest(formData, url) {
+
+            return $.ajax({
+                url,
+                method: "POST",
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                processData: false,
+                contentType: false
+            });
+
+        }
+
+        function refreshReviewList(list, reviews) {
+            list.empty();
+            reviews.forEach(review => appendReview(list, review));
+        }
+
+        function appendReview(list, review) {
+            const userImage = review.user?.profile_image || '/front/assets/images/review/no-image.jpg';
+            const userName = review.user?.name || 'Anonymous';
+            const reviewDate = formatDate(review.created_at);
+            const stars = generateStars(review.rating || 0);
+
+            const reviewHtml = `
                 <li>
                     <div class="people-box">
                         <div class="people-image people-text">
@@ -766,33 +796,33 @@
                     </div>
                 </li>
             `;
-                list.prepend(reviewHtml);
-            }
+            list.prepend(reviewHtml);
+        }
 
-            function generateStars(rating) {
-                return [...Array(5)].map((_, i) =>
-                    `<li><i data-feather="star" class="${i < rating ? 'fill' : ''}"></i></li>`
-                ).join('');
-            }
+        function generateStars(rating) {
+            return [...Array(5)].map((_, i) =>
+                `<li><i data-feather="star" class="${i < rating ? 'fill' : ''}"></i></li>`
+            ).join('');
+        }
 
-            function formatDate(iso) {
-                return new Date(iso).toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            }
+        function formatDate(iso) {
+            return new Date(iso).toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
 
-            function showAlert(title, text, type) {
-                Swal.fire(title, text, type);
-            }
+        function showAlert(title, text, type) {
+            Swal.fire(title, text, type);
+        }
 
-            function handleError(error) {
-                const msg = error.responseJSON?.message || 'Something went wrong.';
-                showAlert('Error!', msg, 'error');
-            }
+        function handleError(error) {
+            const msg = error.responseJSON?.message || 'Something went wrong.';
+            showAlert('Error!', msg, 'error');
+        }
         });
     </script>
 @endpush
