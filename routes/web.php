@@ -50,6 +50,8 @@ Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('p
 
 // Route For Searching The Product
 Route::get('/live-search', SearchController::class)->name('live.search');
+Route::get('/search', [SearchController::class, 'mobileSearchView']);
+Route::get('/search-product', [SearchController::class, 'searchProduct'])->name('search.product');
 
 
 // Routes For Contact

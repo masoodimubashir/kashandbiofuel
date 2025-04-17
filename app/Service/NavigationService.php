@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Models\Category;
+use App\Models\SubCategory;
 
 class NavigationService
 {
@@ -27,13 +28,13 @@ class NavigationService
                 'show_on_navbar' => 1
             ]);
         }])
-        ->where([
-            'status' => 1,
-            'show_on_navbar' => 1
-        ])
-        ->orderBy('name')
-        ->take(5)
-        ->get();
+            ->where([
+                'status' => 1,
+                'show_on_navbar' => 1
+            ])
+            ->orderBy('name')
+            ->take(5)
+            ->get();
     }
 
     /**
@@ -46,5 +47,13 @@ class NavigationService
         return $this->navigation;
     }
 
-   
+
+    public function getAllSubCategories()
+    {
+
+        return SubCategory::where('status', 1)
+            ->orderBy('name')
+            ->take(5)
+            ->get();;
+    }
 }

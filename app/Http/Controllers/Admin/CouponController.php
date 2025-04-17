@@ -65,7 +65,7 @@ class CouponController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'coupon_code' => 'required|string|unique:coupons,coupon_code',
-                'coupon_type' => 'required|in:1,2',
+                // 'coupon_type' => 'required|in:1,2',
                 'discount_value' => 'required|string',
                 'end_date' => 'required|date|after:start_date',
             ]);
@@ -80,7 +80,7 @@ class CouponController extends Controller
 
             $coupon = DB::table('coupons')->insert([
                 'coupon_code' => strtoupper($request->coupon_code),
-                'coupon_type' => $request->coupon_type,
+                'coupon_type' => 2,
                 'discount_value' => $request->discount_value,
                 'end_date' => $request->end_date,
                 'status' => 1,
@@ -122,7 +122,7 @@ class CouponController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'coupon_code' => ['required', 'string', Rule::unique('coupons')->ignore($coupon->id)],
-                'coupon_type' => 'required|in:1,2',
+                // 'coupon_type' => 'required|in:1,2',
                 'discount_value' => 'required|string',
                 'end_date' => 'required|date|after:start_date',
             ]);
@@ -137,7 +137,7 @@ class CouponController extends Controller
 
             $coupon->update([
                 'coupon_code' => strtoupper($request->coupon_code),
-                'coupon_type' => $request->coupon_type,
+                'coupon_type' => 2,
                 'discount_value' => $request->discount_value,
                 'end_date' => $request->end_date,
             ]);

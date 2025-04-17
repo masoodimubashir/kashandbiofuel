@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Log;
 
 class ProductSeoController extends Controller
 {
@@ -17,6 +19,7 @@ class ProductSeoController extends Controller
 
             $validator = Validator::make($request->all(), [
 
+                'product_id' => 'required|exists:products,id',
                 'meta_title' => 'required|string',
                 'meta_description' => 'required|string',
                 'meta_keyword' => 'required|string',
@@ -41,9 +44,9 @@ class ProductSeoController extends Controller
                 'status' => 'success',
                 'message' => 'Product SEO Updated Successfully'
             ]);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (Exception $th) {
 
+            Log::error('Error updating product SEO: ' . $th->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => $th->getMessage()

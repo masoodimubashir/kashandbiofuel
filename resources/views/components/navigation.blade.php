@@ -19,16 +19,17 @@
                         </div>
 
                         <ul class="category-list">
+
                             <li class="onhover-category-list">
                                 <a href="{{ route('home') }}" class="category-name">
-                                   
+
                                     <h6>Home</h6>
                                 </a>
 
                             </li>
                             <li class="onhover-category-list">
                                 <a href="{{ route('contact-us.index') }}" class="category-name">
-                                   
+
                                     <h6>Contact Us</h6>
                                 </a>
 
@@ -36,7 +37,7 @@
 
                             <li class="onhover-category-list">
                                 <a href="{{ route('ship.policy') }}" class="category-name">
-                                   
+
                                     <h6>Shipping Policy</h6>
                                 </a>
 
@@ -44,12 +45,37 @@
 
                             <li class="onhover-category-list">
                                 <a href="{{ route('terms.and.conditions') }}" class="category-name">
-                                   
+
                                     <h6>Shopping FAQs</h6>
                                 </a>
 
                             </li>
-                             
+
+
+
+                            <li class="onhover-category-list">
+
+                                <a href="javascript:void(0)" class="category-name">
+                                    <h6>Sub Categories</h6>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+
+                                <div class="onhover-category-box">
+                                    <div class="list-1">
+                                       
+                                        <ul>
+
+                                            @foreach ($subCategories as $subCategory)
+                                                <li>
+                                                    <a href="{{ route('sub-category-shopping.index', $subCategory->slug) }}">{{ $subCategory->name }}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -65,7 +91,7 @@
 
                                 <ul class="navbar-nav">
 
-                                  
+
 
                                     @foreach ($navigation as $category)
                                         <li

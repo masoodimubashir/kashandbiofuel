@@ -278,7 +278,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody class="text-center   "></tbody>
+                                    <tbody class="text-center"></tbody>
                                 </table>
                             </div>
 
@@ -476,18 +476,30 @@
 
                 // SEO Form Submission
 
+                $('#seoModal').on('show.bs.modal', function(event) {
+                    const button = $(event.relatedTarget); 
+                    const productId = button.data('id');
+
+                    $('#product_id').val(productId);
+
+                });
+
                 $('#seoForm').on('submit', function(e) {
+
                     e.preventDefault();
 
+                    const form = $(this);
                     const formData = new FormData(this);
-                    formData.append('_method', 'PUT');
+                    const productId = $('#product_id').val();
 
+                    // No need to append again - it's already in the formData from the hidden input
+                    formData.append('_method', 'PUT');
 
                     const url = "{{ route('Product.seo') }}";
 
                     $.ajax({
                         url: url,
-                        type: 'POST',
+                        type: 'POST', // Laravel will treat this as PUT due to _method
                         data: formData,
                         processData: false,
                         contentType: false,
@@ -498,23 +510,19 @@
                             if (response.status === 'success') {
                                 productTable.ajax.reload();
                                 $('#seoModal').modal('hide');
-                                formData.resetForm();
+                                form[0].reset(); // Correct way to reset the form
                                 Swal.fire('Success', 'SEO data updated successfully', 'success');
                             }
                         },
                         error: function(xhr) {
                             if (xhr.responseJSON && xhr.responseJSON.errors) {
                                 handleFormErrors(xhr.responseJSON.errors);
-
                             } else {
                                 Swal.fire('Error', 'An unexpected error occurred.', 'error');
-
                             }
-
                         }
                     });
                 });
-
 
                 let rowCounter = 0;
 
@@ -562,31 +570,31 @@
                 const sellingPriceWithoutGst = document.querySelector('#selling_price_without_gst');
                 const gstInput = document.querySelector('#gst');
                 const finalSellingPrice = document.querySelector('#selling_price');
-                
+
                 function validateGstInput(value) {
                     let numericValue = value.replace(/[^0-9.]/g, '');
                     numericValue = parseFloat(numericValue) || 0;
-                    
+
                     if (numericValue > 100) numericValue = 100;
                     if (numericValue < 1) numericValue = 1;
-                    
+
                     return numericValue;
                 }
-                
+
                 function calculateFinalPrice() {
                     const basePrice = parseFloat(sellingPriceWithoutGst.value) || 0;
                     const gstPercentage = validateGstInput(gstInput.value);
-                    
+
                     const gstAmount = (basePrice * gstPercentage) / 100;
                     const totalPrice = basePrice + gstAmount;
-                    
+
                     finalSellingPrice.value = totalPrice.toFixed(2);
                 }
-                
+
                 // Event listeners for GST calculation
                 sellingPriceWithoutGst.addEventListener('input', calculateFinalPrice);
                 gstInput.addEventListener('input', calculateFinalPrice);
-                
+
 
                 gstInput.addEventListener('blur', function() {
                     const validatedValue = validateGstInput(this.value);

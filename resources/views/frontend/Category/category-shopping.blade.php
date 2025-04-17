@@ -28,8 +28,6 @@
     <section class="section-b-space shop-section">
         <div class="container-fluid-lg">
             <div class="row">
-
-
                 <div class="col-custom-3 wow fadeInUp">
                     <div class="left-box">
                         <form class="shop-left-sidebar"

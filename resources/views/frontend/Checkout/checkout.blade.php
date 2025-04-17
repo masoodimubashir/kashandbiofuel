@@ -60,10 +60,7 @@
                                                                         checked />
                                                                     <!-- Automatically selects the first address -->
                                                                 </div>
-                                                                <div class="label">
-                                                                    <label>{{ $address->state }}
-                                                                        , {{ $address->city }}</label>
-                                                                </div>
+
                                                                 <ul class="delivery-address-detail">
                                                                     <li>
                                                                         <h4 class="fw-500">{{ $address->address }}</h4>
@@ -78,6 +75,13 @@
                                                                         <h6 class="text-content mb-0"><span
                                                                                 class="text-title">Pin Code:
                                                                             </span>{{ $address->pin_code }}
+                                                                        </h6>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h6 class="text-content mb-0"><span>
+                                                                                {{ $address->state }}
+                                                                                , {{ $address->city }}
+                                                                            </span>
                                                                         </h6>
                                                                     </li>
                                                                 </ul>

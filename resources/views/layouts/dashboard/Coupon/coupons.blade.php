@@ -18,7 +18,7 @@
                         <div class="invalid-feedback">Please enter a valid coupon code</div>
                     </div>
 
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <label class="form-label" for="coupon_type">Coupon Type</label>
                         <select class="form-control" id="coupon_type" name="coupon_type">
                             <option value="">Select Type</option>
@@ -26,7 +26,7 @@
                             <option value="2">Fixed Amount</option>
                         </select>
                         <div class="invalid-feedback">Please select a coupon type</div>
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-6">
                         <label class="form-label" for="discount_value">Discount Value</label>

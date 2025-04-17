@@ -13,12 +13,17 @@ class Navigation extends Component
 
     public $navigation;
 
+    public $subCategories;
+
     /**
      * Create a new component instance.
      */
     public function __construct(NavigationService $navigationService)
     {
         $this->navigation = $navigationService->getAllNavigationItems();
+
+        $this->subCategories = $navigationService->getAllSubCategories();
+
     }
 
     /**

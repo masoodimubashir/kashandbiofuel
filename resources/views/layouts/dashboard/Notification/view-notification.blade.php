@@ -52,20 +52,7 @@
                                     @foreach ($notifications as $notification)
                                         <li class="inbox-data">
                                             <div class="inbox-user">
-                                                <div class="rounded-border">
-
-                                                    @isset($notification['data']['image'])
-                                                        <img class="img-fluid"
-                                                            src="{{ asset('storage/' . $notification['data']['image']) }}"
-                                                            alt="user">
-                                                    @else
-                                                        <img class="img-fluid"
-                                                            src="{{ asset('default_images/product_image.png') }}"
-                                                            alt="user">
-                                                    @endisset
-
-
-                                                </div>
+                                               
                                                 <p>{{ $notification['data']['user'] }}</p>
                                             </div>
                                             <div class="inbox-message">

@@ -640,6 +640,7 @@
             async function submitCartOrWishlist(url) {
 
                 try {
+                    
                     const selectedColor = $('input[name="color"]:checked').val();
                     const qty = parseInt(qtyInput.val()) || 1;
 
@@ -650,9 +651,6 @@
                     });
 
                     const response = await ajaxRequest(formData, url);
-
-                    console.log(response);
-
 
                     if (response.status === true) {
                         window.location.href = response.redirect_url;

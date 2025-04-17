@@ -1,5 +1,5 @@
 @php
-$items = \App\Models\Cart::checkCartItems()->count();
+    $items = \App\Models\Cart::checkCartItems()->count();
 @endphp
 
 
@@ -37,6 +37,28 @@ $items = \App\Models\Cart::checkCartItems()->count();
         z-index: 1000;
         margin-top: 5px;
         display: none;
+    }
+
+    .product-result {
+        transition: all 0.2s ease;
+    }
+
+    .product-result:hover {
+        background-color: #f9f9f9;
+    }
+
+    .product-image {
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .price-info {
+        font-size: 0.9rem;
+    }
+
+    .total-price {
+        font-size: 0.95rem;
+        color: #333;
     }
 </style>
 
@@ -110,7 +132,7 @@ $items = \App\Models\Cart::checkCartItems()->count();
                                     </div>
                                     <div class="delivery-detail">
                                         <h6>24/7 Delivery</h6>
-                                        <h5>+91 888 104 2340</h5>
+                                        <h5>9560221309|7005432898</h5>
                                     </div>
                                 </a>
                             </li>
@@ -118,7 +140,7 @@ $items = \App\Models\Cart::checkCartItems()->count();
                                 <a href="{{ route('wishlist.view-wishlist') }}"
                                     class="btn p-0 position-relative header-wishlist">
                                     <i data-feather="heart"></i>
-                                    
+
                                 </a>
                             </li>
                             <li class="right-side">
@@ -129,7 +151,7 @@ $items = \App\Models\Cart::checkCartItems()->count();
                                         <i data-feather="shopping-cart"></i>
                                         <span class="position-absolute top-0 start-100 translate-middle badge">
                                             {{ $items }}
-                                            
+
                                             <span class="visually-hidden">unread messages</span>
                                         </span>
                                     </a>
@@ -224,8 +246,10 @@ $items = \App\Models\Cart::checkCartItems()->count();
 @push('frontend.scripts')
     <script>
         $(document).ready(function() {
+
             $('#search-input').on('input', function() {
-                var query = $(this).val();
+                var query = $(this).val().trim();
+                var $searchResults = $('#search-results');
 
                 if (query.length >= 3) {
                     $.ajax({
@@ -234,57 +258,141 @@ $items = \App\Models\Cart::checkCartItems()->count();
                         data: {
                             query: query
                         },
+                        beforeSend: function() {
+                            // Show loading indicator
+                            $searchResults.html(
+                                '<div class="text-center p-3"><div class="spinner-border text-primary" role="status"></div></div>'
+                            ).show();
+                        },
                         success: function(data) {
                             var resultsHtml = '';
 
                             if (data.length > 0) {
                                 data.forEach(function(product) {
+                                    // Calculate total price
+                                    const sellingPrice = parseFloat(product
+                                        .selling_price) || 0;
+                                    const gstAmount = parseFloat(product.gst_amount) ||
+                                        0;
+                                    const totalPrice = (sellingPrice + gstAmount)
+                                        .toFixed(2);
+
+                                    // Get first image if available
+                                    const productImage = product.product_attribute
+                                        ?.images ?
+                                        (Array.isArray(product.product_attribute
+                                                .images) ?
+                                            product.product_attribute.images[0] :
+                                            product.product_attribute.images) :
+                                        null;
+
                                     resultsHtml += `
-                                <div class="product-result">
+                            <div class="product-result d-flex align-items-start p-3 border-bottom">
+                                <div class="flex-shrink-0 me-3">
                                     <a href="/product/${product.slug}">
-                                        <h4>${product.name}</h4>
-                                        <p>${product.description}</p>
+                                       ${productImage ? 
+                                            `<img src="${productImage}" alt="${product.name}" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">` : 
+                                            `<div class="img-thumbnail d-flex align-items-center justify-content-center bg-light" style="width: 80px; height: 80px;">
+                                                        <i class="fas fa-image text-muted"></i>
+                                                    </div>`
+                                        }
                                     </a>
                                 </div>
-                            `;
+                                <div class="flex-grow-1">
+                                    <a href="/product/${product.slug}" class="text-decoration-none text-dark">
+                                        <h6 class="mb-1">${product.name}</h6>
+                                    </a>
+                                    <div class="price-section mt-2">
+                                        <span class="selling-price fw-bold">₹${sellingPrice.toFixed(2)}</span>
+                                        ${gstAmount > 0 ? `<span class="text-muted small ms-2">+ GST: ₹${gstAmount.toFixed(2)}</span>` : ''}
+                                        <div class="total-price mt-1">
+                                            <small class="text-muted">Total: </small>
+                                            <span class="fw-bold text-primary">₹${totalPrice}</span>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        `;
                                 });
                             } else {
-                                resultsHtml = '<p>No results found.</p>';
+                                resultsHtml =
+                                    '<div class="p-3 text-center text-muted">No products found matching your search</div>';
                             }
 
-                            $('#search-results').html(resultsHtml).show();
+                            $searchResults.html(resultsHtml).show();
+                        },
+                        error: function(xhr) {
+                            $searchResults.html(
+                                '<div class="p-3 text-center text-danger">Error loading search results</div>'
+                            ).show();
                         }
                     });
                 } else {
+                    $searchResults.hide();
+                }
+            });
+
+            // Close search results when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#search-input, #search-results').length) {
                     $('#search-results').hide();
                 }
             });
 
-            $(document).ready(function() {
-                $('#search-input').on('input', function() {
-                    var query = $(this).val();
+            // Additional: Keyboard navigation for search results
+            $('#search-input').on('keydown', function(e) {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const $results = $('#search-results .product-result');
+                    if ($results.length > 0) {
+                        const $current = $results.filter('.active');
+                        let $next;
 
-                    if (query.length >= 3) {
-                        $('.search-results-container').show();
-                        // Rest of your AJAX code
-                    } else {
-                        $('.search-results-container').hide();
-                    }
-                });
+                        if (e.key === 'ArrowDown') {
+                            $next = $current.length ? $current.next() : $results.first();
+                        } else {
+                            $next = $current.length ? $current.prev() : $results.last();
+                        }
 
-                // Hide on click outside
-                $(document).on('click', function(e) {
-                    if (!$(e.target).closest('.search-box').length) {
-                        $('.search-results-container').hide();
+                        $results.removeClass('active');
+                        $next.addClass('active').find('a')[0].focus();
                     }
-                });
+                } else if (e.key === 'Enter') {
+                    const $active = $('#search-results .product-result.active');
+                    if ($active.length) {
+                        window.location.href = $active.find('a').attr('href');
+                    }
+                }
             });
 
+
+        });
+
+        $(document).ready(function() {
+            $('#search-input').on('input', function() {
+                var query = $(this).val();
+
+                if (query.length >= 3) {
+                    $('.search-results-container').show();
+                    // Rest of your AJAX code
+                } else {
+                    $('.search-results-container').hide();
+                }
+            });
+
+            // Hide on click outside
             $(document).on('click', function(e) {
                 if (!$(e.target).closest('.search-box').length) {
-                    $('#search-results').hide();
+                    $('.search-results-container').hide();
                 }
             });
+        });
+
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.search-box').length) {
+                $('#search-results').hide();
+            }
         });
     </script>
 @endpush

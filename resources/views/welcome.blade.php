@@ -147,9 +147,7 @@
                 <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                     <a href="{{ route('home') }}">
                         <span>
-                            
                             <i data-feather="home"></i>
-
                         </span>
                     </a>
                 </li>
@@ -174,6 +172,16 @@
                         </span>
                     </a>
                 </li>
+
+                <li class="{{ request()->routeIs('cart.view-cart') ? 'active' : '' }}">
+
+                    <a href="{{ url('/search') }}" class="fly-cate text-white">
+                        <i data-feather="search"></i>
+                    </a>
+
+                   
+                </li>
+
             </ul>
         </div>
         <!-- mobile fix menu end -->
